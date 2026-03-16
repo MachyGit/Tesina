@@ -12,16 +12,6 @@ Plataforma web escolar desarrollada como proyecto institucional.
 
 <hr>
 
-<h2>👥 Integrantes del equipo</h2>
-
-<ul>
-<li>Leandro Nuñez</li>
-<li>Santiago Vigna</li>
-<li>Santiago Machado</li>
-</ul>
-
-<hr>
-
 <h2>📖 Descripción del Proyecto</h2>
 
 <p>
@@ -207,6 +197,13 @@ iconos
 </ul>
 
 <hr>
+<h2>👥 Integrantes del equipo</h2>
+
+<ul>
+<li>Leandro Nuñez</li>
+<li>Santiago Vigna</li>
+<li>Santiago Machado</li>
+</ul>
 
 <h2>📌 Estado del proyecto</h2>
 
