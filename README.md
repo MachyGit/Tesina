@@ -1,4 +1,4 @@
-<h1 align="center"> Tesina Institucional – Página Web Escolar PROA</h1>
+<h1 align="center">📚 Proyecto Institucional – Página Web Escolar PROA</h1>
 
 <p align="center">
 Plataforma web escolar desarrollada como proyecto institucional.
@@ -32,7 +32,6 @@ Este proyecto consiste en el desarrollo de una <b>plataforma web institucional p
 El objetivo es crear un <b>portal escolar centralizado</b> donde estudiantes y docentes puedan acceder a información académica, anuncios, horarios y recursos educativos.
 </p>
 
-
 <hr>
 
 <h2>🎯 Objetivos</h2>
@@ -51,6 +50,7 @@ Desarrollar una plataforma web escolar moderna que facilite el acceso a informac
 <li>Permitir acceso mediante inicio de sesión</li>
 <li>Mostrar horarios escolares</li>
 <li>Crear un campus virtual educativo</li>
+<li>Incorporar herramientas de asistencia virtual</li>
 </ul>
 
 <hr>
@@ -110,6 +110,54 @@ Cada curso contará con su propio espacio de anuncios donde se publicarán aviso
 
 <hr>
 
+<h2>🤖 Asistente Virtual</h2>
+
+<p>
+La plataforma contará con un <b>asistente virtual integrado en la página web</b> que permitirá a los usuarios realizar consultas rápidas sobre:
+</p>
+
+<ul>
+<li>Horarios escolares</li>
+<li>Anuncios del curso</li>
+<li>Información institucional</li>
+<li>Acceso al campus virtual</li>
+<li>Dudas frecuentes de estudiantes</li>
+</ul>
+
+<p>
+El asistente facilitará la navegación dentro del sitio y ayudará a los usuarios a encontrar información de forma rápida e intuitiva.
+</p>
+
+<hr>
+
+<h2>📲 Bot de Telegram</h2>
+
+<p>
+Además de la página web, el proyecto incluirá un <b>bot de Telegram</b> que replicará algunas de las funciones principales del sitio.
+</p>
+
+<p>
+Esto permitirá a los usuarios realizar consultas sin necesidad de ingresar manualmente a la página web.
+</p>
+
+<p>
+Entre sus funciones principales estarán:
+</p>
+
+<ul>
+<li>Consultar horarios escolares</li>
+<li>Ver anuncios del curso</li>
+<li>Recibir avisos importantes</li>
+<li>Acceder a enlaces del campus virtual</li>
+<li>Realizar consultas rápidas mediante comandos</li>
+</ul>
+
+<p>
+De esta forma, los estudiantes podrán acceder a la información de la escuela de forma más rápida y desde cualquier dispositivo.
+</p>
+
+<hr>
+
 <h2>🛠 Tecnologías utilizadas</h2>
 
 <ul>
@@ -117,6 +165,8 @@ Cada curso contará con su propio espacio de anuncios donde se publicarán aviso
 <li>CSS</li>
 <li>JavaScript</li>
 <li>Git / GitHub</li>
+<li>Integración con APIs</li>
+<li>Bot de Telegram</li>
 </ul>
 
 <hr>
@@ -153,6 +203,7 @@ iconos
 <li>Entrega de trabajos prácticos</li>
 <li>Panel de administración</li>
 <li>Chat entre alumnos y docentes</li>
+<li>Mejoras en el asistente virtual</li>
 </ul>
 
 <hr>
