@@ -211,9 +211,5 @@ iconos
 <h2>📌 Estado del proyecto</h2>
 
 <p>
-🟡 Proyecto en desarrollo como trabajo institucional escolar.
-</p>
-
-<p align="center">
-<b>Proyecto desarrollado con fines educativos.</b>
+🔴⏳ Proyecto en desarrollo como trabajo institucional escolar.
 </p>
