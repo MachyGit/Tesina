@@ -148,7 +148,7 @@ De esta forma, los estudiantes podrán acceder a la información de la escuela d
 
 <hr>
 
-<h2>🛠 Tecnologías utilizadas</h2>
+<h2>Tecnologías utilizadas</h2>
 
 <ul>
 <li>HTML</li>
