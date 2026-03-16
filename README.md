@@ -68,7 +68,7 @@ Los usuarios podrán iniciar sesión según su rol:
 <li>Administrador</li>
 </ul>
 
-<h3>📢 Anuncios por curso</h3>
+<h3>Anuncios por curso</h3>
 
 <p>
 Cada curso contará con su propio espacio de anuncios donde se publicarán avisos académicos e institucionales.
@@ -81,7 +81,7 @@ Cada curso contará con su propio espacio de anuncios donde se publicarán aviso
 <li>Avisos importantes</li>
 </ul>
 
-<h3>🎓 Campus Virtual</h3>
+<h3>Campus Virtual</h3>
 
 <ul>
 <li>Material de estudio</li>
