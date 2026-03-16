@@ -32,14 +32,6 @@ Este proyecto consiste en el desarrollo de una <b>plataforma web institucional p
 El objetivo es crear un <b>portal escolar centralizado</b> donde estudiantes y docentes puedan acceder a información académica, anuncios, horarios y recursos educativos.
 </p>
 
-<p>
-El diseño está inspirado en la estructura del sitio del 
-Instituto Marcelino Champagnat.
-</p>
-
-<p>
-🔗 https://www.imc.edu.ar/Secundario/
-</p>
 
 <hr>
 
