@@ -47,7 +47,7 @@ Desarrollar una plataforma web escolar moderna que facilite el acceso a informac
 
 <h2>⚙️ Funcionalidades</h2>
 
-<h3>🏠 Página de inicio</h3>
+<h3> Página de inicio</h3>
 
 <ul>
 <li>Noticias y novedades</li>
@@ -56,7 +56,7 @@ Desarrollar una plataforma web escolar moderna que facilite el acceso a informac
 <li>Acceso al campus virtual</li>
 </ul>
 
-<h3>🔐 Sistema de inicio de sesión</h3>
+<h3> Sistema de inicio de sesión</h3>
 
 <p>
 Los usuarios podrán iniciar sesión según su rol:
@@ -90,7 +90,7 @@ Cada curso contará con su propio espacio de anuncios donde se publicarán aviso
 <li>Contenido académico</li>
 </ul>
 
-<h3>🕒 Horarios escolares</h3>
+<h3> Horarios escolares</h3>
 
 <ul>
 <li>Horarios por curso</li>
@@ -120,7 +120,7 @@ El asistente facilitará la navegación dentro del sitio y ayudará a los usuari
 
 <hr>
 
-<h2>📲 Bot de Telegram</h2>
+<h2> Bot de Telegram</h2>
 
 <p>
 Además de la página web, el proyecto incluirá un <b>bot de Telegram</b> que replicará algunas de las funciones principales del sitio.
@@ -161,7 +161,7 @@ De esta forma, los estudiantes podrán acceder a la información de la escuela d
 
 <hr>
 
-<h2>📂 Estructura del Proyecto</h2>
+<h2> Estructura del Proyecto</h2>
 
 <pre>
 pagina-proa/
@@ -185,7 +185,7 @@ iconos
 
 <hr>
 
-<h2>🚀 Mejoras futuras</h2>
+<h2> Futuras Mejoras </h2>
 
 <ul>
 <li>Sistema de notificaciones</li>
