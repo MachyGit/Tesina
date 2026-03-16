@@ -1,4 +1,4 @@
-<h1 align="center">📚 Proyecto Institucional – Página Web Escolar PROA</h1>
+<h1 align="center"> Tesina – Página Web Escolar PROA</h1>
 
 <p align="center">
 Plataforma web escolar desarrollada como proyecto institucional.
