@@ -164,23 +164,96 @@ De esta forma, los estudiantes podrán acceder a la información de la escuela d
 <h2> Estructura del Proyecto</h2>
 
 <pre>
-pagina-proa/
+ProApp/
+│
+├──  backend/                          # Node.js + Express
+│   ├──  config/
+│   │   └── db.js                        # Conexión MySQL
+│   ├──  controllers/
+│   │   ├── authController.js            # Login / Logout
+│   │   ├── userController.js            # Crear usuarios, asignar roles
+│   │   ├── avisoController.js           # CRUD de avisos
+│   │   ├── asistenciaController.js      # Registrar asistencia
+│   │   └── logController.js             # Ver logs de sesión
+│   ├──  middleware/
+│   │   ├── authMiddleware.js            # Verificar JWT + roles
+│   │   └── sessionLogger.js            # Registrar acciones
+│   ├──  models/
+│   │   ├── User.js
+│   │   └── Aviso.js
+│   ├──  routes/
+│   │   ├── auth.js
+│   │   ├── users.js
+│   │   ├── avisos.js
+│   │   ├── asistencia.js
+│   │   └── logs.js
+│   ├──  telegram/                     # Endpoint para recibir avisos del bot
+│   ├──  logs/                         # Logs del servidor
+│   ├── server.js                        # Entrada principal
+│   ├── package.json
+│   └── .env.example
+│
+├──  frontend-web/                     # React + Tailwind CSS
+│   ├──  public/
+│   │   └── images/                  # Fotos de la escuela
+│   └──  src/
+│       ├──  pages/
+│       │   ├── Home.jsx                 # Página pública principal
+│       │   ├── Login.jsx                # Campus virtual - inicio sesión
+│       │   └──  Dashboard/
+│       │       ├── Dashboard.jsx        # Enruta según el rol
+│       │       ├── Director.jsx
+│       │       ├── Secretaria.jsx
+│       │       ├── Preceptor.jsx
+│       │       ├── Profesor.jsx
+│       │       └── Alumno.jsx
+│       ├── components/
+│       │   ├──  Navbar/
+│       │   │   └── Navbar.jsx
+│       │   ├──  Avisos/
+│       │   │   └── AvisoCard.jsx
+│       │   ├──  Asistencia/
+│       │   │   └── AsistenciaForm.jsx
+│       │   └──  Asistente/
+│       │       ├── AsistenteButton.jsx  # Botón flotante
+│       │       └── AsistenteChat.jsx    # Ventana del chat IA
+│       ├──  context/
+│       │   └── AuthContext.jsx          # Estado global del usuario
+│       ├──  services/
+│       │   └── api.js                   # Axios + interceptores JWT
+│       ├──  hooks/                    # Custom hooks
+│       └── App.jsx                      # Rutas principales
+│
+├──  frontend-mobile/                  # React Native + Expo
+│   ├──  app/
+│   │   ├── index.jsx                    # Redirige según sesión
+│   │   ├──  auth/
+│   │   │   └── login.jsx
+│   │   └──  dashboard/
+│   │       ├── director.jsx
+│   │       ├── secretaria.jsx
+│   │       ├── preceptor.jsx
+│   │       ├── profesor.jsx
+│   │       └── alumno.jsx
+│   ├──  components/
+│   │   ├── AvisoCard.jsx
+│   │   ├── HorarioTable.jsx
+│   │   └── AsistenciaItem.jsx
+│   ├──  services/
+│   │   └── api.js                       # Mismo backend, token con SecureStore
+│   ├──  hooks/
+│   └──  assets/
+│
+├──  telegram-bot/                     # Python + Telebot
+│   ├── bot.py                           # Entrada principal
+│   ├── commands.py                      # /aviso /tarea /horario /urgente /ver
+│   ├── auth.py                          # Verifica Telegram ID autorizado
+│   ├── requirements.txt
+│   └── .env.example
+│
+├── database/
+│  └── schema.sql                       # Tablas: users, cursos, avisos, asistencia, logs
 
-index.html
-login.html
-anuncios.html
-campus.html
-horarios.html
-
-css/
-style.css
-
-js/
-script.js
-
-assets/
-imagenes
-iconos
 </pre>
 
 <hr>
