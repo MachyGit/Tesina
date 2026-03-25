@@ -93,7 +93,6 @@
       text-decoration: none; font-weight: 600;
     }
 
-    /* ─── HERO ─── */
     #inicio {
       position: relative; height: 100vh; min-height: 560px;
       display: flex; align-items: center; justify-content: center;
@@ -102,8 +101,7 @@
     .hero-bg {
       position: absolute; inset: 0;
       background: url('/images/hero.jpg') center/cover no-repeat;
-      /* 🖼️ REEMPLAZÁ: /images/hero.jpg con tu foto principal */
-      background-color: var(--azul); /* color fallback si no hay imagen */
+      background-color: var(--azul); 
       transform: scale(1.04);
       animation: zoomOut 8s ease forwards;
     }
@@ -176,7 +174,6 @@
       background: rgba(255,255,255,.4);
     }
 
-    /* ─── SECCIÓN BASE ─── */
     section { padding: 100px 48px; }
     .container { max-width: 1160px; margin: 0 auto; }
     .tag {
@@ -196,7 +193,7 @@
       line-height: 1.8; max-width: 540px;
     }
 
-    /* ─── NOSOTROS ─── */
+    
     #nosotros { background: var(--claro); }
     .nosotros-grid {
       display: grid; grid-template-columns: 1fr 1fr;
@@ -219,7 +216,7 @@
     .nosotros-img {
       width: 100%; border-radius: 12px;
       object-fit: cover; height: 460px;
-      /* 🖼️ REEMPLAZÁ la imagen en src */
+      
       background: #c8d8f0;
       display: block;
     }
@@ -232,7 +229,7 @@
       box-shadow: 0 8px 24px rgba(232,160,32,.35);
     }
 
-    /* ─── GALERÍA ─── */
+  
     #galeria { background: var(--azul); padding: 100px 48px; }
     .tag-light { color: rgba(255,255,255,.6); }
     .section-title-light {
@@ -248,7 +245,6 @@
     .carrusel-img {
       width: 100%; height: 100%; object-fit: cover;
       transition: opacity .5s ease;
-      /* 🖼️ Las imágenes se cargan desde /images/foto1.jpg etc */
       background: rgba(255,255,255,.1);
     }
     .carrusel-caption {
@@ -288,11 +284,9 @@
       height: 90px; object-fit: cover; border-radius: 8px;
       cursor: pointer; opacity: .55; transition: all .2s;
       background: rgba(255,255,255,.1);
-      /* 🖼️ Las miniaturas usan las mismas imágenes */
     }
     .thumb.active, .thumb:hover { opacity: 1; outline: 3px solid var(--acento); }
 
-    /* ─── CONTACTO ─── */
     #contacto { background: var(--blanco); }
     .contacto-grid {
       display: grid; grid-template-columns: 1fr 1.4fr;
@@ -342,7 +336,6 @@
     .btn-enviar:hover { background: var(--azul2); transform: translateY(-1px); }
     .btn-enviar.enviado { background: #16a34a; }
 
-    /* ─── FOOTER ─── */
     footer {
       background: var(--texto); color: rgba(255,255,255,.6);
       padding: 40px 48px; text-align: center;
@@ -365,7 +358,6 @@
     .footer-link:hover { color: #fff; }
     .footer-copy { font-size: .82rem; width: 100%; text-align: center; margin-top: 8px; }
 
-    /* ─── RESPONSIVE ─── */
     @media (max-width: 900px) {
       nav { padding: 16px 24px; }
       nav.scrolled { padding: 12px 24px; }
@@ -392,8 +384,7 @@
 ═══════════════════════════════════════ -->
 <nav id="navbar">
   <div class="logo">
-    Escuela <span>·</span> Río Tercero
-    <!-- ✏️ Reemplazá con el nombre real -->
+    Escuela Proa <span>·</span> Río Tercero
   </div>
 
   <div class="nav-links">
@@ -401,7 +392,7 @@
     <a href="#nosotros" class="nav-link">Nosotros</a>
     <a href="#galeria"  class="nav-link">Galería</a>
     <a href="#contacto" class="nav-link">Contacto</a>
-    <a href="/login"    class="btn-campus">🎓 Campus Virtual</a>
+    <a href="/login"    class="btn-campus"> Campus Virtual</a>
   </div>
 
   <button class="burger" onclick="toggleMenu()">☰</button>
@@ -411,7 +402,7 @@
     <a href="#nosotros" class="mobile-link" onclick="closeMenu()">Nosotros</a>
     <a href="#galeria"  class="mobile-link" onclick="closeMenu()">Galería</a>
     <a href="#contacto" class="mobile-link" onclick="closeMenu()">Contacto</a>
-    <a href="/login"    class="mobile-btn">🎓 Campus Virtual</a>
+    <a href="/login"    class="mobile-btn"> Campus Virtual</a>
   </div>
 </nav>
 
@@ -421,8 +412,6 @@
 ═══════════════════════════════════════ -->
 <section id="inicio">
   <div class="hero-bg"></div>
-  <!-- 🖼️ Para poner tu foto: cambiá el background-image en .hero-bg en el CSS
-       Ejemplo: background: url('/images/hero.jpg') center/cover no-repeat; -->
   <div class="hero-overlay"></div>
 
   <div class="hero-content">
@@ -432,7 +421,6 @@
     </h1>
     <p class="hero-sub">
       Formando el futuro de Río Tercero con educación de calidad
-      <!--lema me pa que no tenemos -->
     </p>
     <div class="hero-btns">
       <a href="#nosotros" class="btn-primary">Conocenos</a>
@@ -447,14 +435,11 @@
 </section>
 
 
-<!-- ═══════════════════════════════════════
-     NOSOTROS
-═══════════════════════════════════════ -->
+<!--NOSOTROS-->
 <section id="nosotros">
   <div class="container">
     <div class="nosotros-grid">
 
-      <!-- Texto -->
       <div>
         <span class="tag">Nuestra institución</span>
         <h2 class="section-title">¿Quiénes somos?</h2>
@@ -479,7 +464,7 @@
             <span class="stat-num">—</span>
             <span class="stat-label">Año de comienzo</span>
           </div>
-          <!-- ✏️ Reemplazá los — con los números reales -->
+
         </div>
       </div>
 
@@ -491,11 +476,10 @@
           alt="Nuestra escuela"
           onerror="this.style.background='#c8d8f0'; this.removeAttribute('src')"
         />
-        <!-- 🖼️ Reemplazá /images/nosotros.jpg con tu foto -->
+    
 
         <div class="nosotros-badge">
           Río Tercero<br>Córdoba, Argentina
-          <!-- ✏️ Podés cambiar este texto -->
         </div>
       </div>
 
@@ -504,9 +488,7 @@
 </section>
 
 
-<!-- ═══════════════════════════════════════
-     GALERÍA
-═══════════════════════════════════════ -->
+<!-- GALERÍA -->
 <section id="galeria">
   <div class="container">
     <span class="tag tag-light">Galería</span>
@@ -519,7 +501,6 @@
         alt="Foto escuela"
         onerror="this.style.background='rgba(255,255,255,.12)'; this.removeAttribute('src')"
       />
-      <!-- 🖼️ Las fotos se toman desde el array FOTOS en el JS abajo -->
 
       <div class="carrusel-caption" id="caption">Foto 1</div>
 
@@ -529,18 +510,14 @@
       </div>
     </div>
 
-    <!-- Dots -->
     <div class="dots" id="dots"></div>
 
-    <!-- Thumbnails -->
     <div class="thumbs" id="thumbs"></div>
   </div>
 </section>
 
 
-<!-- ═══════════════════════════════════════
-     CONTACTO
-═══════════════════════════════════════ -->
+<!--CONTACTO-->
 <section id="contacto">
   <div class="container">
     <span class="tag">Escribinos</span>
@@ -556,8 +533,7 @@
             <div>
               <div class="info-label">Dirección</div>
               <div class="info-value">
-                Calle 123, Río Tercero<br>Córdoba, Argentina
-                <!-- ✏️ Reemplazá con la dirección real -->
+                rio gallegos, Río Tercero<br>Córdoba, Argentina
               </div>
             </div>
           </div>
@@ -566,8 +542,7 @@
             <div>
               <div class="info-label">Teléfono</div>
               <div class="info-value">
-                +54 9 353 000-0000
-                <!-- ✏️ Reemplazá con el teléfono real -->
+                +54 9 3571 000-0000
               </div>
             </div>
           </div>
@@ -577,7 +552,6 @@
               <div class="info-label">Email</div>
               <div class="info-value">
                 <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="54373b3a203537203b14312737213138357a3130217a3526">[email&#160;protected]</a>
-                <!-- ✏️ Reemplazá con el email real -->
               </div>
             </div>
           </div>
@@ -586,22 +560,19 @@
             <div>
               <div class="info-label">Horarios</div>
               <div class="info-value">
-                Lunes a viernes: 7:00 - 13:00 hs<br>
-                Turno tarde: 13:00 - 19:00 hs
-                <!-- ✏️ Reemplazá con los horarios reales -->
+                Lunes a viernes: 7:40 - 17:00 hs<br>
               </div>
             </div>
           </div>
         </div>
-
-        <!-- Placeholder mapa -->
+        
         <div class="mapa-placeholder">
           📍 Acá podés embeber Google Maps<br>
           <small>Insertá el iframe de Google Maps con la dirección de la escuela</small>
         </div>
       </div>
 
-      <!-- Formulario -->
+  
       <form class="form" id="contactForm">
         <div class="form-row">
           <input class="input" type="text"  id="fNombre"  placeholder="Tu nombre"   required />
@@ -625,8 +596,7 @@
 <footer>
   <div class="footer-inner">
     <div class="footer-logo">
-      Escuela <span>·</span> Río Tercero
-      <!-- ✏️ Reemplazá con el nombre real -->
+      Escuela Proa <span>·</span> Río Tercero
     </div>
     <div class="footer-links">
       <a href="#inicio"   class="footer-link">Inicio</a>
@@ -636,7 +606,7 @@
       <a href="/login"    class="footer-link">Campus Virtual</a>
     </div>
     <div class="footer-copy">
-      © <span id="year"></span> Escuela Río Tercero · Todos los derechos reservados
+      © <span id="year"></span> Escuela ProA Río Tercero · Todos los derechos reservados
     </div>
   </div>
 </footer>
@@ -644,7 +614,6 @@
 
 <!-- ═══════════════════════════════════════
      BOTPRESS — Asistente virtual
-     Pegá acá el script que te da Botpress
 ═══════════════════════════════════════ -->
 <!-- <script src="https://cdn.botpress.cloud/webchat/v2/inject.js"></script>
 <script>
@@ -654,15 +623,10 @@
   });
 </script> -->
 
-
-<!-- ═══════════════════════════════════════
-     JAVASCRIPT
-═══════════════════════════════════════ -->
 <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
-  // ─── Año en footer ───
   document.getElementById('year').textContent = new Date().getFullYear();
 
-  // ─── Navbar scroll ───
+
   window.addEventListener('scroll', () => {
     document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 50);
   });
@@ -680,13 +644,12 @@
   }
 
   // ─── Galería / Carrusel ───
-  // 🖼️ AGREGÁ ACÁ TUS FOTOS
   const FOTOS = [
     { src: '/images/foto1.jpg', caption: 'Escribí una descripción para esta foto' },
     { src: '/images/foto2.jpg', caption: 'Escribí una descripción para esta foto' },
     { src: '/images/foto3.jpg', caption: 'Escribí una descripción para esta foto' },
     { src: '/images/foto4.jpg', caption: 'Escribí una descripción para esta foto' },
-    // ➕ Agregá más objetos acá: { src: '/images/foto5.jpg', caption: '...' }
+    //  Agregár más: { src: '/images/foto5.jpg', caption: '...' }
   ];
 
   let fotoActiva = 0;
