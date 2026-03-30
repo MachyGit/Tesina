@@ -1,17 +1,23 @@
 import requests
 import os
-import anthropic
+from google import genai
+
+# =============================================
+# 🔐 CONFIG GEMINI (NUEVA LIBRERÍA)
+# =============================================
+client = genai.Client(api_key=os.getenv("GEMINI_API_KEY"))
 
 # =============================================
 # 🔐 IDs DE TELEGRAM AUTORIZADOS
-# Para agregar alguien: pedile que escriba a @userinfobot y agregá su ID acá
 # =============================================
 IDS_AUTORIZADOS = {
-    '8467741760': 'director',#ID de lean
-    '7859819402': 'secretaria',#ID de Santi M
-    # 'xxxxxxxxx': 'rol correspondiente', #iD de 
+    '8467741760': 'director',
+    '7859819402': 'secretaria',
 }
 
+# =============================================
+# 🧠 CONTEXTO IA
+# =============================================
 CONTEXTO_ESCUELA = """
 Sos el asistente virtual del Campus Escolar de Río Tercero, Córdoba, Argentina.
 Solo podés responder preguntas relacionadas con la escuela y el campus virtual.
@@ -27,20 +33,17 @@ Información que conocés sobre la escuela:
 - El director y la secretaria gestionan cuentas de usuarios y publican comunicados
 - Para dudas técnicas del campus, sugerí contactar a la secretaría
 
-✏️ COMPLETÁ CON LA INFO REAL DE LA ESCUELA:
-- Nombre: (Proa Sede Rio Tercero)
-- Dirección: (Rio no se que)
-- Teléfono: (3571 mi pito en tu cola)
-- Email: (lenunez@escuelasproa.edu.ar)
-- Horarios: (horario de corrido 01:00 A 19:00)
-- Orientaciones: (Bachiller en desarrolo de software)
+- Nombre: Proa Sede Rio Tercero
+- Dirección: Río Tercero, Córdoba
+- Email: lenunez@escuelasproa.edu.ar
+- Horarios: 01:00 a 19:00
+- Orientaciones: Bachiller en desarrollo de software
 """
 
 API_URL = os.getenv("API_URL", "http://localhost:5000/api")
-ANTHROPIC_API_KEY = "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"
 
 # =============================================
-# 🔒 VERIFICAR USUARIO AUTORIZADO
+# 🔒 VERIFICAR USUARIO
 # =============================================
 def verificar_usuario(telegram_id):
     telegram_id = str(telegram_id)
@@ -51,9 +54,8 @@ def verificar_usuario(telegram_id):
         "rol": IDS_AUTORIZADOS[telegram_id]
     }
 
-
 # =============================================
-# ASISTENTE IA — Responde sobre la escuela
+# 🤖 IA GEMINI
 # =============================================
 def responder_mensaje_libre(bot, message):
     telegram_id = str(message.from_user.id)
@@ -66,23 +68,21 @@ def responder_mensaje_libre(bot, message):
     try:
         bot.send_chat_action(message.chat.id, 'typing')
 
-        client = anthropic.Anthropic(api_key=ANTHROPIC_API_KEY)
-        respuesta = client.messages.create(
-            model="claude-sonnet-4-6",
-            max_tokens=500,
-            system=CONTEXTO_ESCUELA,
-            messages=[
-                {"role": "user", "content": message.text}
-            ]
+        prompt = f"{CONTEXTO_ESCUELA}\n\nUsuario: {message.text}"
+
+        response = client.models.generate_content(
+            model="gemini-2.0-flash",
+            contents=prompt
         )
-        bot.reply_to(message, respuesta.content[0].text)
+
+        bot.reply_to(message, response.text)
 
     except Exception as e:
-        bot.reply_to(message, "❌ No pude procesar tu consulta. Intentá de nuevo más tarde.")
-
+        print("ERROR GEMINI:", e)
+        bot.reply_to(message, "❌ No pude procesar tu consulta. Intentá de nuevo.")
 
 # =============================================
-#  REGISTRAR TODOS LOS COMANDOS
+# 📋 COMANDOS
 # =============================================
 def registrar_comandos(bot):
 
@@ -195,7 +195,7 @@ def registrar_comandos(bot):
         except Exception as e:
             bot.reply_to(message, f"❌ Error: {str(e)}")
 
-    # ── Mensajes de texto libre → Asistente IA ──
-    @bot.message_handler(func=lambda message: not message.text.startswith('/'))
+    # ── Mensajes de texto libre ──
+    @bot.message_handler(func=lambda message: message.text and not message.text.startswith('/'))
     def handle_texto(message):
         responder_mensaje_libre(bot, message)
