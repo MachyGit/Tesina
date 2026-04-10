@@ -3,576 +3,225 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Escuela — Río Tercero</title>
+  <title>Escuela ProA — Río Tercero</title>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
     :root {
-      --azul:    #1a3a6b;
-      --azul2:   #2256a8;
-      --acento:  #e8a020;
-      --claro:   #f5f7fa;
-      --texto:   #1c1c2e;
-      --gris:    #6b7280;
-      --blanco:  #ffffff;
+      --azul:    #1a3a6b; --azul2:   #2256a8; --acento:  #e8a020;
+      --claro:   #f5f7fa; --texto:   #1c1c2e; --gris:    #6b7280; --blanco:  #ffffff;
     }
-
     html { scroll-behavior: smooth; }
-
-    body {
-      font-family: 'DM Sans', sans-serif;
-      color: var(--texto);
-      background: var(--blanco);
-      overflow-x: hidden;
-    }
-
-    /* ─── NAVBAR ─── */
-    nav {
-      position: fixed; top: 0; left: 0; right: 0; z-index: 999;
-      padding: 20px 48px;
-      display: flex; align-items: center; justify-content: space-between;
-      transition: all .35s ease;
-    }
-    nav.scrolled {
-      background: rgba(255,255,255,0.97);
-      backdrop-filter: blur(12px);
-      box-shadow: 0 2px 24px rgba(0,0,0,.08);
-      padding: 14px 48px;
-    }
+    body { font-family: 'DM Sans', sans-serif; color: var(--texto); background: var(--blanco); overflow-x: hidden; }
+    nav { position: fixed; top: 0; left: 0; right: 0; z-index: 999; padding: 20px 48px; display: flex; align-items: center; justify-content: space-between; transition: all .35s ease; }
+    nav.scrolled { background: rgba(255,255,255,0.97); backdrop-filter: blur(12px); box-shadow: 0 2px 24px rgba(0,0,0,.08); padding: 14px 48px; }
     nav.scrolled .logo { color: var(--azul); text-shadow: none; }
     nav.scrolled .nav-link { color: var(--texto); text-shadow: none; }
-
-    .logo {
-      font-family: 'Playfair Display', serif;
-      font-size: 1.3rem; font-weight: 700;
-      color: #fff; text-shadow: 0 2px 8px rgba(0,0,0,.4);
-      letter-spacing: .5px;
-    }
+    .logo { font-family: 'Playfair Display', serif; font-size: 1.3rem; font-weight: 700; color: #fff; text-shadow: 0 2px 8px rgba(0,0,0,.4); letter-spacing: .5px; }
     .logo span { color: var(--acento); }
-
     .nav-links { display: flex; align-items: center; gap: 36px; }
-    .nav-link {
-      color: #fff; text-decoration: none;
-      font-size: .9rem; font-weight: 500; letter-spacing: .3px;
-      text-shadow: 0 1px 6px rgba(0,0,0,.4);
-      transition: opacity .2s;
-    }
+    .nav-link { color: #fff; text-decoration: none; font-size: .9rem; font-weight: 500; letter-spacing: .3px; text-shadow: 0 1px 6px rgba(0,0,0,.4); transition: opacity .2s; }
     .nav-link:hover { opacity: .7; }
-
-    .btn-campus {
-      background: var(--acento); color: var(--blanco);
-      padding: 10px 24px; border-radius: 6px;
-      text-decoration: none; font-weight: 600; font-size: .88rem;
-      letter-spacing: .3px; transition: background .2s, transform .2s;
-    }
+    .btn-campus { background: var(--acento); color: var(--blanco); padding: 10px 24px; border-radius: 6px; text-decoration: none; font-weight: 600; font-size: .88rem; letter-spacing: .3px; transition: background .2s, transform .2s; }
     .btn-campus:hover { background: #c8860e; transform: translateY(-1px); }
-
-    .burger {
-      display: none; background: none; border: none;
-      font-size: 1.6rem; color: #fff; cursor: pointer;
-    }
+    .burger { display: none; background: none; border: none; font-size: 1.6rem; color: #fff; cursor: pointer; }
     nav.scrolled .burger { color: var(--azul); }
-
-    .mobile-menu {
-      display: none; position: absolute;
-      top: 100%; left: 0; right: 0;
-      background: #fff; flex-direction: column;
-      padding: 16px 32px 24px; gap: 4px;
-      box-shadow: 0 8px 24px rgba(0,0,0,.1);
-    }
+    .mobile-menu { display: none; position: absolute; top: 100%; left: 0; right: 0; background: #fff; flex-direction: column; padding: 16px 32px 24px; gap: 4px; box-shadow: 0 8px 24px rgba(0,0,0,.1); }
     .mobile-menu.open { display: flex; }
-    .mobile-link {
-      color: var(--texto); text-decoration: none;
-      padding: 12px 0; font-size: 1rem;
-      border-bottom: 1px solid #f0f0f0;
-    }
-    .mobile-btn {
-      margin-top: 12px; background: var(--acento); color: #fff;
-      padding: 14px; border-radius: 8px; text-align: center;
-      text-decoration: none; font-weight: 600;
-    }
-
-    #inicio {
-      position: relative; height: 100vh; min-height: 560px;
-      display: flex; align-items: center; justify-content: center;
-      overflow: hidden;
-    }
-    .hero-bg {
-      position: absolute; inset: 0;
-      background: url('/images/hero.jpg') center/cover no-repeat;
-      background-color: var(--azul); 
-      transform: scale(1.04);
-      animation: zoomOut 8s ease forwards;
-    }
+    .mobile-link { color: var(--texto); text-decoration: none; padding: 12px 0; font-size: 1rem; border-bottom: 1px solid #f0f0f0; }
+    .mobile-btn { margin-top: 12px; background: var(--acento); color: #fff; padding: 14px; border-radius: 8px; text-align: center; text-decoration: none; font-weight: 600; }
+    #inicio { position: relative; height: 100vh; min-height: 560px; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+    .hero-bg { position: absolute; inset: 0; background: url('/images/hero.jpg') center/cover no-repeat; background-color: var(--azul); transform: scale(1.04); animation: zoomOut 8s ease forwards; }
     @keyframes zoomOut { to { transform: scale(1); } }
-
-    .hero-overlay {
-      position: absolute; inset: 0;
-      background: linear-gradient(160deg,
-        rgba(10,25,60,.75) 0%,
-        rgba(10,25,60,.45) 60%,
-        rgba(10,25,60,.65) 100%);
-    }
-    .hero-content {
-      position: relative; text-align: center;
-      color: #fff; padding: 0 24px; max-width: 860px;
-      animation: fadeUp .9s ease both;
-    }
-    @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(30px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
-
-    .hero-pre {
-      font-size: .78rem; letter-spacing: 5px;
-      text-transform: uppercase; opacity: .8;
-      margin-bottom: 16px;
-    }
-    .hero-title {
-      font-family: 'Playfair Display', serif;
-      font-size: clamp(2.4rem, 7vw, 5rem);
-      font-weight: 900; line-height: 1.05;
-      margin-bottom: 18px;
-      text-shadow: 0 3px 16px rgba(0,0,0,.35);
-    }
+    .hero-overlay { position: absolute; inset: 0; background: linear-gradient(160deg, rgba(10,25,60,.75) 0%, rgba(10,25,60,.45) 60%, rgba(10,25,60,.65) 100%); }
+    .hero-content { position: relative; text-align: center; color: #fff; padding: 0 24px; max-width: 860px; animation: fadeUp .9s ease both; }
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+    .hero-pre { font-size: .78rem; letter-spacing: 5px; text-transform: uppercase; opacity: .8; margin-bottom: 16px; }
+    .hero-title { font-family: 'Playfair Display', serif; font-size: clamp(2.4rem, 7vw, 5rem); font-weight: 900; line-height: 1.05; margin-bottom: 18px; text-shadow: 0 3px 16px rgba(0,0,0,.35); }
     .hero-title span { color: var(--acento); }
-    .hero-sub {
-      font-size: clamp(.95rem, 2.2vw, 1.2rem);
-      opacity: .88; margin-bottom: 40px; font-weight: 300;
-    }
+    .hero-sub { font-size: clamp(.95rem, 2.2vw, 1.2rem); opacity: .88; margin-bottom: 40px; font-weight: 300; }
     .hero-btns { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
-    .btn-primary {
-      background: var(--acento); color: #fff;
-      padding: 15px 36px; border-radius: 6px;
-      text-decoration: none; font-weight: 600; font-size: .95rem;
-      transition: background .2s, transform .2s;
-    }
+    .btn-primary { background: var(--acento); color: #fff; padding: 15px 36px; border-radius: 6px; text-decoration: none; font-weight: 600; font-size: .95rem; transition: background .2s, transform .2s; }
     .btn-primary:hover { background: #c8860e; transform: translateY(-2px); }
-    .btn-outline {
-      border: 2px solid rgba(255,255,255,.7); color: #fff;
-      padding: 14px 34px; border-radius: 6px;
-      text-decoration: none; font-weight: 500; font-size: .95rem;
-      transition: all .2s;
-    }
+    .btn-outline { border: 2px solid rgba(255,255,255,.7); color: #fff; padding: 14px 34px; border-radius: 6px; text-decoration: none; font-weight: 500; font-size: .95rem; transition: all .2s; }
     .btn-outline:hover { background: rgba(255,255,255,.15); }
-
-    .hero-scroll {
-      position: absolute; bottom: 32px; left: 50%;
-      transform: translateX(-50%);
-      color: rgba(255,255,255,.6); font-size: .78rem;
-      letter-spacing: 2px; text-transform: uppercase;
-      display: flex; flex-direction: column; align-items: center; gap: 8px;
-      animation: bounce 2s infinite;
-    }
-    @keyframes bounce {
-      0%,100% { transform: translateX(-50%) translateY(0); }
-      50%      { transform: translateX(-50%) translateY(8px); }
-    }
-    .scroll-line {
-      width: 1px; height: 40px;
-      background: rgba(255,255,255,.4);
-    }
-
+    .hero-scroll { position: absolute; bottom: 32px; left: 50%; transform: translateX(-50%); color: rgba(255,255,255,.6); font-size: .78rem; letter-spacing: 2px; text-transform: uppercase; display: flex; flex-direction: column; align-items: center; gap: 8px; animation: bounce 2s infinite; }
+    @keyframes bounce { 0%,100% { transform: translateX(-50%) translateY(0); } 50% { transform: translateX(-50%) translateY(8px); } }
+    .scroll-line { width: 1px; height: 40px; background: rgba(255,255,255,.4); }
     section { padding: 100px 48px; }
     .container { max-width: 1160px; margin: 0 auto; }
-    .tag {
-      display: inline-block;
-      color: var(--azul2); font-size: .78rem;
-      font-weight: 600; letter-spacing: 3px;
-      text-transform: uppercase; margin-bottom: 14px;
-    }
-    .section-title {
-      font-family: 'Playfair Display', serif;
-      font-size: clamp(2rem, 4vw, 2.8rem);
-      font-weight: 700; line-height: 1.15;
-      margin-bottom: 20px; color: var(--texto);
-    }
-    .section-text {
-      font-size: 1.05rem; color: var(--gris);
-      line-height: 1.8; max-width: 540px;
-    }
-
-    
+    .tag { display: inline-block; color: var(--azul2); font-size: .78rem; font-weight: 600; letter-spacing: 3px; text-transform: uppercase; margin-bottom: 14px; }
+    .section-title { font-family: 'Playfair Display', serif; font-size: clamp(2rem, 4vw, 2.8rem); font-weight: 700; line-height: 1.15; margin-bottom: 20px; color: var(--texto); }
+    .section-text { font-size: 1.05rem; color: var(--gris); line-height: 1.8; max-width: 540px; }
     #nosotros { background: var(--claro); }
-    .nosotros-grid {
-      display: grid; grid-template-columns: 1fr 1fr;
-      gap: 80px; align-items: center;
-    }
-    .stats-row {
-      display: flex; gap: 32px; margin-top: 40px; flex-wrap: wrap;
-    }
-    .stat-box {
-      display: flex; flex-direction: column; gap: 4px;
-    }
-    .stat-num {
-      font-family: 'Playfair Display', serif;
-      font-size: 2.4rem; font-weight: 700; color: var(--azul2);
-      line-height: 1;
-    }
+    .nosotros-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
+    .stats-row { display: flex; gap: 32px; margin-top: 40px; flex-wrap: wrap; }
+    .stat-box { display: flex; flex-direction: column; gap: 4px; }
+    .stat-num { font-family: 'Playfair Display', serif; font-size: 2.4rem; font-weight: 700; color: var(--azul2); line-height: 1; }
     .stat-label { font-size: .82rem; color: var(--gris); font-weight: 500; }
-
     .nosotros-img-wrap { position: relative; }
-    .nosotros-img {
-      width: 100%; border-radius: 12px;
-      object-fit: cover; height: 460px;
-      
-      background: #c8d8f0;
-      display: block;
-    }
-    .nosotros-badge {
-      position: absolute; bottom: -20px; left: -20px;
-      background: var(--acento); color: #fff;
-      padding: 20px 24px; border-radius: 10px;
-      font-family: 'Playfair Display', serif;
-      font-size: 1rem; font-weight: 700; line-height: 1.3;
-      box-shadow: 0 8px 24px rgba(232,160,32,.35);
-    }
-
-  
+    .nosotros-img { width: 100%; border-radius: 12px; object-fit: cover; height: 460px; background: #c8d8f0; display: block; }
+    .nosotros-badge { position: absolute; bottom: -20px; left: -20px; background: var(--acento); color: #fff; padding: 20px 24px; border-radius: 10px; font-family: 'Playfair Display', serif; font-size: 1rem; font-weight: 700; line-height: 1.3; box-shadow: 0 8px 24px rgba(232,160,32,.35); }
     #galeria { background: var(--azul); padding: 100px 48px; }
     .tag-light { color: rgba(255,255,255,.6); }
-    .section-title-light {
-      font-family: 'Playfair Display', serif;
-      font-size: clamp(2rem, 4vw, 2.8rem);
-      color: #fff; font-weight: 700; margin-bottom: 48px;
-    }
-
-    .carrusel {
-      position: relative; border-radius: 12px; overflow: hidden;
-      height: 480px; background: rgba(255,255,255,.08);
-    }
-    .carrusel-img {
-      width: 100%; height: 100%; object-fit: cover;
-      transition: opacity .5s ease;
-      background: rgba(255,255,255,.1);
-    }
-    .carrusel-caption {
-      position: absolute; bottom: 0; left: 0; right: 0;
-      padding: 24px; background: linear-gradient(to top, rgba(0,0,0,.6), transparent);
-      color: #fff; font-size: .9rem;
-    }
-    .carrusel-nav {
-      position: absolute; top: 50%; transform: translateY(-50%);
-      display: flex; justify-content: space-between;
-      width: 100%; padding: 0 16px; pointer-events: none;
-    }
-    .nav-btn {
-      pointer-events: all;
-      background: rgba(255,255,255,.2); border: none;
-      color: #fff; width: 44px; height: 44px; border-radius: 50%;
-      font-size: 1.2rem; cursor: pointer; transition: background .2s;
-      backdrop-filter: blur(4px);
-    }
+    .section-title-light { font-family: 'Playfair Display', serif; font-size: clamp(2rem, 4vw, 2.8rem); color: #fff; font-weight: 700; margin-bottom: 48px; }
+    .carrusel { position: relative; border-radius: 12px; overflow: hidden; height: 480px; background: rgba(255,255,255,.08); }
+    .carrusel-img { width: 100%; height: 100%; object-fit: cover; transition: opacity .5s ease; background: rgba(255,255,255,.1); }
+    .carrusel-caption { position: absolute; bottom: 0; left: 0; right: 0; padding: 24px; background: linear-gradient(to top, rgba(0,0,0,.6), transparent); color: #fff; font-size: .9rem; }
+    .carrusel-nav { position: absolute; top: 50%; transform: translateY(-50%); display: flex; justify-content: space-between; width: 100%; padding: 0 16px; pointer-events: none; }
+    .nav-btn { pointer-events: all; background: rgba(255,255,255,.2); border: none; color: #fff; width: 44px; height: 44px; border-radius: 50%; font-size: 1.2rem; cursor: pointer; transition: background .2s; backdrop-filter: blur(4px); }
     .nav-btn:hover { background: rgba(255,255,255,.35); }
-
-    .dots {
-      display: flex; justify-content: center; gap: 8px; margin-top: 20px;
-    }
-    .dot {
-      width: 8px; height: 8px; border-radius: 50%;
-      background: rgba(255,255,255,.3); border: none; cursor: pointer;
-      transition: all .2s;
-    }
+    .dots { display: flex; justify-content: center; gap: 8px; margin-top: 20px; }
+    .dot { width: 8px; height: 8px; border-radius: 50%; background: rgba(255,255,255,.3); border: none; cursor: pointer; transition: all .2s; }
     .dot.active { background: var(--acento); transform: scale(1.3); }
-
-    .thumbs {
-      display: grid; grid-template-columns: repeat(4, 1fr);
-      gap: 12px; margin-top: 20px;
-    }
-    .thumb {
-      height: 90px; object-fit: cover; border-radius: 8px;
-      cursor: pointer; opacity: .55; transition: all .2s;
-      background: rgba(255,255,255,.1);
-    }
+    .thumbs { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-top: 20px; }
+    .thumb { height: 90px; object-fit: cover; border-radius: 8px; cursor: pointer; opacity: .55; transition: all .2s; background: rgba(255,255,255,.1); }
     .thumb.active, .thumb:hover { opacity: 1; outline: 3px solid var(--acento); }
-
     #contacto { background: var(--blanco); }
-    .contacto-grid {
-      display: grid; grid-template-columns: 1fr 1.4fr;
-      gap: 80px; align-items: start; margin-top: 48px;
-    }
+    .contacto-grid { display: grid; grid-template-columns: 1fr 1.4fr; gap: 80px; align-items: start; margin-top: 48px; }
     .info-items { display: flex; flex-direction: column; gap: 28px; }
     .info-item { display: flex; align-items: flex-start; gap: 16px; }
-    .info-icon {
-      width: 46px; height: 46px; border-radius: 10px;
-      background: var(--claro); display: flex;
-      align-items: center; justify-content: center;
-      font-size: 1.2rem; flex-shrink: 0;
-    }
+    .info-icon { width: 46px; height: 46px; border-radius: 10px; background: var(--claro); display: flex; align-items: center; justify-content: center; font-size: 1.2rem; flex-shrink: 0; }
     .info-label { font-weight: 600; font-size: .9rem; margin-bottom: 4px; }
     .info-value { color: var(--gris); font-size: .9rem; line-height: 1.5; }
-
-    .mapa-placeholder {
-      margin-top: 32px; height: 180px; border-radius: 10px;
-      background: var(--claro); border: 2px dashed #d1d5db;
-      display: flex; align-items: center; justify-content: center;
-      color: var(--gris); font-size: .88rem; text-align: center;
-      padding: 24px;
-    }
-
+    .mapa-placeholder { margin-top: 32px; height: 180px; border-radius: 10px; background: var(--claro); border: 2px dashed #d1d5db; display: flex; align-items: center; justify-content: center; color: var(--gris); font-size: .88rem; text-align: center; padding: 24px; }
     .form { display: flex; flex-direction: column; gap: 16px; }
     .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-    .input, .textarea {
-      width: 100%; padding: 14px 18px;
-      border: 1.5px solid #e5e7eb; border-radius: 8px;
-      font-family: 'DM Sans', sans-serif; font-size: .95rem;
-      color: var(--texto); background: var(--claro);
-      transition: border .2s, box-shadow .2s;
-      outline: none;
-    }
-    .input:focus, .textarea:focus {
-      border-color: var(--azul2);
-      box-shadow: 0 0 0 3px rgba(34,86,168,.12);
-    }
+    .input, .textarea { width: 100%; padding: 14px 18px; border: 1.5px solid #e5e7eb; border-radius: 8px; font-family: 'DM Sans', sans-serif; font-size: .95rem; color: var(--texto); background: var(--claro); transition: border .2s, box-shadow .2s; outline: none; }
+    .input:focus, .textarea:focus { border-color: var(--azul2); box-shadow: 0 0 0 3px rgba(34,86,168,.12); }
     .textarea { resize: vertical; min-height: 130px; }
-    .btn-enviar {
-      background: var(--azul); color: #fff;
-      padding: 15px 32px; border: none; border-radius: 8px;
-      font-family: 'DM Sans', sans-serif;
-      font-size: .95rem; font-weight: 600; cursor: pointer;
-      transition: background .2s, transform .2s; align-self: flex-start;
-    }
+    .btn-enviar { background: var(--azul); color: #fff; padding: 15px 32px; border: none; border-radius: 8px; font-family: 'DM Sans', sans-serif; font-size: .95rem; font-weight: 600; cursor: pointer; transition: background .2s, transform .2s; align-self: flex-start; }
     .btn-enviar:hover { background: var(--azul2); transform: translateY(-1px); }
     .btn-enviar.enviado { background: #16a34a; }
-
-    footer {
-      background: var(--texto); color: rgba(255,255,255,.6);
-      padding: 40px 48px; text-align: center;
-    }
-    .footer-inner {
-      max-width: 1160px; margin: 0 auto;
-      display: flex; align-items: center; justify-content: space-between;
-      flex-wrap: wrap; gap: 16px;
-    }
-    .footer-logo {
-      font-family: 'Playfair Display', serif;
-      font-size: 1.1rem; color: #fff; font-weight: 700;
-    }
+    footer { background: var(--texto); color: rgba(255,255,255,.6); padding: 40px 48px; text-align: center; }
+    .footer-inner { max-width: 1160px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px; }
+    .footer-logo { font-family: 'Playfair Display', serif; font-size: 1.1rem; color: #fff; font-weight: 700; }
     .footer-logo span { color: var(--acento); }
     .footer-links { display: flex; gap: 24px; }
-    .footer-link {
-      color: rgba(255,255,255,.5); text-decoration: none;
-      font-size: .85rem; transition: color .2s;
-    }
+    .footer-link { color: rgba(255,255,255,.5); text-decoration: none; font-size: .85rem; transition: color .2s; }
     .footer-link:hover { color: #fff; }
     .footer-copy { font-size: .82rem; width: 100%; text-align: center; margin-top: 8px; }
-
     @media (max-width: 900px) {
-      nav { padding: 16px 24px; }
-      nav.scrolled { padding: 12px 24px; }
-      .nav-links { display: none; }
-      .burger { display: block; }
+      nav { padding: 16px 24px; } nav.scrolled { padding: 12px 24px; }
+      .nav-links { display: none; } .burger { display: block; }
       section { padding: 72px 24px; }
       .nosotros-grid { grid-template-columns: 1fr; gap: 40px; }
-      .nosotros-img { height: 300px; }
-      .nosotros-badge { left: 0; bottom: -16px; font-size: .88rem; }
-      .contacto-grid { grid-template-columns: 1fr; gap: 40px; }
-      .form-row { grid-template-columns: 1fr; }
-      .thumbs { grid-template-columns: repeat(2, 1fr); }
-      .carrusel { height: 280px; }
+      .nosotros-img { height: 300px; } .nosotros-badge { left: 0; bottom: -16px; font-size: .88rem; }
+      .contacto-grid { grid-template-columns: 1fr; gap: 40px; } .form-row { grid-template-columns: 1fr; }
+      .thumbs { grid-template-columns: repeat(2, 1fr); } .carrusel { height: 280px; }
       #galeria { padding: 72px 24px; }
-      .footer-inner { flex-direction: column; text-align: center; }
-      .footer-links { justify-content: center; }
+      .footer-inner { flex-direction: column; text-align: center; } .footer-links { justify-content: center; }
     }
   </style>
 </head>
 <body>
 
-<!-- ═══════════════════════════════════════
-     NAVBAR
-═══════════════════════════════════════ -->
 <nav id="navbar">
-  <div class="logo">
-    Escuela Proa <span>·</span> Río Tercero
-  </div>
-
+  <div class="logo">Escuela Proa <span>·</span> Río Tercero</div>
   <div class="nav-links">
     <a href="#inicio"   class="nav-link">Inicio</a>
     <a href="#nosotros" class="nav-link">Nosotros</a>
     <a href="#galeria"  class="nav-link">Galería</a>
     <a href="#contacto" class="nav-link">Contacto</a>
-    <a href="/login"    class="btn-campus"> Campus Virtual</a>
+    <a href="login.html" class="btn-campus">🎓 Campus Virtual</a>
   </div>
-
   <button class="burger" onclick="toggleMenu()">☰</button>
-
   <div class="mobile-menu" id="mobileMenu">
     <a href="#inicio"   class="mobile-link" onclick="closeMenu()">Inicio</a>
     <a href="#nosotros" class="mobile-link" onclick="closeMenu()">Nosotros</a>
     <a href="#galeria"  class="mobile-link" onclick="closeMenu()">Galería</a>
     <a href="#contacto" class="mobile-link" onclick="closeMenu()">Contacto</a>
-    <a href="/login"    class="mobile-btn"> Campus Virtual</a>
+    <a href="login.html" class="mobile-btn">🎓 Campus Virtual</a>
   </div>
 </nav>
 
-
-<!-- ═══════════════════════════════════════
-     HERO
-═══════════════════════════════════════ -->
 <section id="inicio">
   <div class="hero-bg"></div>
   <div class="hero-overlay"></div>
-
   <div class="hero-content">
     <p class="hero-pre">Bienvenidos a nuestra institución</p>
-    <h1 class="hero-title">
-      Nombre de la<br><span>Escuela</span>
-    </h1>
-    <p class="hero-sub">
-      Formando el futuro de Río Tercero con educación de calidad
-    </p>
+    <h1 class="hero-title">Nombre de la<br><span>Escuela</span></h1>
+    <p class="hero-sub">Formando el futuro de Río Tercero con educación de calidad</p>
     <div class="hero-btns">
-      <a href="#nosotros" class="btn-primary">Conocenos</a>
-      <a href="/login"    class="btn-outline">Campus Virtual →</a>
+      <a href="#nosotros"  class="btn-primary">Conocenos</a>
+      <a href="login.html" class="btn-outline">Campus Virtual →</a>
     </div>
   </div>
-
-  <div class="hero-scroll">
-    <div class="scroll-line"></div>
-    Scroll
-  </div>
+  <div class="hero-scroll"><div class="scroll-line"></div>Scroll</div>
 </section>
 
-
-<!--NOSOTROS-->
 <section id="nosotros">
   <div class="container">
     <div class="nosotros-grid">
-
       <div>
         <span class="tag">Nuestra institución</span>
         <h2 class="section-title">¿Quiénes somos?</h2>
         <p class="section-text">
           Lorem ipsum dolor sit amet consectetur adipisicing elit. Ducimus nemo omnis, velit necessitatibus quae non voluptatum eum recusandae optio placeat! Consequuntur libero fugit nesciunt accusamus necessitatibus, quaerat facilis perferendis ipsa!
-          <!-- Reemplazá con el texto real -->
         </p>
         <p class="section-text" style="margin-top:16px">
           Lorem ipsum dolor sit, amet consectetur adipisicing elit. Officiis quae repellat repudiandae obcaecati esse voluptatum aspernatur voluptas. Dolores neque provident tempora aperiam, cum fuga esse eos, animi aliquam, voluptatum nam.
         </p>
-
         <div class="stats-row">
-          <div class="stat-box">
-            <span class="stat-num">—</span>
-            <span class="stat-label">Alumnos</span>
-          </div>
-          <div class="stat-box">
-            <span class="stat-num">—</span>
-            <span class="stat-label">Docentes</span>
-          </div>
-          <div class="stat-box">
-            <span class="stat-num">—</span>
-            <span class="stat-label">Año de comienzo</span>
-          </div>
-
+          <div class="stat-box"><span class="stat-num">—</span><span class="stat-label">Alumnos</span></div>
+          <div class="stat-box"><span class="stat-num">—</span><span class="stat-label">Docentes</span></div>
+          <div class="stat-box"><span class="stat-num">—</span><span class="stat-label">Año de comienzo</span></div>
         </div>
       </div>
-
-      <!-- Imagen -->
       <div class="nosotros-img-wrap">
-        <img
-          class="nosotros-img"
-          src="/images/nosotros.jpg"
-          alt="Nuestra escuela"
-          onerror="this.style.background='#c8d8f0'; this.removeAttribute('src')"
-        />
-    
-
-        <div class="nosotros-badge">
-          Río Tercero<br>Córdoba, Argentina
-        </div>
+        <img class="nosotros-img" src="/images/nosotros.jpg" alt="Nuestra escuela" onerror="this.style.background='#c8d8f0'; this.removeAttribute('src')"/>
+        <div class="nosotros-badge">Río Tercero<br>Córdoba, Argentina</div>
       </div>
-
     </div>
   </div>
 </section>
 
-
-<!-- GALERÍA -->
 <section id="galeria">
   <div class="container">
     <span class="tag tag-light">Galería</span>
     <h2 class="section-title-light">Nuestra escuela en imágenes</h2>
-
-    <!-- Carrusel -->
     <div class="carrusel">
-      <img class="carrusel-img" id="carruselImg"
-        src="/images/foto1.jpg"
-        alt="Foto escuela"
-        onerror="this.style.background='rgba(255,255,255,.12)'; this.removeAttribute('src')"
-      />
-
+      <img class="carrusel-img" id="carruselImg" src="/images/foto1.jpg" alt="Foto escuela" onerror="this.style.background='rgba(255,255,255,.12)'; this.removeAttribute('src')"/>
       <div class="carrusel-caption" id="caption">Foto 1</div>
-
       <div class="carrusel-nav">
         <button class="nav-btn" onclick="cambiarFoto(-1)">‹</button>
         <button class="nav-btn" onclick="cambiarFoto(1)">›</button>
       </div>
     </div>
-
     <div class="dots" id="dots"></div>
-
     <div class="thumbs" id="thumbs"></div>
   </div>
 </section>
 
-
-<!--CONTACTO-->
 <section id="contacto">
   <div class="container">
     <span class="tag">Escribinos</span>
     <h2 class="section-title">Contacto</h2>
-
     <div class="contacto-grid">
-
-      <!-- Info -->
       <div>
         <div class="info-items">
           <div class="info-item">
             <div class="info-icon">📍</div>
-            <div>
-              <div class="info-label">Dirección</div>
-              <div class="info-value">
-                rio gallegos, Río Tercero<br>Córdoba, Argentina
-              </div>
-            </div>
+            <div><div class="info-label">Dirección</div><div class="info-value">Rio Gallegos, Río Tercero<br>Córdoba, Argentina</div></div>
           </div>
           <div class="info-item">
             <div class="info-icon">📞</div>
-            <div>
-              <div class="info-label">Teléfono</div>
-              <div class="info-value">
-                +54 9 3571 000-0000
-              </div>
-            </div>
+            <div><div class="info-label">Teléfono</div><div class="info-value">+54 9 3571 000-0000</div></div>
           </div>
           <div class="info-item">
             <div class="info-icon">✉️</div>
-            <div>
-              <div class="info-label">Email</div>
-              <div class="info-value">
-                <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="54373b3a203537203b14312737213138357a3130217a3526">[email&#160;protected]</a>
-              </div>
-            </div>
+            <div><div class="info-label">Email</div><div class="info-value">contacto@escuelasproa.edu.ar</div></div>
           </div>
           <div class="info-item">
             <div class="info-icon">🕐</div>
-            <div>
-              <div class="info-label">Horarios</div>
-              <div class="info-value">
-                Lunes a viernes: 7:40 - 17:00 hs<br>
-              </div>
-            </div>
+            <div><div class="info-label">Horarios</div><div class="info-value">Lunes a viernes: 7:40 - 17:00 hs</div></div>
           </div>
         </div>
-        
         <div class="mapa-placeholder">
           📍 Acá podés embeber Google Maps<br>
           <small>Insertá el iframe de Google Maps con la dirección de la escuela</small>
         </div>
       </div>
-
-  
       <form class="form" id="contactForm">
         <div class="form-row">
           <input class="input" type="text"  id="fNombre"  placeholder="Tu nombre"   required />
@@ -580,58 +229,35 @@
         </div>
         <input  class="input"    type="text" id="fAsunto"  placeholder="Asunto"      required />
         <textarea class="textarea"           id="fMensaje" placeholder="Tu mensaje..." required></textarea>
-        <button type="submit" class="btn-enviar" id="btnEnviar">
-          Enviar mensaje
-        </button>
+        <button type="submit" class="btn-enviar" id="btnEnviar">Enviar mensaje</button>
       </form>
-
     </div>
   </div>
 </section>
 
-
-<!-- ═══════════════════════════════════════
-     FOOTER
-═══════════════════════════════════════ -->
 <footer>
   <div class="footer-inner">
-    <div class="footer-logo">
-      Escuela Proa <span>·</span> Río Tercero
-    </div>
+    <div class="footer-logo">Escuela Proa <span>·</span> Río Tercero</div>
     <div class="footer-links">
-      <a href="#inicio"   class="footer-link">Inicio</a>
-      <a href="#nosotros" class="footer-link">Nosotros</a>
-      <a href="#galeria"  class="footer-link">Galería</a>
-      <a href="#contacto" class="footer-link">Contacto</a>
-      <a href="/login"    class="footer-link">Campus Virtual</a>
+      <a href="#inicio"    class="footer-link">Inicio</a>
+      <a href="#nosotros"  class="footer-link">Nosotros</a>
+      <a href="#galeria"   class="footer-link">Galería</a>
+      <a href="#contacto"  class="footer-link">Contacto</a>
+      <a href="login.html" class="footer-link">Campus Virtual</a>
     </div>
-    <div class="footer-copy">
-      © <span id="year"></span> Escuela ProA Río Tercero · Todos los derechos reservados
-    </div>
+    <div class="footer-copy">© <span id="year"></span> Escuela ProA Río Tercero · Todos los derechos reservados</div>
   </div>
 </footer>
 
-
-<!-- ═══════════════════════════════════════
-     BOTPRESS — Asistente virtual
-═══════════════════════════════════════ -->
+<!-- BOTPRESS -->
 <!-- <script src="https://cdn.botpress.cloud/webchat/v2/inject.js"></script>
+<script>window.botpressWebChat.init({ botId: 'TU_BOT_ID', clientId: 'TU_CLIENT_ID' });</script> -->
+
 <script>
-  window.botpressWebChat.init({
-    botId: 'TU_BOT_ID',
-    clientId: 'TU_CLIENT_ID',
-  });
-</script> -->
-
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
   document.getElementById('year').textContent = new Date().getFullYear();
-
-
   window.addEventListener('scroll', () => {
     document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 50);
   });
-
-  // ─── Menú mobile ───
   function toggleMenu() {
     const m = document.getElementById('mobileMenu');
     const b = document.querySelector('.burger');
@@ -642,74 +268,52 @@
     document.getElementById('mobileMenu').classList.remove('open');
     document.querySelector('.burger').textContent = '☰';
   }
-
-  // ─── Galería / Carrusel ───
   const FOTOS = [
     { src: '/images/foto1.jpg', caption: 'Escribí una descripción para esta foto' },
     { src: '/images/foto2.jpg', caption: 'Escribí una descripción para esta foto' },
     { src: '/images/foto3.jpg', caption: 'Escribí una descripción para esta foto' },
     { src: '/images/foto4.jpg', caption: 'Escribí una descripción para esta foto' },
-    //  Agregár más: { src: '/images/foto5.jpg', caption: '...' }
   ];
-
-  let fotoActiva = 0;
-  let timer;
-
+  let fotoActiva = 0, timer;
   function renderGaleria() {
-    const dots  = document.getElementById('dots');
+    const dots = document.getElementById('dots');
     const thumbs = document.getElementById('thumbs');
-    dots.innerHTML = '';
-    thumbs.innerHTML = '';
-
+    dots.innerHTML = ''; thumbs.innerHTML = '';
     FOTOS.forEach((f, i) => {
-      // Dot
       const d = document.createElement('button');
       d.className = 'dot' + (i === 0 ? ' active' : '');
-      d.onclick = () => irA(i);
-      dots.appendChild(d);
-
-      // Thumb
+      d.onclick = () => irA(i); dots.appendChild(d);
       const img = document.createElement('img');
       img.className = 'thumb' + (i === 0 ? ' active' : '');
-      img.src = f.src;
-      img.alt = f.caption;
-      img.onerror = function() {
-        this.style.background = 'rgba(255,255,255,.12)';
-        this.removeAttribute('src');
-      };
-      img.onclick = () => irA(i);
-      thumbs.appendChild(img);
+      img.src = f.src; img.alt = f.caption;
+      img.onerror = function() { this.style.background = 'rgba(255,255,255,.12)'; this.removeAttribute('src'); };
+      img.onclick = () => irA(i); thumbs.appendChild(img);
     });
   }
-
   function irA(i) {
     fotoActiva = i;
-    const img     = document.getElementById('carruselImg');
+    const img = document.getElementById('carruselImg');
     const caption = document.getElementById('caption');
-
     img.style.opacity = '0';
-    setTimeout(() => {
-      img.src = FOTOS[i].src;
-      caption.textContent = FOTOS[i].caption;
-      img.style.opacity = '1';
-    }, 250);
-
-    document.querySelectorAll('.dot').forEach((d, j)  => d.classList.toggle('active', j === i));
+    setTimeout(() => { img.src = FOTOS[i].src; caption.textContent = FOTOS[i].caption; img.style.opacity = '1'; }, 250);
+    document.querySelectorAll('.dot').forEach((d, j) => d.classList.toggle('active', j === i));
     document.querySelectorAll('.thumb').forEach((t, j) => t.classList.toggle('active', j === i));
-
-    clearInterval(timer);
-    iniciarTimer();
+    clearInterval(timer); iniciarTimer();
   }
+  function cambiarFoto(dir) { irA((fotoActiva + dir + FOTOS.length) % FOTOS.length); }
+  function iniciarTimer() { timer = setInterval(() => cambiarFoto(1), 4000); }
+  renderGaleria(); iniciarTimer();
 
-  function cambiarFoto(dir) {
-    irA((fotoActiva + dir + FOTOS.length) % FOTOS.length);
-  }
-
-  function iniciarTimer() {
-    timer = setInterval(() => cambiarFoto(1), 4000);
-  }
-
-  renderGaleria();
-  iniciarTimer();
-
-  
+  // Formulario contacto
+  document.getElementById('contactForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const btn = document.getElementById('btnEnviar');
+    btn.textContent = '✅ Mensaje enviado';
+    btn.classList.add('enviado');
+    btn.disabled = true;
+    this.reset();
+    setTimeout(() => { btn.textContent = 'Enviar mensaje'; btn.classList.remove('enviado'); btn.disabled = false; }, 4000);
+  });
+</script>
+</body>
+</html>

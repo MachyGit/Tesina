@@ -10,178 +10,137 @@
     :root {
       --azul:#1a3a6b; --azul2:#2256a8; --acento:#e8a020;
       --claro:#f5f7fa; --texto:#1c1c2e; --gris:#6b7280;
-      --sidebar: 260px;
+      --verde:#16a34a; --rojo:#dc2626; --sidebar:260px;
     }
     body { font-family:'DM Sans',sans-serif; background:var(--claro); display:flex; min-height:100vh; }
 
     /* SIDEBAR */
-    .sidebar {
-      width:var(--sidebar); background:var(--azul); color:#fff;
-      display:flex; flex-direction:column;
-      position:fixed; top:0; left:0; bottom:0; z-index:50;
-    }
-    .sidebar-logo {
-      padding:28px 24px 20px;
-      font-family:'Playfair Display',serif; font-size:1.1rem;
-      border-bottom:1px solid rgba(255,255,255,.1);
-    }
+    .sidebar { width:var(--sidebar); background:var(--azul); color:#fff; display:flex; flex-direction:column; position:fixed; top:0; left:0; bottom:0; z-index:50; }
+    .sidebar-logo { padding:24px 20px 16px; font-family:'Playfair Display',serif; font-size:1.05rem; border-bottom:1px solid rgba(255,255,255,.1); }
     .sidebar-logo span { color:var(--acento); }
-    .sidebar-rol {
-      padding:12px 24px;
-      font-size:.75rem; letter-spacing:2px;
-      text-transform:uppercase; opacity:.5;
-      border-bottom:1px solid rgba(255,255,255,.08);
-    }
-    .sidebar-nav { flex:1; padding:16px 0; }
-    .nav-item {
-      display:flex; align-items:center; gap:12px;
-      padding:13px 24px; color:rgba(255,255,255,.75);
-      cursor:pointer; transition:all .2s; font-size:.92rem;
-      border-left:3px solid transparent;
-    }
-    .nav-item:hover, .nav-item.active {
-      background:rgba(255,255,255,.08);
-      color:#fff; border-left-color:var(--acento);
-    }
-    .nav-item .icon { font-size:1.1rem; width:22px; }
-    .sidebar-footer {
-      padding:20px 24px;
-      border-top:1px solid rgba(255,255,255,.1);
-    }
-    .btn-logout {
-      display:flex; align-items:center; gap:8px;
-      background:rgba(255,255,255,.08); border:none;
-      color:#fff; padding:11px 16px; border-radius:8px;
-      cursor:pointer; font-family:'DM Sans',sans-serif;
-      font-size:.88rem; width:100%; transition:background .2s;
-    }
+    .sidebar-rol { padding:10px 20px; font-size:.72rem; letter-spacing:2px; text-transform:uppercase; opacity:.5; border-bottom:1px solid rgba(255,255,255,.08); }
+    .sidebar-nav { flex:1; padding:12px 0; overflow-y:auto; }
+    .nav-item { display:flex; align-items:center; gap:10px; padding:12px 20px; color:rgba(255,255,255,.75); cursor:pointer; transition:all .2s; font-size:.9rem; border-left:3px solid transparent; }
+    .nav-item:hover, .nav-item.active { background:rgba(255,255,255,.08); color:#fff; border-left-color:var(--acento); }
+    .nav-item .icon { font-size:1rem; width:20px; }
+    .nav-badge { background:var(--rojo); color:#fff; border-radius:20px; padding:1px 8px; font-size:.7rem; font-weight:700; margin-left:auto; }
+    .sidebar-footer { padding:16px 20px; border-top:1px solid rgba(255,255,255,.1); }
+    .btn-logout { display:flex; align-items:center; gap:8px; background:rgba(255,255,255,.08); border:none; color:#fff; padding:10px 14px; border-radius:8px; cursor:pointer; font-family:'DM Sans',sans-serif; font-size:.85rem; width:100%; transition:background .2s; }
     .btn-logout:hover { background:rgba(255,255,255,.15); }
 
     /* MAIN */
     .main { margin-left:var(--sidebar); flex:1; display:flex; flex-direction:column; min-height:100vh; }
 
     /* TOPBAR */
-    .topbar {
-      background:#fff; padding:18px 36px;
-      display:flex; align-items:center; justify-content:space-between;
-      box-shadow:0 1px 12px rgba(0,0,0,.06); position:sticky; top:0; z-index:40;
+    .topbar { background:#fff; padding:16px 32px; display:flex; align-items:center; justify-content:space-between; box-shadow:0 1px 12px rgba(0,0,0,.06); position:sticky; top:0; z-index:40; }
+    .topbar-title { font-family:'Playfair Display',serif; font-size:1.25rem; color:var(--texto); }
+    .topbar-right { display:flex; align-items:center; gap:12px; }
+    .verificado-badge {
+      display:none; align-items:center; gap:6px;
+      background:#f0fdf4; border:1px solid #bbf7d0; color:var(--verde);
+      padding:5px 12px; border-radius:20px; font-size:.78rem; font-weight:600;
     }
-    .topbar-title { font-family:'Playfair Display',serif; font-size:1.3rem; color:var(--texto); }
-    .topbar-user {
-      display:flex; align-items:center; gap:10px; font-size:.88rem; color:var(--gris);
-    }
-    .avatar {
-      width:36px; height:36px; border-radius:50%;
-      background:var(--azul); color:#fff;
-      display:flex; align-items:center; justify-content:center;
-      font-weight:600; font-size:.9rem;
-    }
+    .topbar-user { display:flex; align-items:center; gap:8px; font-size:.85rem; color:var(--gris); }
+    .avatar { width:34px; height:34px; border-radius:50%; background:var(--azul); color:#fff; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:.88rem; }
 
     /* CONTENT */
-    .content { padding:32px 36px; flex:1; }
+    .content { padding:28px 32px; flex:1; }
 
     /* TABS */
-    .tabs { display:flex; gap:4px; margin-bottom:28px; background:#fff; padding:6px; border-radius:10px; box-shadow:0 1px 8px rgba(0,0,0,.06); width:fit-content; }
-    .tab {
-      padding:9px 20px; border-radius:7px; border:none;
-      cursor:pointer; font-family:'DM Sans',sans-serif; font-size:.88rem; font-weight:500;
-      color:var(--gris); background:transparent; transition:all .2s;
-    }
+    .tabs { display:flex; gap:4px; margin-bottom:24px; background:#fff; padding:5px; border-radius:10px; box-shadow:0 1px 8px rgba(0,0,0,.06); width:fit-content; flex-wrap:wrap; }
+    .tab { padding:8px 18px; border-radius:7px; border:none; cursor:pointer; font-family:'DM Sans',sans-serif; font-size:.85rem; font-weight:600; color:var(--gris); background:transparent; transition:all .2s; position:relative; }
     .tab.active { background:var(--azul); color:#fff; }
+    .tab-dot { width:7px; height:7px; background:var(--rojo); border-radius:50%; position:absolute; top:6px; right:6px; display:none; }
+    .tab-dot.show { display:block; }
 
-    /* PANELS */
     .panel { display:none; }
     .panel.active { display:block; }
 
     /* STATS */
-    .stats-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:16px; margin-bottom:28px; }
-    .stat-card {
-      background:#fff; border-radius:12px; padding:20px 22px;
-      box-shadow:0 1px 8px rgba(0,0,0,.06);
-    }
-    .stat-icon { font-size:1.6rem; margin-bottom:10px; }
-    .stat-val { font-family:'Playfair Display',serif; font-size:1.9rem; color:var(--texto); }
-    .stat-lbl { font-size:.8rem; color:var(--gris); margin-top:2px; }
+    .stats-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:14px; margin-bottom:24px; }
+    .stat-card { background:#fff; border-radius:12px; padding:18px 20px; box-shadow:0 1px 8px rgba(0,0,0,.06); }
+    .stat-icon { font-size:1.5rem; margin-bottom:8px; }
+    .stat-val { font-family:'Playfair Display',serif; font-size:1.8rem; color:var(--texto); }
+    .stat-lbl { font-size:.78rem; color:var(--gris); margin-top:2px; }
 
     /* CARDS */
-    .card {
-      background:#fff; border-radius:12px; padding:24px;
-      box-shadow:0 1px 8px rgba(0,0,0,.06); margin-bottom:20px;
-    }
-    .card-header {
-      display:flex; align-items:center; justify-content:space-between;
-      margin-bottom:20px;
-    }
-    .card-title { font-weight:600; font-size:1rem; color:var(--texto); }
+    .card { background:#fff; border-radius:12px; padding:22px; box-shadow:0 1px 8px rgba(0,0,0,.06); margin-bottom:18px; }
+    .card-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:18px; }
+    .card-title { font-weight:600; font-size:.95rem; color:var(--texto); }
 
     /* FORM */
-    .form-grid { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
-    .field { display:flex; flex-direction:column; gap:5px; }
+    .form-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+    .field { display:flex; flex-direction:column; gap:4px; }
     .field.full { grid-column:1/-1; }
-    label { font-size:.82rem; font-weight:600; color:var(--texto); }
-    input, select, textarea {
-      padding:11px 14px; border:1.5px solid #e5e7eb; border-radius:8px;
-      font-family:'DM Sans',sans-serif; font-size:.92rem; color:var(--texto);
-      background:var(--claro); outline:none; transition:border .2s;
-    }
-    input:focus, select:focus, textarea:focus {
-      border-color:var(--azul2); box-shadow:0 0 0 3px rgba(34,86,168,.1);
-    }
-    textarea { resize:vertical; min-height:100px; }
-    .btn {
-      padding:11px 22px; border-radius:8px; border:none;
-      font-family:'DM Sans',sans-serif; font-weight:600; font-size:.9rem;
-      cursor:pointer; transition:all .2s;
-    }
+    label { font-size:.8rem; font-weight:600; color:var(--texto); }
+    input, select, textarea { padding:10px 12px; border:1.5px solid #e5e7eb; border-radius:8px; font-family:'DM Sans',sans-serif; font-size:.9rem; color:var(--texto); background:var(--claro); outline:none; transition:border .2s; }
+    input:focus, select:focus, textarea:focus { border-color:var(--azul2); box-shadow:0 0 0 3px rgba(34,86,168,.1); }
+    textarea { resize:vertical; min-height:90px; }
+
+    /* BUTTONS */
+    .btn { padding:10px 20px; border-radius:8px; border:none; font-family:'DM Sans',sans-serif; font-weight:600; font-size:.87rem; cursor:pointer; transition:all .2s; }
     .btn-primary { background:var(--azul); color:#fff; }
-    .btn-primary:hover { background:var(--azul2); transform:translateY(-1px); }
-    .btn-danger  { background:#fee2e2; color:#dc2626; }
+    .btn-primary:hover { background:var(--azul2); }
+    .btn-success { background:#dcfce7; color:var(--verde); }
+    .btn-success:hover { background:#bbf7d0; }
+    .btn-danger  { background:#fee2e2; color:var(--rojo); }
     .btn-danger:hover  { background:#fecaca; }
-    .btn-sm { padding:7px 14px; font-size:.8rem; }
+    .btn-sm { padding:6px 12px; font-size:.78rem; }
 
     /* TABLE */
-    table { width:100%; border-collapse:collapse; font-size:.88rem; }
-    th { text-align:left; padding:10px 14px; font-size:.75rem; letter-spacing:.5px; text-transform:uppercase; color:var(--gris); border-bottom:2px solid #f0f0f0; }
-    td { padding:12px 14px; border-bottom:1px solid #f7f7f7; color:var(--texto); }
+    table { width:100%; border-collapse:collapse; font-size:.85rem; }
+    th { text-align:left; padding:9px 12px; font-size:.72rem; letter-spacing:.5px; text-transform:uppercase; color:var(--gris); border-bottom:2px solid #f0f0f0; }
+    td { padding:11px 12px; border-bottom:1px solid #f7f7f7; color:var(--texto); vertical-align:middle; }
     tr:hover td { background:#fafafa; }
 
-    /* BADGE */
-    .badge {
-      display:inline-block; padding:3px 10px; border-radius:20px;
-      font-size:.75rem; font-weight:600;
-    }
-    .badge-director  { background:#ede9fe; color:#7c3aed; }
-    .badge-secretaria{ background:#dbeafe; color:#1d4ed8; }
-    .badge-preceptor { background:#cffafe; color:#0e7490; }
-    .badge-profesor  { background:#dcfce7; color:#16a34a; }
-    .badge-alumno    { background:#fef3c7; color:#b45309; }
-    .badge-general   { background:#e0e7ff; color:#4338ca; }
-    .badge-tarea     { background:#dcfce7; color:#16a34a; }
-    .badge-horario   { background:#fef3c7; color:#b45309; }
-    .badge-urgente   { background:#fee2e2; color:#dc2626; }
+    /* BADGES */
+    .badge { display:inline-block; padding:3px 10px; border-radius:20px; font-size:.72rem; font-weight:700; }
+    .badge-director   { background:#ede9fe; color:#7c3aed; }
+    .badge-secretaria { background:#dbeafe; color:#1d4ed8; }
+    .badge-preceptor  { background:#cffafe; color:#0e7490; }
+    .badge-profesor   { background:#dcfce7; color:#16a34a; }
+    .badge-alumno     { background:#fef3c7; color:#b45309; }
+    .badge-pendiente  { background:#fee2e2; color:#dc2626; }
+    .badge-activo     { background:#dcfce7; color:#16a34a; }
+    .badge-general    { background:#e0e7ff; color:#4338ca; }
+    .badge-tarea      { background:#dcfce7; color:#16a34a; }
+    .badge-horario    { background:#fef3c7; color:#b45309; }
+    .badge-urgente    { background:#fee2e2; color:#dc2626; }
 
     /* AVISO CARD */
-    .aviso-card {
-      border:1px solid #f0f0f0; border-radius:10px; padding:16px 18px;
-      margin-bottom:12px; transition:box-shadow .2s;
-    }
+    .aviso-card { border:1px solid #f0f0f0; border-radius:10px; padding:14px 16px; margin-bottom:10px; transition:box-shadow .2s; }
     .aviso-card:hover { box-shadow:0 4px 16px rgba(0,0,0,.07); }
-    .aviso-meta { display:flex; align-items:center; gap:10px; margin-bottom:8px; flex-wrap:wrap; }
-    .aviso-titulo { font-weight:600; font-size:.95rem; margin-bottom:6px; }
-    .aviso-body { color:var(--gris); font-size:.88rem; line-height:1.6; }
-    .aviso-fecha { font-size:.78rem; color:var(--gris); margin-left:auto; }
+    .aviso-meta { display:flex; align-items:center; gap:8px; margin-bottom:8px; flex-wrap:wrap; }
+    .aviso-titulo { font-weight:600; font-size:.92rem; margin-bottom:5px; }
+    .aviso-body { color:var(--gris); font-size:.85rem; line-height:1.6; }
+    .aviso-fecha { font-size:.75rem; color:var(--gris); margin-left:auto; }
+
+    /* PENDIENTES */
+    .pendiente-card {
+      border:2px solid #fde68a; border-radius:10px; padding:14px 16px;
+      margin-bottom:10px; background:#fffbeb;
+      display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap;
+    }
+    .pendiente-info { flex:1; }
+    .pendiente-nombre { font-weight:600; font-size:.92rem; color:var(--texto); }
+    .pendiente-email  { font-size:.8rem; color:var(--gris); margin-top:2px; }
+    .pendiente-rol    { font-size:.78rem; color:#b45309; margin-top:4px; }
+    .pendiente-btns   { display:flex; gap:8px; flex-shrink:0; }
 
     /* EMPTY */
-    .empty { text-align:center; padding:48px; color:var(--gris); }
-    .empty-icon { font-size:2.5rem; margin-bottom:12px; }
+    .empty { text-align:center; padding:40px; color:var(--gris); }
+    .empty-icon { font-size:2.2rem; margin-bottom:10px; }
+
+    /* TIPO ROW */
+    .tipo-row { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:10px; }
+    .tipo-badge { padding:7px 14px; border-radius:20px; border:1.5px solid #e5e7eb; cursor:pointer; font-size:.82rem; font-weight:600; color:var(--gris); background:var(--claro); transition:all .2s; }
+    .tipo-badge.active { background:var(--azul); color:#fff; border-color:var(--azul); }
 
     @media(max-width:900px) {
-      .sidebar { display:none; }
-      .main { margin-left:0; }
-      .stats-grid { grid-template-columns:1fr 1fr; }
-      .form-grid { grid-template-columns:1fr; }
-      .content { padding:20px 16px; }
-      .topbar { padding:14px 20px; }
+      .sidebar{display:none} .main{margin-left:0}
+      .stats-grid{grid-template-columns:1fr 1fr}
+      .form-grid{grid-template-columns:1fr}
+      .content{padding:18px 14px} .topbar{padding:12px 18px}
     }
   </style>
 </head>
@@ -195,6 +154,10 @@
     <div class="nav-item active" onclick="showTab('inicio')"><span class="icon">🏠</span> Inicio</div>
     <div class="nav-item" onclick="showTab('avisos')"><span class="icon">📢</span> Avisos</div>
     <div class="nav-item" onclick="showTab('usuarios')"><span class="icon">👥</span> Usuarios</div>
+    <div class="nav-item" id="navPendientes" onclick="showTab('pendientes')">
+      <span class="icon">⏳</span> Pendientes
+      <span class="nav-badge" id="sidebarBadge" style="display:none">0</span>
+    </div>
     <div class="nav-item" onclick="showTab('logs')"><span class="icon">📋</span> Actividad</div>
   </nav>
   <div class="sidebar-footer">
@@ -206,120 +169,113 @@
 <div class="main">
   <div class="topbar">
     <div class="topbar-title" id="pageTitle">Panel Director</div>
-    <div class="topbar-user">
-      <div class="avatar" id="avatarInitial">D</div>
-      <span id="userName">Director</span>
+    <div class="topbar-right">
+      <div class="verificado-badge" id="verificadoBadge"></div>
+      <div class="topbar-user">
+        <div class="avatar" id="avatarInitial">D</div>
+        <span id="userName">Director</span>
+      </div>
     </div>
   </div>
 
   <div class="content">
-
     <!-- TABS -->
     <div class="tabs">
       <button class="tab active" onclick="showTab('inicio')">🏠 Inicio</button>
       <button class="tab" onclick="showTab('avisos')">📢 Avisos</button>
       <button class="tab" onclick="showTab('usuarios')">👥 Usuarios</button>
+      <button class="tab" onclick="showTab('pendientes')">
+        ⏳ Pendientes
+        <span class="tab-dot" id="tabDot"></span>
+      </button>
       <button class="tab" onclick="showTab('logs')">📋 Actividad</button>
     </div>
 
-    <!-- PANEL: INICIO -->
+    <!-- INICIO -->
     <div class="panel active" id="panel-inicio">
       <div class="stats-grid">
-        <div class="stat-card">
-          <div class="stat-icon">👥</div>
-          <div class="stat-val" id="statUsuarios">—</div>
-          <div class="stat-lbl">Usuarios totales</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-icon">📢</div>
-          <div class="stat-val" id="statAvisos">—</div>
-          <div class="stat-lbl">Avisos publicados</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-icon">✅</div>
-          <div class="stat-val" id="statSesiones">—</div>
-          <div class="stat-lbl">Sesiones hoy</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-icon">🎓</div>
-          <div class="stat-val" id="statAlumnos">—</div>
-          <div class="stat-lbl">Alumnos</div>
-        </div>
+        <div class="stat-card"><div class="stat-icon">👥</div><div class="stat-val" id="statUsuarios">—</div><div class="stat-lbl">Usuarios activos</div></div>
+        <div class="stat-card"><div class="stat-icon">⏳</div><div class="stat-val" id="statPendientes">—</div><div class="stat-lbl">Pendientes</div></div>
+        <div class="stat-card"><div class="stat-icon">📢</div><div class="stat-val" id="statAvisos">—</div><div class="stat-lbl">Avisos publicados</div></div>
+        <div class="stat-card"><div class="stat-icon">🎓</div><div class="stat-val" id="statAlumnos">—</div><div class="stat-lbl">Alumnos</div></div>
       </div>
-
       <div class="card">
         <div class="card-header"><div class="card-title">📢 Últimos avisos</div></div>
-        <div id="ultimosAvisos"><div class="empty"><div class="empty-icon">📭</div>Cargando avisos...</div></div>
+        <div id="ultimosAvisos"><div class="empty"><div class="empty-icon">📭</div>Sin avisos aún</div></div>
       </div>
     </div>
 
-    <!-- PANEL: AVISOS -->
+    <!-- AVISOS -->
     <div class="panel" id="panel-avisos">
       <div class="card">
         <div class="card-header"><div class="card-title">Publicar nuevo aviso</div></div>
         <div class="form-grid">
           <div class="field"><label>Título</label><input type="text" id="avisoTitulo" placeholder="Título del aviso"/></div>
           <div class="field"><label>Tipo</label>
-            <select id="avisoTipo">
-              <option value="general">📣 General</option>
-              <option value="tarea">📚 Tarea</option>
-              <option value="horario">🕐 Horario</option>
-              <option value="urgente">🚨 Urgente</option>
-            </select>
+            <div class="tipo-row">
+              <span class="tipo-badge active" onclick="selTipo(this,'general')">📣 General</span>
+              <span class="tipo-badge" onclick="selTipo(this,'tarea')">📚 Tarea</span>
+              <span class="tipo-badge" onclick="selTipo(this,'horario')">🕐 Horario</span>
+              <span class="tipo-badge" onclick="selTipo(this,'urgente')">🚨 Urgente</span>
+            </div>
           </div>
-          <div class="field full"><label>Contenido</label><textarea id="avisoContenido" placeholder="Escribí el contenido del aviso..."></textarea></div>
-          <div class="field full">
-            <button class="btn btn-primary" onclick="publicarAviso()">📤 Publicar aviso</button>
-          </div>
+          <div class="field full"><label>Contenido</label><textarea id="avisoContenido" placeholder="Escribí el contenido..."></textarea></div>
+          <div class="field full"><button class="btn btn-primary" onclick="publicarAviso()">📤 Publicar aviso</button></div>
         </div>
       </div>
       <div class="card">
         <div class="card-header"><div class="card-title">Avisos publicados</div></div>
-        <div id="listaAvisos"><div class="empty"><div class="empty-icon">📭</div>Cargando...</div></div>
+        <div id="listaAvisos"><div class="empty"><div class="empty-icon">📭</div>Sin avisos</div></div>
       </div>
     </div>
 
-    <!-- PANEL: USUARIOS -->
+    <!-- USUARIOS -->
     <div class="panel" id="panel-usuarios">
       <div class="card">
-        <div class="card-header"><div class="card-title">Crear nuevo usuario</div></div>
+        <div class="card-header"><div class="card-title">Crear usuario manualmente</div></div>
         <div class="form-grid">
           <div class="field"><label>Nombre completo</label><input type="text" id="uNombre" placeholder="Nombre y apellido"/></div>
-          <div class="field"><label>Email</label><input type="email" id="uEmail" placeholder="correo@escuela.edu.ar"/></div>
+          <div class="field"><label>Email</label><input type="email" id="uEmail" placeholder="correo@escuelasproa.edu.ar"/></div>
           <div class="field"><label>Contraseña</label><input type="password" id="uPassword" placeholder="Contraseña inicial"/></div>
           <div class="field"><label>Rol</label>
             <select id="uRol">
-              <option value="alumno">🎓 Alumno</option>
-              <option value="profesor">📖 Profesor</option>
-              <option value="preceptor">👁️ Preceptor</option>
-              <option value="secretaria">📋 Secretaria</option>
-              <option value="director">🏫 Director</option>
+              <option value="alumno">🟡 Alumno</option>
+              <option value="profesor">🟢 Profesor</option>
+              <option value="preceptor">🔵 Preceptor</option>
+              <option value="secretaria">🔵 Secretaria</option>
+              <option value="director">🟣 Director</option>
             </select>
           </div>
-          <div class="field full">
-            <button class="btn btn-primary" onclick="crearUsuario()">➕ Crear usuario</button>
-          </div>
+          <div class="field full"><button class="btn btn-primary" onclick="crearUsuario()">➕ Crear usuario</button></div>
         </div>
       </div>
       <div class="card">
-        <div class="card-header"><div class="card-title">Usuarios del sistema</div></div>
+        <div class="card-header"><div class="card-title">Usuarios activos</div></div>
         <div style="overflow-x:auto">
           <table>
             <thead><tr><th>Nombre</th><th>Email</th><th>Rol</th><th>Acciones</th></tr></thead>
-            <tbody id="tablaUsuarios"><tr><td colspan="4" style="text-align:center;padding:32px;color:#9ca3af">Cargando...</td></tr></tbody>
+            <tbody id="tablaUsuarios"><tr><td colspan="4" style="text-align:center;padding:28px;color:#9ca3af">Cargando...</td></tr></tbody>
           </table>
         </div>
       </div>
     </div>
 
-    <!-- PANEL: LOGS -->
+    <!-- PENDIENTES -->
+    <div class="panel" id="panel-pendientes">
+      <div class="card">
+        <div class="card-header"><div class="card-title">⏳ Usuarios esperando aprobación</div></div>
+        <div id="listaPendientes"><div class="empty"><div class="empty-icon">✅</div>No hay solicitudes pendientes</div></div>
+      </div>
+    </div>
+
+    <!-- LOGS -->
     <div class="panel" id="panel-logs">
       <div class="card">
         <div class="card-header"><div class="card-title">📋 Registro de actividad</div></div>
         <div style="overflow-x:auto">
           <table>
-            <thead><tr><th>Usuario</th><th>Rol</th><th>Acción</th><th>Fecha y hora</th></tr></thead>
-            <tbody id="tablaLogs"><tr><td colspan="4" style="text-align:center;padding:32px;color:#9ca3af">Cargando...</td></tr></tbody>
+            <thead><tr><th>Usuario</th><th>Rol</th><th>Acción</th><th>Fecha</th></tr></thead>
+            <tbody id="tablaLogs"><tr><td colspan="4" style="text-align:center;padding:28px;color:#9ca3af">Sin registros</td></tr></tbody>
           </table>
         </div>
       </div>
@@ -333,33 +289,78 @@
   // ── Init ──
   const user = getUser();
   if (user) {
-    document.getElementById('userName').textContent = user.nombre;
+    document.getElementById('userName').textContent     = user.nombre;
     document.getElementById('avatarInitial').textContent = user.nombre[0].toUpperCase();
+  }
+  initValidacionTelegram();
+
+  // ── Avisos en localStorage ──
+  function getAvisos() { return JSON.parse(localStorage.getItem('campus_avisos') || '[]'); }
+  function guardarAvisos(a) { localStorage.setItem('campus_avisos', JSON.stringify(a)); }
+
+  // ── Logs ──
+  function getLogs() { return JSON.parse(localStorage.getItem('campus_logs') || '[]'); }
+  function addLog(accion) {
+    const logs = getLogs();
+    logs.unshift({ nombre: user?.nombre, rol: user?.rol, accion, fecha: new Date().toISOString() });
+    localStorage.setItem('campus_logs', JSON.stringify(logs.slice(0,100)));
+  }
+
+  // ── Tipo de aviso ──
+  let tipoActual = 'general';
+  function selTipo(el, tipo) {
+    document.querySelectorAll('.tipo-badge').forEach(b => b.classList.remove('active'));
+    el.classList.add('active');
+    tipoActual = tipo;
   }
 
   // ── Tabs ──
+  const TITULOS = { inicio:'Panel Director', avisos:'Gestión de Avisos', usuarios:'Gestión de Usuarios', pendientes:'Solicitudes Pendientes', logs:'Registro de Actividad' };
   function showTab(tab) {
     document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
     document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
     document.getElementById('panel-' + tab).classList.add('active');
-    document.querySelectorAll('.tab').forEach(t => { if (t.textContent.toLowerCase().includes(tab)) t.classList.add('active'); });
-    const titulos = { inicio:'Panel Director', avisos:'Gestión de Avisos', usuarios:'Gestión de Usuarios', logs:'Registro de Actividad' };
-    document.getElementById('pageTitle').textContent = titulos[tab] || 'Panel Director';
-    if (tab === 'avisos')   cargarAvisos();
-    if (tab === 'usuarios') cargarUsuarios();
-    if (tab === 'logs')     cargarLogs();
+    document.querySelectorAll('.tab').forEach(t => { if(t.textContent.toLowerCase().includes(tab.substring(0,4))) t.classList.add('active'); });
+    document.getElementById('pageTitle').textContent = TITULOS[tab] || 'Panel Director';
+    if (tab === 'avisos')     cargarAvisos();
+    if (tab === 'usuarios')   cargarUsuarios();
+    if (tab === 'pendientes') cargarPendientes();
+    if (tab === 'logs')       cargarLogs();
+    if (tab === 'inicio')     cargarInicio();
+  }
+
+  // ── Inicio ──
+  function cargarInicio() {
+    const usuarios  = getUsuarios();
+    const avisos    = getAvisos();
+    const pendientes = usuarios.filter(u => u.estado === 'pendiente');
+    const activos   = usuarios.filter(u => u.estado === 'activo');
+
+    document.getElementById('statUsuarios').textContent  = activos.length;
+    document.getElementById('statPendientes').textContent = pendientes.length;
+    document.getElementById('statAvisos').textContent    = avisos.length;
+    document.getElementById('statAlumnos').textContent   = activos.filter(u => u.rol === 'alumno').length;
+
+    // Badge pendientes
+    const badge = document.getElementById('sidebarBadge');
+    const dot   = document.getElementById('tabDot');
+    if (pendientes.length > 0) {
+      badge.textContent = pendientes.length; badge.style.display = 'inline-block';
+      dot.classList.add('show');
+    } else {
+      badge.style.display = 'none'; dot.classList.remove('show');
+    }
+
+    // Últimos avisos
+    const el = document.getElementById('ultimosAvisos');
+    if (!avisos.length) { el.innerHTML = '<div class="empty"><div class="empty-icon">📭</div>Sin avisos aún</div>'; return; }
+    el.innerHTML = avisos.slice(0,3).map(renderAviso).join('');
   }
 
   // ── Avisos ──
-  async function cargarAvisos() {
-    const data = await apiFetch('/api/avisos');
-    const lista = document.getElementById('listaAvisos');
-    const ultimos = document.getElementById('ultimosAvisos');
-    if (!data.length) {
-      lista.innerHTML = '<div class="empty"><div class="empty-icon">📭</div>No hay avisos aún</div>';
-      return;
-    }
-    const render = (avisos) => avisos.map(a => `
+  function renderAviso(a) {
+    return `
       <div class="aviso-card">
         <div class="aviso-meta">
           <span class="badge badge-${a.tipo}">${a.tipo.toUpperCase()}</span>
@@ -368,92 +369,135 @@
         <div class="aviso-titulo">${a.titulo}</div>
         <div class="aviso-body">${a.contenido}</div>
         <div style="margin-top:10px">
-          <button class="btn btn-danger btn-sm" onclick="eliminarAviso(${a.id})">🗑️ Eliminar</button>
+          <button class="btn btn-danger btn-sm" onclick="eliminarAviso('${a.id}')">🗑️ Eliminar</button>
         </div>
-      </div>
-    `).join('');
-    lista.innerHTML = render(data);
-    if (ultimos) ultimos.innerHTML = render(data.slice(0,3));
-    document.getElementById('statAvisos').textContent = data.length;
+      </div>`;
   }
 
-  async function publicarAviso() {
+  function cargarAvisos() {
+    const avisos = getAvisos();
+    const el = document.getElementById('listaAvisos');
+    el.innerHTML = avisos.length ? avisos.map(renderAviso).join('') : '<div class="empty"><div class="empty-icon">📭</div>Sin avisos</div>';
+    document.getElementById('statAvisos').textContent = avisos.length;
+  }
+
+  function publicarAviso() {
     const titulo    = document.getElementById('avisoTitulo').value.trim();
     const contenido = document.getElementById('avisoContenido').value.trim();
-    const tipo      = document.getElementById('avisoTipo').value;
     if (!titulo || !contenido) return alert('Completá título y contenido');
-    await apiFetch('/api/avisos', { method:'POST', body: JSON.stringify({ titulo, contenido, tipo }) });
-    document.getElementById('avisoTitulo').value = '';
+    const avisos = getAvisos();
+    avisos.unshift({ id: Date.now().toString(), titulo, contenido, tipo: tipoActual, autor: user.nombre, fecha: new Date().toISOString() });
+    guardarAvisos(avisos);
+    document.getElementById('avisoTitulo').value    = '';
     document.getElementById('avisoContenido').value = '';
+    addLog('Publicó aviso: ' + titulo);
     cargarAvisos();
   }
 
-  async function eliminarAviso(id) {
+  function eliminarAviso(id) {
     if (!confirm('¿Eliminás este aviso?')) return;
-    await apiFetch('/api/avisos/' + id, { method:'DELETE' });
+    guardarAvisos(getAvisos().filter(a => a.id !== id));
+    addLog('Eliminó aviso');
     cargarAvisos();
   }
 
   // ── Usuarios ──
-  async function cargarUsuarios() {
-    const data = await apiFetch('/api/users');
+  function cargarUsuarios() {
+    const usuarios = getUsuarios().filter(u => u.estado === 'activo');
     const tbody = document.getElementById('tablaUsuarios');
-    const alumnos = data.filter(u => u.rol === 'alumno').length;
-    document.getElementById('statUsuarios').textContent = data.length;
-    document.getElementById('statAlumnos').textContent  = alumnos;
-    tbody.innerHTML = data.map(u => `
+    tbody.innerHTML = usuarios.map(u => `
       <tr>
         <td><strong>${u.nombre}</strong></td>
-        <td>${u.email}</td>
+        <td style="color:var(--gris)">${u.email}</td>
         <td><span class="badge badge-${u.rol}">${u.rol}</span></td>
         <td>
-          <select onchange="cambiarRol(${u.id}, this.value)" style="padding:5px 8px;font-size:.8rem;border-radius:6px;border:1px solid #e5e7eb">
-            ${['director','secretaria','preceptor','profesor','alumno'].map(r =>
-              `<option value="${r}" ${r===u.rol?'selected':''}>${r}</option>`
-            ).join('')}
+          <select onchange="cambiarRol('${u.email}', this.value)" style="padding:5px 8px;font-size:.8rem;border-radius:6px;border:1px solid #e5e7eb">
+            ${['director','secretaria','preceptor','profesor','alumno'].map(r => `<option value="${r}" ${r===u.rol?'selected':''}>${r}</option>`).join('')}
           </select>
         </td>
-      </tr>
-    `).join('');
+      </tr>`).join('');
   }
 
-  async function crearUsuario() {
+  function crearUsuario() {
     const nombre   = document.getElementById('uNombre').value.trim();
-    const email    = document.getElementById('uEmail').value.trim();
+    const email    = document.getElementById('uEmail').value.trim().toLowerCase();
     const password = document.getElementById('uPassword').value;
     const rol      = document.getElementById('uRol').value;
     if (!nombre || !email || !password) return alert('Completá todos los campos');
-    await apiFetch('/api/users', { method:'POST', body: JSON.stringify({ nombre, email, password, rol }) });
+    const usuarios = getUsuarios();
+    if (usuarios.find(u => u.email === email)) return alert('Ese email ya existe');
+    usuarios.push({ nombre, email, password, rol, estado: 'activo', telegram_validado: false });
+    guardarUsuarios(usuarios);
     document.getElementById('uNombre').value = '';
     document.getElementById('uEmail').value  = '';
     document.getElementById('uPassword').value = '';
+    addLog('Creó usuario: ' + nombre);
+    cargarUsuarios();
+    alert('✅ Usuario creado correctamente');
+  }
+
+  function cambiarRol(email, nuevoRol) {
+    actualizarUsuario(email, { rol: nuevoRol });
+    addLog('Cambió rol de ' + email + ' a ' + nuevoRol);
     cargarUsuarios();
   }
 
-  async function cambiarRol(userId, nuevoRol) {
-    await apiFetch('/api/users/rol', { method:'PUT', body: JSON.stringify({ userId, nuevoRol }) });
-    cargarUsuarios();
+  // ── Pendientes ──
+  function cargarPendientes() {
+    const pendientes = getUsuarios().filter(u => u.estado === 'pendiente');
+    const el = document.getElementById('listaPendientes');
+    if (!pendientes.length) {
+      el.innerHTML = '<div class="empty"><div class="empty-icon">✅</div>No hay solicitudes pendientes</div>';
+      return;
+    }
+    el.innerHTML = pendientes.map(u => `
+      <div class="pendiente-card">
+        <div class="pendiente-info">
+          <div class="pendiente-nombre">${u.nombre}</div>
+          <div class="pendiente-email">${u.email}</div>
+          <div class="pendiente-rol">Rol solicitado: ${u.rol}</div>
+        </div>
+        <div class="pendiente-btns">
+          <button class="btn btn-success btn-sm" onclick="aprobarUsuario('${u.email}')">✅ Aprobar</button>
+          <button class="btn btn-danger btn-sm"  onclick="rechazarUsuario('${u.email}')">❌ Rechazar</button>
+        </div>
+      </div>`).join('');
+  }
+
+  function aprobarUsuario(email) {
+    actualizarUsuario(email, { estado: 'activo' });
+    addLog('Aprobó usuario: ' + email);
+    cargarPendientes();
+    cargarInicio();
+    alert('✅ Usuario aprobado correctamente');
+  }
+
+  function rechazarUsuario(email) {
+    if (!confirm('¿Rechazás y eliminás esta solicitud?')) return;
+    const usuarios = getUsuarios().filter(u => u.email !== email);
+    guardarUsuarios(usuarios);
+    addLog('Rechazó solicitud: ' + email);
+    cargarPendientes();
+    cargarInicio();
   }
 
   // ── Logs ──
-  async function cargarLogs() {
-    const data = await apiFetch('/api/logs');
+  function cargarLogs() {
+    const logs = getLogs();
     const tbody = document.getElementById('tablaLogs');
-    document.getElementById('statSesiones').textContent = data.filter(l => {
-      return new Date(l.fecha).toDateString() === new Date().toDateString();
-    }).length;
-    tbody.innerHTML = data.map(l => `
+    if (!logs.length) { tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;padding:28px;color:#9ca3af">Sin registros</td></tr>'; return; }
+    tbody.innerHTML = logs.map(l => `
       <tr>
         <td><strong>${l.nombre}</strong></td>
         <td><span class="badge badge-${l.rol}">${l.rol}</span></td>
         <td>${l.accion || '—'}</td>
-        <td>${formatFecha(l.fecha)}</td>
-      </tr>
-    `).join('');
+        <td style="color:var(--gris)">${formatFecha(l.fecha)}</td>
+      </tr>`).join('');
   }
 
   // ── Cargar al inicio ──
-  cargarAvisos();
+  addLog('Ingresó al campus');
+  cargarInicio();
 </script>
 </body>
 </html>

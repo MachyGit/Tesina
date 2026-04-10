@@ -7,48 +7,58 @@
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    :root { --azul:#1a3a6b; --azul2:#2256a8; --acento:#e8a020; --claro:#f5f7fa; --texto:#1c1c2e; --gris:#6b7280; --sidebar:240px; }
+    :root { --verde:#15803d; --verde2:#16a34a; --claro:#f5f7fa; --texto:#1c1c2e; --gris:#6b7280; --sidebar:240px; --acento:#e8a020; }
     body { font-family:'DM Sans',sans-serif; background:var(--claro); display:flex; min-height:100vh; }
-    .sidebar { width:var(--sidebar); background:#15803d; color:#fff; display:flex; flex-direction:column; position:fixed; top:0; left:0; bottom:0; z-index:50; }
-    .sidebar-logo { padding:28px 24px 20px; font-family:'Playfair Display',serif; font-size:1.1rem; border-bottom:1px solid rgba(255,255,255,.1); }
+    .sidebar { width:var(--sidebar); background:var(--verde); color:#fff; display:flex; flex-direction:column; position:fixed; top:0; left:0; bottom:0; z-index:50; }
+    .sidebar-logo { padding:24px 20px 16px; font-family:'Playfair Display',serif; font-size:1.05rem; border-bottom:1px solid rgba(255,255,255,.1); }
     .sidebar-logo span { color:#86efac; }
-    .sidebar-rol { padding:12px 24px; font-size:.75rem; letter-spacing:2px; text-transform:uppercase; opacity:.5; border-bottom:1px solid rgba(255,255,255,.08); }
-    .sidebar-nav { flex:1; padding:16px 0; }
-    .nav-item { display:flex; align-items:center; gap:12px; padding:13px 24px; color:rgba(255,255,255,.75); cursor:pointer; transition:all .2s; font-size:.92rem; border-left:3px solid transparent; }
+    .sidebar-rol { padding:10px 20px; font-size:.72rem; letter-spacing:2px; text-transform:uppercase; opacity:.5; border-bottom:1px solid rgba(255,255,255,.08); }
+    .sidebar-nav { flex:1; padding:12px 0; }
+    .nav-item { display:flex; align-items:center; gap:10px; padding:12px 20px; color:rgba(255,255,255,.75); cursor:pointer; transition:all .2s; font-size:.9rem; border-left:3px solid transparent; }
     .nav-item:hover, .nav-item.active { background:rgba(255,255,255,.1); color:#fff; border-left-color:#86efac; }
-    .nav-item .icon { font-size:1.1rem; width:22px; }
-    .sidebar-footer { padding:20px 24px; border-top:1px solid rgba(255,255,255,.1); }
-    .btn-logout { display:flex; align-items:center; gap:8px; background:rgba(255,255,255,.08); border:none; color:#fff; padding:11px 16px; border-radius:8px; cursor:pointer; font-family:'DM Sans',sans-serif; font-size:.88rem; width:100%; }
+    .nav-item .icon { font-size:1rem; width:20px; }
+    .sidebar-footer { padding:16px 20px; border-top:1px solid rgba(255,255,255,.1); }
+    .btn-logout { display:flex; align-items:center; gap:8px; background:rgba(255,255,255,.08); border:none; color:#fff; padding:10px 14px; border-radius:8px; cursor:pointer; font-family:'DM Sans',sans-serif; font-size:.85rem; width:100%; }
     .main { margin-left:var(--sidebar); flex:1; display:flex; flex-direction:column; }
-    .topbar { background:#fff; padding:18px 36px; display:flex; align-items:center; justify-content:space-between; box-shadow:0 1px 12px rgba(0,0,0,.06); position:sticky; top:0; z-index:40; }
-    .topbar-title { font-family:'Playfair Display',serif; font-size:1.3rem; color:var(--texto); }
-    .topbar-user { display:flex; align-items:center; gap:10px; font-size:.88rem; color:var(--gris); }
-    .avatar { width:36px; height:36px; border-radius:50%; background:#15803d; color:#fff; display:flex; align-items:center; justify-content:center; font-weight:600; font-size:.9rem; }
-    .content { padding:32px 36px; flex:1; }
-    .tabs { display:flex; gap:4px; margin-bottom:28px; background:#fff; padding:6px; border-radius:10px; box-shadow:0 1px 8px rgba(0,0,0,.06); width:fit-content; }
-    .tab { padding:9px 20px; border-radius:7px; border:none; cursor:pointer; font-family:'DM Sans',sans-serif; font-size:.88rem; font-weight:500; color:var(--gris); background:transparent; transition:all .2s; }
-    .tab.active { background:#15803d; color:#fff; }
+    .topbar { background:#fff; padding:16px 32px; display:flex; align-items:center; justify-content:space-between; box-shadow:0 1px 12px rgba(0,0,0,.06); position:sticky; top:0; z-index:40; }
+    .topbar-title { font-family:'Playfair Display',serif; font-size:1.25rem; color:var(--texto); }
+    .topbar-user { display:flex; align-items:center; gap:8px; font-size:.85rem; color:var(--gris); }
+    .avatar { width:34px; height:34px; border-radius:50%; background:var(--verde); color:#fff; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:.88rem; }
+    .content { padding:28px 32px; flex:1; }
+    .tabs { display:flex; gap:4px; margin-bottom:24px; background:#fff; padding:5px; border-radius:10px; box-shadow:0 1px 8px rgba(0,0,0,.06); width:fit-content; }
+    .tab { padding:8px 18px; border-radius:7px; border:none; cursor:pointer; font-family:'DM Sans',sans-serif; font-size:.85rem; font-weight:600; color:var(--gris); background:transparent; transition:all .2s; }
+    .tab.active { background:var(--verde); color:#fff; }
     .panel { display:none; }
     .panel.active { display:block; }
-    .card { background:#fff; border-radius:12px; padding:24px; box-shadow:0 1px 8px rgba(0,0,0,.06); margin-bottom:20px; }
-    .card-title { font-weight:600; font-size:1rem; color:var(--texto); margin-bottom:18px; }
-    .form-grid { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
-    .field { display:flex; flex-direction:column; gap:5px; }
+    .card { background:#fff; border-radius:12px; padding:22px; box-shadow:0 1px 8px rgba(0,0,0,.06); margin-bottom:18px; }
+    .card-title { font-weight:600; font-size:.95rem; color:var(--texto); margin-bottom:16px; }
+    .form-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+    .field { display:flex; flex-direction:column; gap:4px; }
     .field.full { grid-column:1/-1; }
-    label { font-size:.82rem; font-weight:600; color:var(--texto); }
-    input, select, textarea { padding:11px 14px; border:1.5px solid #e5e7eb; border-radius:8px; font-family:'DM Sans',sans-serif; font-size:.92rem; color:var(--texto); background:var(--claro); outline:none; }
-    input:focus, select:focus, textarea:focus { border-color:#15803d; }
-    textarea { resize:vertical; min-height:100px; }
-    .btn { padding:11px 22px; border-radius:8px; border:none; font-family:'DM Sans',sans-serif; font-weight:600; font-size:.9rem; cursor:pointer; }
-    .btn-primary { background:#15803d; color:#fff; }
-    .btn-primary:hover { background:#16a34a; }
-    .aviso-card { border:1px solid #f0f0f0; border-radius:10px; padding:16px 18px; margin-bottom:12px; }
-    .badge { display:inline-block; padding:3px 10px; border-radius:20px; font-size:.75rem; font-weight:600; }
+    label { font-size:.8rem; font-weight:600; color:var(--texto); }
+    input, select, textarea { padding:10px 12px; border:1.5px solid #e5e7eb; border-radius:8px; font-family:'DM Sans',sans-serif; font-size:.9rem; color:var(--texto); background:var(--claro); outline:none; }
+    input:focus, select:focus, textarea:focus { border-color:var(--verde2); }
+    textarea { resize:vertical; min-height:90px; }
+    .btn { padding:10px 20px; border-radius:8px; border:none; font-family:'DM Sans',sans-serif; font-weight:600; font-size:.87rem; cursor:pointer; }
+    .btn-primary { background:var(--verde); color:#fff; }
+    .btn-primary:hover { background:var(--verde2); }
+    .tipo-row { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:10px; }
+    .tipo-badge { padding:7px 14px; border-radius:20px; border:1.5px solid #e5e7eb; cursor:pointer; font-size:.82rem; font-weight:600; color:var(--gris); background:var(--claro); }
+    .tipo-badge.active { background:var(--verde); color:#fff; border-color:var(--verde); }
+    .aviso-card { border:1px solid #f0f0f0; border-radius:10px; padding:14px 16px; margin-bottom:10px; }
+    .aviso-meta { display:flex; align-items:center; gap:8px; margin-bottom:8px; flex-wrap:wrap; }
+    .aviso-titulo { font-weight:600; font-size:.92rem; margin-bottom:5px; }
+    .aviso-body { color:var(--gris); font-size:.85rem; line-height:1.6; }
+    .aviso-fecha { font-size:.75rem; color:var(--gris); margin-left:auto; }
+    .badge { display:inline-block; padding:3px 10px; border-radius:20px; font-size:.72rem; font-weight:700; }
     .badge-tarea { background:#dcfce7; color:#16a34a; }
     .badge-general { background:#e0e7ff; color:#4338ca; }
-    .empty { text-align:center; padding:48px; color:var(--gris); }
-    .empty-icon { font-size:2.5rem; margin-bottom:12px; }
-    @media(max-width:900px) { .sidebar{display:none} .main{margin-left:0} .content{padding:20px 16px} .topbar{padding:14px 20px} .form-grid{grid-template-columns:1fr} }
+    .badge-horario { background:#fef3c7; color:#b45309; }
+    .badge-urgente { background:#fee2e2; color:#dc2626; }
+    .empty { text-align:center; padding:40px; color:var(--gris); }
+    .empty-icon { font-size:2.2rem; margin-bottom:10px; }
+    .info-banner { background:#f0fdf4; border:1px solid #bbf7d0; border-radius:10px; padding:14px 18px; margin-bottom:20px; color:#15803d; font-size:.88rem; line-height:1.6; }
+    @media(max-width:900px) { .sidebar{display:none} .main{margin-left:0} .form-grid{grid-template-columns:1fr} .content{padding:18px 14px} .topbar{padding:12px 18px} }
   </style>
 </head>
 <body>
@@ -56,8 +66,8 @@
   <div class="sidebar-logo">Campus <span>Virtual</span></div>
   <div class="sidebar-rol">🟢 Profesor</div>
   <nav class="sidebar-nav">
-    <div class="nav-item active" onclick="showTab('tareas')"><span class="icon">📚</span> Mis Tareas</div>
-    <div class="nav-item" onclick="showTab('avisos')"><span class="icon">📢</span> Avisos</div>
+    <div class="nav-item active" onclick="showTab('avisos')"><span class="icon">📢</span> Avisos de clase</div>
+    <div class="nav-item" onclick="showTab('todos')"><span class="icon">📋</span> Ver todos</div>
   </nav>
   <div class="sidebar-footer">
     <button class="btn-logout" onclick="logout()">🚪 Cerrar sesión</button>
@@ -72,37 +82,44 @@
       <span id="userName">Profesor</span>
     </div>
   </div>
+
   <div class="content">
     <div class="tabs">
-      <button class="tab active" onclick="showTab('tareas')">📚 Mis Tareas</button>
-      <button class="tab" onclick="showTab('avisos')">📢 Avisos</button>
+      <button class="tab active" onclick="showTab('avisos')">📢 Mis avisos</button>
+      <button class="tab" onclick="showTab('todos')">📋 Ver todos</button>
     </div>
 
-    <div class="panel active" id="panel-tareas">
+    <!-- AVISOS DE CLASE -->
+    <div class="panel active" id="panel-avisos">
+      <div class="info-banner">
+        ℹ️ Como profesor solo podés publicar avisos relacionados a tus clases: tareas, comunicados de materia y cambios de horario.
+      </div>
       <div class="card">
-        <div class="card-title">Publicar nueva tarea</div>
+        <div class="card-title">Publicar aviso de clase</div>
         <div class="form-grid">
-          <div class="field"><label>Título de la tarea</label><input type="text" id="tareaTitulo" placeholder="Ej: Ejercicios pág. 45"/></div>
+          <div class="field"><label>Título</label><input type="text" id="avisoTitulo" placeholder="Ej: Tarea para el viernes"/></div>
           <div class="field"><label>Tipo</label>
-            <select id="tareaTipo">
-              <option value="tarea">📚 Tarea</option>
-              <option value="general">📣 Aviso general</option>
-            </select>
+            <div class="tipo-row">
+              <span class="tipo-badge active" onclick="selTipo(this,'tarea')">📚 Tarea</span>
+              <span class="tipo-badge" onclick="selTipo(this,'general')">📣 Aviso</span>
+              <span class="tipo-badge" onclick="selTipo(this,'horario')">🕐 Horario</span>
+            </div>
           </div>
-          <div class="field full"><label>Descripción</label><textarea id="tareaContenido" placeholder="Detallá la tarea..."></textarea></div>
-          <div class="field full"><button class="btn btn-primary" onclick="publicarTarea()">📤 Publicar</button></div>
+          <div class="field full"><label>Contenido</label><textarea id="avisoContenido" placeholder="Describí la tarea o aviso..."></textarea></div>
+          <div class="field full"><button class="btn btn-primary" onclick="publicarAviso()">📤 Publicar</button></div>
         </div>
       </div>
       <div class="card">
-        <div class="card-title">Tareas publicadas</div>
-        <div id="listaTareas"><div class="empty"><div class="empty-icon">📚</div>Cargando...</div></div>
+        <div class="card-title">Mis publicaciones</div>
+        <div id="misAvisos"><div class="empty"><div class="empty-icon">📚</div>Aún no publicaste nada</div></div>
       </div>
     </div>
 
-    <div class="panel" id="panel-avisos">
+    <!-- TODOS LOS AVISOS -->
+    <div class="panel" id="panel-todos">
       <div class="card">
-        <div class="card-title">Todos los avisos</div>
-        <div id="listaAvisos"><div class="empty"><div class="empty-icon">📭</div>Cargando...</div></div>
+        <div class="card-title">Todos los avisos del campus</div>
+        <div id="todosAvisos"><div class="empty"><div class="empty-icon">📭</div>Sin avisos</div></div>
       </div>
     </div>
   </div>
@@ -112,60 +129,73 @@
 <script>
   const user = getUser();
   if (user) {
-    document.getElementById('userName').textContent = user.nombre;
+    document.getElementById('userName').textContent      = user.nombre;
     document.getElementById('avatarInitial').textContent = user.nombre[0].toUpperCase();
+  }
+
+  function getAvisos() { return JSON.parse(localStorage.getItem('campus_avisos') || '[]'); }
+  function guardarAvisos(a) { localStorage.setItem('campus_avisos', JSON.stringify(a)); }
+
+  let tipoActual = 'tarea';
+  function selTipo(el, tipo) {
+    document.querySelectorAll('.tipo-badge').forEach(b => b.classList.remove('active'));
+    el.classList.add('active'); tipoActual = tipo;
   }
 
   function showTab(tab) {
     document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
     document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
     document.getElementById('panel-' + tab).classList.add('active');
-    document.querySelectorAll('.tab').forEach(t => { if(t.textContent.toLowerCase().includes(tab)) t.classList.add('active'); });
-    if (tab === 'avisos') cargarAvisos();
-    if (tab === 'tareas') cargarTareas();
+    document.querySelectorAll('.tab').forEach(t => { if(t.textContent.toLowerCase().includes(tab === 'avisos' ? 'mis' : 'ver')) t.classList.add('active'); });
+    if (tab === 'todos') cargarTodos();
+    else cargarMisAvisos();
   }
 
-  async function publicarTarea() {
-    const titulo    = document.getElementById('tareaTitulo').value.trim();
-    const contenido = document.getElementById('tareaContenido').value.trim();
-    const tipo      = document.getElementById('tareaTipo').value;
-    if (!titulo || !contenido) return alert('Completá todos los campos');
-    await apiFetch('/api/avisos', { method:'POST', body: JSON.stringify({ titulo, contenido, tipo }) });
-    document.getElementById('tareaTitulo').value = '';
-    document.getElementById('tareaContenido').value = '';
-    cargarTareas();
+  function publicarAviso() {
+    const titulo    = document.getElementById('avisoTitulo').value.trim();
+    const contenido = document.getElementById('avisoContenido').value.trim();
+    if (!titulo || !contenido) return alert('Completá título y contenido');
+    const avisos = getAvisos();
+    avisos.unshift({ id: Date.now().toString(), titulo, contenido, tipo: tipoActual, autor: user.nombre, autor_id: user.email, fecha: new Date().toISOString() });
+    guardarAvisos(avisos);
+    document.getElementById('avisoTitulo').value    = '';
+    document.getElementById('avisoContenido').value = '';
+    cargarMisAvisos();
+    alert('✅ Aviso publicado');
   }
 
-  async function cargarTareas() {
-    const data = await apiFetch('/api/avisos');
-    const mias = data.filter(a => a.autor_id === user.id);
-    const el = document.getElementById('listaTareas');
-    if (!mias.length) { el.innerHTML = '<div class="empty"><div class="empty-icon">📚</div>No publicaste tareas aún</div>'; return; }
-    el.innerHTML = mias.map(a => `
+  function cargarMisAvisos() {
+    const misAvisos = getAvisos().filter(a => a.autor_id === user.email);
+    const el = document.getElementById('misAvisos');
+    if (!misAvisos.length) { el.innerHTML = '<div class="empty"><div class="empty-icon">📚</div>Aún no publicaste nada</div>'; return; }
+    el.innerHTML = misAvisos.map(a => `
       <div class="aviso-card">
-        <span class="badge badge-${a.tipo}">${a.tipo.toUpperCase()}</span>
-        <div style="margin-top:8px;font-weight:600">${a.titulo}</div>
-        <div style="color:var(--gris);font-size:.88rem;margin-top:4px">${a.contenido}</div>
-        <small style="color:#9ca3af">${formatFecha(a.fecha)}</small>
-      </div>
-    `).join('');
+        <div class="aviso-meta">
+          <span class="badge badge-${a.tipo}">${a.tipo.toUpperCase()}</span>
+          <span class="aviso-fecha">${formatFecha(a.fecha)}</span>
+        </div>
+        <div class="aviso-titulo">${a.titulo}</div>
+        <div class="aviso-body">${a.contenido}</div>
+      </div>`).join('');
   }
 
-  async function cargarAvisos() {
-    const data = await apiFetch('/api/avisos');
-    const el = document.getElementById('listaAvisos');
-    if (!data.length) { el.innerHTML = '<div class="empty"><div class="empty-icon">📭</div>Sin avisos</div>'; return; }
-    el.innerHTML = data.map(a => `
-      <div style="padding:14px 0;border-bottom:1px solid #f0f0f0">
-        <strong>${a.titulo}</strong>
-        <p style="color:var(--gris);font-size:.88rem;margin-top:4px">${a.contenido}</p>
-        <small style="color:#9ca3af">${formatFecha(a.fecha)} · ${a.autor}</small>
-      </div>
-    `).join('');
+  function cargarTodos() {
+    const avisos = getAvisos();
+    const el = document.getElementById('todosAvisos');
+    if (!avisos.length) { el.innerHTML = '<div class="empty"><div class="empty-icon">📭</div>Sin avisos</div>'; return; }
+    el.innerHTML = avisos.map(a => `
+      <div class="aviso-card">
+        <div class="aviso-meta">
+          <span class="badge badge-${a.tipo}">${a.tipo.toUpperCase()}</span>
+          <span style="font-size:.8rem;color:var(--gris)">Por: ${a.autor}</span>
+          <span class="aviso-fecha">${formatFecha(a.fecha)}</span>
+        </div>
+        <div class="aviso-titulo">${a.titulo}</div>
+        <div class="aviso-body">${a.contenido}</div>
+      </div>`).join('');
   }
 
-  // Dashboard Secretaria (redirige al director con permisos limitados)
-  cargarTareas();
+  cargarMisAvisos();
 </script>
 </body>
 </html>
