@@ -1,6 +1,6 @@
  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
-      --azul:    #1a3a6b; --azul2:   #2256a8; --acento:  #e8a020;
+      --azul:    #65bae1; --azul2:   #4f96f2; --acento:  #db1717;
       --claro:   #f5f7fa; --texto:   #1c1c2e; --gris:    #6b7280; --blanco:  #ffffff;
     }
     html { scroll-behavior: smooth; }
