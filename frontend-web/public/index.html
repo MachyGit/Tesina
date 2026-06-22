@@ -6,9 +6,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Escuela ProA — Río Tercero</title>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
-
+  <script>
+    // Si el backend corre en otra dirección (servidor, dominio, etc.), cambiá esto:
+    window.BACKEND_URL = 'http://localhost:5000';
+  </script>
 </head>
 <body>
+
+<div id="scrollProgress"></div>
 
 <nav id="navbar">
   <div class="logo">Escuela Proa <span>·</span> Río Tercero</div>
@@ -33,9 +38,9 @@
   <div class="hero-bg"></div>
   <div class="hero-overlay"></div>
   <div class="hero-content">
-    <p class="hero-pre">Bienvenidos a nuestra institución</p>
-    <h1 class="hero-title">Nombre de la<br><span>Escuela</span></h1>
-    <p class="hero-sub">Formando el futuro de Río Tercero con educación de calidad</p>
+    <p class="hero-pre">Programa Avanzado de Educación Secundaria en TIC</p>
+    <h1 class="hero-title">Escuela ProA<br><span>Río Tercero</span></h1>
+    <p class="hero-sub">Bachiller en Informática con formación especializada en Desarrollo de Software</p>
     <div class="hero-btns">
       <a href="#nosotros"  class="btn-primary">Conocenos</a>
       <a href="login.html" class="btn-outline">Campus Virtual →</a>
@@ -47,22 +52,22 @@
 <section id="nosotros">
   <div class="container">
     <div class="nosotros-grid">
-      <div>
+      <div data-reveal="left">
         <span class="tag">Nuestra institución</span>
         <h2 class="section-title">¿Quiénes somos?</h2>
         <p class="section-text">
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Ducimus nemo omnis, velit necessitatibus quae non voluptatum eum recusandae optio placeat! Consequuntur libero fugit nesciunt accusamus necessitatibus, quaerat facilis perferendis ipsa!
+          La Escuela ProA Río Tercero forma parte del Programa Avanzado de Educación Secundaria con énfasis en las Tecnologías de la Información y la Comunicación (ProA), una iniciativa del Gobierno de la Provincia de Córdoba puesta en marcha en 2014. Nuestra orientación es Bachiller en Informática con Formación Especializada en Desarrollo de Software.
         </p>
         <p class="section-text" style="margin-top:16px">
-          Lorem ipsum dolor sit, amet consectetur adipisicing elit. Officiis quae repellat repudiandae obcaecati esse voluptatum aspernatur voluptas. Dolores neque provident tempora aperiam, cum fuga esse eos, animi aliquam, voluptatum nam.
+          Desde primer año, nuestros alumnos aprenden a programar y a pensar de forma lógica para automatizar procesos, dentro de una jornada extendida de 8 horas que combina la propuesta curricular con clubes de ciencias, arte, deportes e inglés aplicado, además de espacios de tutoría personalizados. Funcionamos en nuestro edificio propio, inaugurado en 2024, con aulas, talleres de informática, info-arte y ciencias.
         </p>
-        <div class="stats-row">
-          <div class="stat-box"><span class="stat-num">—</span><span class="stat-label">Alumnos</span></div>
-          <div class="stat-box"><span class="stat-num">—</span><span class="stat-label">Docentes</span></div>
-          <div class="stat-box"><span class="stat-num">—</span><span class="stat-label">Año de comienzo</span></div>
+        <div class="stats-row" data-reveal-group>
+          <div class="stat-box"><span class="stat-num" data-count="180">0</span><span class="stat-label">Alumnos (capacidad)</span></div>
+          <div class="stat-box"><span class="stat-num" data-count="8">0</span><span class="stat-label">Jornada extendida (hs)</span></div>
+          <div class="stat-box"><span class="stat-num" data-count="2024" data-no-plus="1">0</span><span class="stat-label">Edificio propio</span></div>
         </div>
       </div>
-      <div class="nosotros-img-wrap">
+      <div class="nosotros-img-wrap" data-reveal="right">
         <img class="nosotros-img" src="/images/nosotros.jpg" alt="Nuestra escuela" onerror="this.style.background='#c8d8f0'; this.removeAttribute('src')"/>
         <div class="nosotros-badge">Río Tercero<br>Córdoba, Argentina</div>
       </div>
@@ -72,10 +77,10 @@
 
 <section id="galeria">
   <div class="container">
-    <span class="tag tag-light">Galería</span>
-    <h2 class="section-title-light">Nuestra escuela en imágenes</h2>
-    <div class="carrusel">
-      <img class="carrusel-img" id="carruselImg" src="/images/foto1.jpg" alt="Foto escuela" onerror="this.style.background='rgba(255,255,255,.12)'; this.removeAttribute('src')"/>
+    <span class="tag tag-light" data-reveal>Galería</span>
+    <h2 class="section-title-light" data-reveal>Nuestra escuela en imágenes</h2>
+    <div class="carrusel" data-reveal="zoom">
+      <img class="carrusel-img" id="carruselImg" src="/images/galeria/fachada.jpg" alt="Foto escuela" onerror="this.style.background='rgba(255,255,255,.12)'; this.removeAttribute('src')"/>
       <div class="carrusel-caption" id="caption">Foto 1</div>
       <div class="carrusel-nav">
         <button class="nav-btn" onclick="cambiarFoto(-1)">‹</button>
@@ -83,20 +88,20 @@
       </div>
     </div>
     <div class="dots" id="dots"></div>
-    <div class="thumbs" id="thumbs"></div>
+    <div class="thumbs" id="thumbs" data-reveal-group></div>
   </div>
 </section>
 
 <section id="contacto">
   <div class="container">
-    <span class="tag">Escribinos</span>
-    <h2 class="section-title">Contacto</h2>
+    <span class="tag" data-reveal>Escribinos</span>
+    <h2 class="section-title" data-reveal>Contacto</h2>
     <div class="contacto-grid">
-      <div>
-        <div class="info-items">
+      <div data-reveal="left">
+        <div class="info-items" data-reveal-group>
           <div class="info-item">
             <div class="info-icon">📍</div>
-            <div><div class="info-label">Dirección</div><div class="info-value">Rio Gallegos, Río Tercero<br>Córdoba, Argentina</div></div>
+            <div><div class="info-label">Dirección</div><div class="info-value">Río Amazonas 450, Río Tercero<br>Córdoba, Argentina</div></div>
           </div>
           <div class="info-item">
             <div class="info-icon">📞</div>
@@ -104,19 +109,22 @@
           </div>
           <div class="info-item">
             <div class="info-icon">✉️</div>
-            <div><div class="info-label">Email</div><div class="info-value">contacto@escuelasproa.edu.ar</div></div>
+            <div><div class="info-label">Email</div><div class="info-value">lenunez@escuelasproa.edu.ar</div></div>
           </div>
           <div class="info-item">
             <div class="info-icon">🕐</div>
-            <div><div class="info-label">Horarios</div><div class="info-value">Lunes a viernes: 7:40 - 17:00 hs</div></div>
+            <div><div class="info-label">Horarios</div><div class="info-value">Lunes a viernes: 7:00 - 17:00 hs</div></div>
           </div>
         </div>
-        <div class="mapa-placeholder">
-          📍 Acá podés embeber Google Maps<br>
-          <small>Insertá el iframe de Google Maps con la dirección de la escuela</small>
+        <div class="mapa-wrap">
+          <iframe
+            src="https://www.google.com/maps?q=R%C3%ADo+Amazonas+450,+R%C3%ADo+Tercero,+C%C3%B3rdoba&output=embed"
+            width="100%" height="220" style="border:0; border-radius:10px;"
+            allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade">
+          </iframe>
         </div>
       </div>
-      <form class="form" id="contactForm">
+      <form class="form" id="contactForm" data-reveal="right">
         <div class="form-row">
           <input class="input" type="text"  id="fNombre"  placeholder="Tu nombre"   required />
           <input class="input" type="email" id="fEmail"   placeholder="Tu email"    required />
@@ -128,6 +136,8 @@
     </div>
   </div>
 </section>
+
+<button id="backToTop" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="Volver arriba">↑</button>
 
 <footer>
   <div class="footer-inner">
@@ -149,9 +159,60 @@
 
 <script>
   document.getElementById('year').textContent = new Date().getFullYear();
+
+  // Navbar al hacer scroll + barra de progreso + botón volver arriba
+  const navbar       = document.getElementById('navbar');
+  const scrollBar    = document.getElementById('scrollProgress');
+  const backToTopBtn = document.getElementById('backToTop');
+
   window.addEventListener('scroll', () => {
-    document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 50);
+    navbar.classList.toggle('scrolled', window.scrollY > 50);
+
+    const max = document.documentElement.scrollHeight - window.innerHeight;
+    const pct = max > 0 ? (window.scrollY / max) * 100 : 0;
+    scrollBar.style.width = pct + '%';
+
+    backToTopBtn.classList.toggle('show', window.scrollY > 600);
   });
+
+  // Scroll-reveal: cualquier elemento con [data-reveal] o [data-reveal-group]
+  const revealEls = document.querySelectorAll('[data-reveal], [data-reveal-group]');
+  const revealObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('in-view');
+        revealObserver.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
+  revealEls.forEach(el => revealObserver.observe(el));
+
+  // Contador animado de números (stat-num con data-count)
+  function animarContador(el) {
+    const destino = parseInt(el.dataset.count, 10);
+    const sinMas  = el.dataset.noPlus === '1';
+    const dur = 1400;
+    const t0  = performance.now();
+    function paso(ahora) {
+      const p = Math.min((ahora - t0) / dur, 1);
+      const easeOut = 1 - Math.pow(1 - p, 3);
+      const valor = Math.floor(easeOut * destino);
+      el.textContent = valor + (p >= 1 && !sinMas && destino >= 100 ? '+' : '');
+      if (p < 1) requestAnimationFrame(paso);
+      else el.textContent = destino + (!sinMas && destino >= 100 ? '+' : '');
+    }
+    requestAnimationFrame(paso);
+  }
+  const counterObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        animarContador(entry.target);
+        counterObserver.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.4 });
+  document.querySelectorAll('.stat-num[data-count]').forEach(el => counterObserver.observe(el));
+
   function toggleMenu() {
     const m = document.getElementById('mobileMenu');
     const b = document.querySelector('.burger');
@@ -163,10 +224,14 @@
     document.querySelector('.burger').textContent = '☰';
   }
   const FOTOS = [
-    { src: '/images/foto1.jpg', caption: 'Escribí una descripción para esta foto' },
-    { src: '/images/foto2.jpg', caption: 'Escribí una descripción para esta foto' },
-    { src: '/images/foto3.jpg', caption: 'Escribí una descripción para esta foto' },
-    { src: '/images/foto4.jpg', caption: 'Escribí una descripción para esta foto' },
+    { src: '/images/galeria/fachada.jpg',     caption: 'Fachada del edificio — Río Amazonas 450' },
+    { src: '/images/galeria/aula.jpg',        caption: 'Aulas' },
+    { src: '/images/galeria/informatica.jpg', caption: 'Taller de Informática' },
+    { src: '/images/galeria/infoarte.jpg',    caption: 'Taller de Info-Arte' },
+    { src: '/images/galeria/ciencias.jpg',    caption: 'Taller de Ciencias' },
+    { src: '/images/galeria/alumnos.jpg',     caption: 'Alumnos en clase' },
+    { src: '/images/galeria/eventos.jpg',     caption: 'Jornada de Profundización' },
+    { src: '/images/galeria/exterior.jpg',    caption: 'Patio y espacios comunes' },
   ];
   let fotoActiva = 0, timer;
   function renderGaleria() {
@@ -198,15 +263,50 @@
   function iniciarTimer() { timer = setInterval(() => cambiarFoto(1), 4000); }
   renderGaleria(); iniciarTimer();
 
-  // Formulario contacto
-  document.getElementById('contactForm').addEventListener('submit', function(e) {
+  // Formulario contacto — se conecta al backend para que llegue un mail real
+  const BACKEND_URL = window.BACKEND_URL || 'http://localhost:5000';
+
+  document.getElementById('contactForm').addEventListener('submit', async function(e) {
     e.preventDefault();
-    const btn = document.getElementById('btnEnviar');
-    btn.textContent = '✅ Mensaje enviado';
-    btn.classList.add('enviado');
+    const form = this;
+    const btn  = document.getElementById('btnEnviar');
+    const textoOriginal = btn.textContent;
+
     btn.disabled = true;
-    this.reset();
-    setTimeout(() => { btn.textContent = 'Enviar mensaje'; btn.classList.remove('enviado'); btn.disabled = false; }, 4000);
+    btn.textContent = 'Enviando...';
+
+    const datos = {
+      nombre:  document.getElementById('fNombre').value.trim(),
+      email:   document.getElementById('fEmail').value.trim(),
+      asunto:  document.getElementById('fAsunto').value.trim(),
+      mensaje: document.getElementById('fMensaje').value.trim(),
+    };
+
+    try {
+      const resp = await fetch(`${BACKEND_URL}/api/contacto`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(datos),
+      });
+      const data = await resp.json();
+
+      if (!resp.ok) {
+        throw new Error(data.error || 'No se pudo enviar el mensaje');
+      }
+
+      btn.textContent = '✅ Mensaje enviado';
+      btn.classList.add('enviado');
+      form.reset();
+    } catch (err) {
+      btn.textContent = '❌ ' + (err.message || 'Error al enviar');
+      btn.classList.add('error');
+    } finally {
+      setTimeout(() => {
+        btn.textContent = textoOriginal;
+        btn.classList.remove('enviado', 'error');
+        btn.disabled = false;
+      }, 4000);
+    }
   });
 </script>
 </body>
