@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Panel Profesor — Campus Virtual</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root { --azul:#1a3a6b; --azul2:#2256a8; --acento:#e8a020; --claro:#f5f7fa; --texto:#1c1c2e; --gris:#6b7280; --verde:#16a34a; --rojo:#dc2626; --sidebar:260px; }
+    body { font-family:'DM Sans',sans-serif; background:var(--claro); display:flex; min-height:100vh; }
+    .sidebar { width:var(--sidebar); background:var(--azul); color:#fff; display:flex; flex-direction:column; position:fixed; top:0; left:0; bottom:0; z-index:50; }
+    .sidebar-logo { padding:24px 20px 16px; font-family:'Playfair Display',serif; font-size:1.05rem; border-bottom:1px solid rgba(255,255,255,.1); }
+    .sidebar-logo span { color:var(--acento); }
+    .sidebar-rol { padding:10px 20px; font-size:.72rem; letter-spacing:2px; text-transform:uppercase; opacity:.5; border-bottom:1px solid rgba(255,255,255,.08); }
+    .sidebar-nav { flex:1; padding:12px 0; }
+    .nav-item { display:flex; align-items:center; gap:10px; padding:12px 20px; color:rgba(255,255,255,.75); cursor:pointer; transition:all .2s; font-size:.9rem; border-left:3px solid transparent; }
+    .nav-item:hover, .nav-item.active { background:rgba(255,255,255,.1); color:#fff; border-left-color:var(--acento); }
+    .nav-item .icon { font-size:1rem; width:20px; }
+    .sidebar-footer { padding:16px 20px; border-top:1px solid rgba(255,255,255,.1); }
+    .btn-logout { display:flex; align-items:center; gap:8px; background:rgba(255,255,255,.08); border:none; color:#fff; padding:10px 14px; border-radius:8px; cursor:pointer; font-family:'DM Sans',sans-serif; font-size:.85rem; width:100%; }
+    .main { margin-left:var(--sidebar); flex:1; display:flex; flex-direction:column; }
+    .topbar { background:#fff; padding:16px 32px; display:flex; align-items:center; justify-content:space-between; box-shadow:0 1px 12px rgba(0,0,0,.06); position:sticky; top:0; z-index:40; }
+    .topbar-title { font-family:'Playfair Display',serif; font-size:1.25rem; color:var(--texto); }
+    .perfil-btn { display:flex; align-items:center; gap:10px; cursor:pointer; padding:6px 12px; border-radius:10px; transition:background .2s; border:1.5px solid transparent; }
+    .perfil-btn:hover { background:var(--claro); border-color:#e5e7eb; }
+    .avatar { width:36px; height:36px; border-radius:50%; background:var(--azul); color:#fff; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:.88rem; overflow:hidden; border:2px solid var(--acento); flex-shrink:0; }
+    .avatar img { width:100%; height:100%; object-fit:cover; }
+    .perfil-info { display:flex; flex-direction:column; }
+    .perfil-nombre { font-size:.85rem; font-weight:600; color:var(--texto); line-height:1.2; }
+    .perfil-link { font-size:.72rem; color:var(--gris); }
+    .content { padding:28px 32px; flex:1; }
+    .tabs { display:flex; gap:4px; margin-bottom:24px; background:#fff; padding:5px; border-radius:10px; box-shadow:0 1px 8px rgba(0,0,0,.06); width:fit-content; }
+    .tab { padding:8px 18px; border-radius:7px; border:none; cursor:pointer; font-family:'DM Sans',sans-serif; font-size:.85rem; font-weight:600; color:var(--gris); background:transparent; transition:all .2s; }
+    .tab.active { background:var(--azul); color:#fff; }
+    .panel { display:none; } .panel.active { display:block; }
+    .card { background:#fff; border-radius:12px; padding:22px; box-shadow:0 1px 8px rgba(0,0,0,.06); margin-bottom:18px; }
+    .card-title { font-weight:600; font-size:.95rem; color:var(--texto); margin-bottom:16px; }
+    .form-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+    .field { display:flex; flex-direction:column; gap:4px; }
+    .field.full { grid-column:1/-1; }
+    label { font-size:.8rem; font-weight:600; color:var(--texto); }
+    input, select, textarea { padding:10px 12px; border:1.5px solid #e5e7eb; border-radius:8px; font-family:'DM Sans',sans-serif; font-size:.9rem; color:var(--texto); background:var(--claro); outline:none; }
+    input:focus, select:focus, textarea:focus { border-color:var(--azul2); }
+    textarea { resize:vertical; min-height:90px; }
+    .btn { padding:10px 20px; border-radius:8px; border:none; font-family:'DM Sans',sans-serif; font-weight:600; font-size:.87rem; cursor:pointer; }
+    .btn-primary { background:var(--azul); color:#fff; } .btn-primary:hover { background:var(--azul2); }
+    .tipo-row { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:10px; }
+    .tipo-badge { padding:7px 14px; border-radius:20px; border:1.5px solid #e5e7eb; cursor:pointer; font-size:.82rem; font-weight:600; color:var(--gris); background:var(--claro); }
+    .tipo-badge.active { background:var(--azul); color:#fff; border-color:var(--azul); }
+    .badge { display:inline-block; padding:3px 10px; border-radius:20px; font-size:.72rem; font-weight:700; }
+    .badge-tarea { background:#dcfce7; color:#16a34a; } .badge-general { background:#e0e7ff; color:#4338ca; } .badge-horario { background:#fef3c7; color:#b45309; }
+    .aviso-card { border:1px solid #f0f0f0; border-radius:10px; padding:14px 16px; margin-bottom:10px; }
+    .aviso-meta { display:flex; align-items:center; gap:8px; margin-bottom:8px; flex-wrap:wrap; }
+    .aviso-titulo { font-weight:600; font-size:.92rem; margin-bottom:5px; }
+    .aviso-body { color:var(--gris); font-size:.85rem; line-height:1.6; }
+    .aviso-fecha { font-size:.75rem; color:var(--gris); margin-left:auto; }
+    .empty { text-align:center; padding:40px; color:var(--gris); }
+    .empty-icon { font-size:2.2rem; margin-bottom:10px; }
+    .info-banner { background:#eff6ff; border:1px solid #bfdbfe; border-radius:10px; padding:14px 18px; margin-bottom:20px; color:#1a3a6b; font-size:.88rem; }
+    @media(max-width:900px) { .sidebar{display:none} .main{margin-left:0} .form-grid{grid-template-columns:1fr} .content{padding:18px 14px} .topbar{padding:12px 18px} .perfil-info{display:none} }
+  </style>
+</head>
+<body>
+<aside class="sidebar">
+  <div class="sidebar-logo">Campus <span>Virtual</span></div>
+  <div class="sidebar-rol">🔵 Profesor</div>
+  <nav class="sidebar-nav">
+    <div class="nav-item active" onclick="showTab('avisos')"><span class="icon">📢</span> Mis avisos</div>
+    <div class="nav-item" onclick="showTab('todos')"><span class="icon">📋</span> Ver todos</div>
+    <div class="nav-item" onclick="showTab('chat')"><span class="icon">💬</span> Mensajes</div>
+  </nav>
+  <div class="sidebar-footer">
+    <button class="btn-logout" onclick="logout()">🚪 Cerrar sesión</button>
+  </div>
+</aside>
+<div class="main">
+  <div class="topbar">
+    <div class="topbar-title">Panel Profesor</div>
+    <div class="perfil-btn" onclick="irAPerfil()">
+      <div class="avatar" id="avatarInitial"></div>
+      <div class="perfil-info">
+        <div class="perfil-nombre" id="userName">Profesor</div>
+        <div class="perfil-link">Ver perfil →</div>
+      </div>
+    </div>
+  </div>
+  <div class="content">
+    <div class="tabs">
+      <button class="tab active" onclick="showTab('avisos')">📢 Mis avisos</button>
+      <button class="tab" onclick="showTab('todos')">📋 Ver todos</button>
+    </div>
+    <div class="panel active" id="panel-avisos">
+      <div class="info-banner">ℹ️ Como profesor solo podés publicar avisos de tus clases: tareas, comunicados y cambios de horario.</div>
+      <div class="card">
+        <div class="card-title">Publicar aviso de clase</div>
+        <div class="form-grid">
+          <div class="field"><label>Título</label><input type="text" id="avisoTitulo" placeholder="Ej: Tarea para el viernes"/></div>
+          <div class="field"><label>Tipo</label>
+            <div class="tipo-row">
+              <span class="tipo-badge active" onclick="selTipo(this,'tarea')">📚 Tarea</span>
+              <span class="tipo-badge" onclick="selTipo(this,'general')">📣 Aviso</span>
+              <span class="tipo-badge" onclick="selTipo(this,'horario')">🕐 Horario</span>
+            </div>
+          </div>
+          <div class="field full"><label>Contenido</label><textarea id="avisoContenido" placeholder="Describí la tarea o aviso..."></textarea></div>
+          <div class="field full"><button class="btn btn-primary" onclick="publicarAviso()">📤 Publicar</button></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">Mis publicaciones</div>
+        <div id="misAvisos"><div class="empty"><div class="empty-icon">📚</div>Aún no publicaste nada</div></div>
+      </div>
+    </div>
+    <div class="panel" id="panel-todos">
+      <div class="card">
+        <div class="card-title">Todos los avisos del campus</div>
+        <div id="todosAvisos"><div class="empty"><div class="empty-icon">📭</div>Sin avisos</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    <!-- PANEL CHAT -->
+    <div class="panel" id="panel-chat">
+      <div class="card" style="min-height:500px; padding:0; overflow:hidden;">
+        <div style="display:flex; height:560px;">
+          <div id="chatContactos" style="width:240px; border-right:1px solid #f0f0f0; overflow-y:auto; flex-shrink:0;">
+            <div style="padding:14px 16px; font-weight:600; font-size:.85rem; color:var(--texto); border-bottom:1px solid #f0f0f0;">
+              💬 Mensajes
+            </div>
+            <div id="listaContactos"><div class="empty" style="padding:20px;font-size:.82rem;">Cargando...</div></div>
+          </div>
+          <div style="flex:1; display:flex; flex-direction:column;">
+            <div id="chatHeader" style="padding:12px 18px; border-bottom:1px solid #f0f0f0; font-weight:600; font-size:.88rem; color:var(--texto);">
+              Seleccioná un contacto para chatear
+            </div>
+            <div id="chatMensajes" style="flex:1; overflow-y:auto; padding:16px; display:flex; flex-direction:column; gap:10px;"></div>
+            <div id="chatInput" style="padding:12px 16px; border-top:1px solid #f0f0f0; display:none; gap:8px; align-items:flex-end;">
+              <textarea id="chatTexto" placeholder="Escribí un mensaje..." rows="2"
+                style="flex:1; resize:none; padding:8px 12px; border:1.5px solid #e5e7eb; border-radius:8px; font-family:inherit; font-size:.88rem; outline:none;"
+                onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();enviarMensajeChat();}"></textarea>
+              <label style="cursor:pointer; padding:8px 10px; background:#f3f4f6; border-radius:8px; font-size:1rem;" title="Adjuntar archivo">
+                📎<input type="file" style="display:none" onchange="adjuntarArchivo(event)"/>
+              </label>
+              <button onclick="enviarMensajeChat()" class="btn btn-primary" style="height:38px;">Enviar</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+<script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+<script src="base.js"></script>
+<script>
+  const user = getUser();
+  if (user) { document.getElementById('userName').textContent = user.nombre;  initAvatar(); }
+
+  function irAPerfil() { window.location.href = 'perfil.html'; }
+  function cargarFotoPerfil() {
+    const u = getUser(); if (!u) return;
+    const ud = getUsuarios().find(x => x.email === u.email);
+  }
+  document.addEventListener('DOMContentLoaded', cargarFotoPerfil);
+
+  function getAvisos() { return JSON.parse(localStorage.getItem('campus_avisos') || '[]'); }
+  function guardarAvisos(a) { localStorage.setItem('campus_avisos', JSON.stringify(a)); }
+
+  let tipoActual = 'tarea';
+  function selTipo(el, tipo) { document.querySelectorAll('.tipo-badge').forEach(b => b.classList.remove('active')); el.classList.add('active'); tipoActual = tipo; }
+
+  function showTab(tab) {
+    if (tab === 'chat') { initChat(); }
+    if (tab === 'anios') { cargarAnios(); }
+    document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.getElementById('panel-' + tab).classList.add('active');
+    document.querySelectorAll('.tab').forEach(t => { if(t.textContent.toLowerCase().includes(tab === 'avisos' ? 'mis' : 'ver')) t.classList.add('active'); });
+    if (tab === 'todos') cargarTodos();
+    else cargarMisAvisos();
+  }
+
+  function publicarAviso() {
+    const titulo = document.getElementById('avisoTitulo').value.trim();
+    const contenido = document.getElementById('avisoContenido').value.trim();
+    if (!titulo || !contenido) return alert('Completá título y contenido');
+    const avisos = getAvisos();
+    avisos.unshift({ id: Date.now().toString(), titulo, contenido, tipo: tipoActual, autor: user.nombre, autor_id: user.email, fecha: new Date().toISOString() });
+    guardarAvisos(avisos);
+    document.getElementById('avisoTitulo').value = ''; document.getElementById('avisoContenido').value = '';
+    cargarMisAvisos(); alert('✅ Aviso publicado');
+  }
+
+  function cargarMisAvisos() {
+    const mis = getAvisos().filter(a => a.autor_id === user.email);
+    const el  = document.getElementById('misAvisos');
+    el.innerHTML = mis.length ? mis.map(a => `
+      <div class="aviso-card">
+        <div class="aviso-meta"><span class="badge badge-${a.tipo}">${a.tipo.toUpperCase()}</span><span class="aviso-fecha">${formatFecha(a.fecha)}</span></div>
+        <div class="aviso-titulo">${a.titulo}</div><div class="aviso-body">${a.contenido}</div>
+      </div>`).join('') : '<div class="empty"><div class="empty-icon">📚</div>Aún no publicaste nada</div>';
+  }
+
+  function cargarTodos() {
+    const avisos = getAvisos();
+    const el = document.getElementById('todosAvisos');
+    el.innerHTML = avisos.length ? avisos.map(a => `
+      <div class="aviso-card">
+        <div class="aviso-meta"><span class="badge badge-${a.tipo}">${a.tipo.toUpperCase()}</span><span style="font-size:.8rem;color:var(--gris)">Por: ${a.autor}</span><span class="aviso-fecha">${formatFecha(a.fecha)}</span></div>
+        <div class="aviso-titulo">${a.titulo}</div><div class="aviso-body">${a.contenido}</div>
+      </div>`).join('') : '<div class="empty"><div class="empty-icon">📭</div>Sin avisos</div>';
+  }
+
+  cargarMisAvisos();
+</script>
+<script src="chat.js"></script>
+</body>
+</html>

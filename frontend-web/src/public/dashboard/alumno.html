@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Mi Campus — Alumno</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root { --azul:#1a3a6b; --azul2:#2256a8; --acento:#e8a020; --claro:#f5f7fa; --texto:#1c1c2e; --gris:#6b7280; --sidebar:240px; }
+    body { font-family:'DM Sans',sans-serif; background:var(--claro); display:flex; min-height:100vh; }
+    .sidebar { width:var(--sidebar); background:var(--azul); color:#fff; display:flex; flex-direction:column; position:fixed; top:0; left:0; bottom:0; z-index:50; }
+    .sidebar-logo { padding:24px 20px 16px; font-family:'Playfair Display',serif; font-size:1.05rem; border-bottom:1px solid rgba(255,255,255,.1); }
+    .sidebar-logo span { color:var(--acento); }
+    .sidebar-rol { padding:10px 20px; font-size:.72rem; letter-spacing:2px; text-transform:uppercase; opacity:.5; border-bottom:1px solid rgba(255,255,255,.08); }
+    .sidebar-nav { flex:1; padding:12px 0; }
+    .nav-item { display:flex; align-items:center; gap:12px; padding:13px 24px; color:rgba(255,255,255,.75); cursor:pointer; transition:all .2s; font-size:.92rem; border-left:3px solid transparent; }
+    .nav-item:hover, .nav-item.active { background:rgba(255,255,255,.08); color:#fff; border-left-color:var(--acento); }
+    .nav-item .icon { font-size:1.1rem; width:22px; }
+    .sidebar-footer { padding:20px 24px; border-top:1px solid rgba(255,255,255,.1); }
+    .btn-logout { display:flex; align-items:center; gap:8px; background:rgba(255,255,255,.08); border:none; color:#fff; padding:11px 16px; border-radius:8px; cursor:pointer; font-family:'DM Sans',sans-serif; font-size:.88rem; width:100%; transition:background .2s; }
+    .btn-logout:hover { background:rgba(255,255,255,.15); }
+    .main { margin-left:var(--sidebar); flex:1; display:flex; flex-direction:column; min-height:100vh; }
+    .topbar { background:#fff; padding:18px 36px; display:flex; align-items:center; justify-content:space-between; box-shadow:0 1px 12px rgba(0,0,0,.06); position:sticky; top:0; z-index:40; }
+    .topbar-title { font-family:'Playfair Display',serif; font-size:1.3rem; color:var(--texto); }
+    .perfil-btn { display:flex; align-items:center; gap:10px; cursor:pointer; padding:6px 12px; border-radius:10px; transition:background .2s; border:1.5px solid transparent; }
+    .perfil-btn:hover { background:var(--claro); border-color:#e5e7eb; }
+    .avatar { width:36px; height:36px; border-radius:50%; background:var(--acento); color:#fff; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:.9rem; overflow:hidden; border:2px solid var(--azul); flex-shrink:0; }
+    .avatar img { width:100%; height:100%; object-fit:cover; }
+    .perfil-info { display:flex; flex-direction:column; }
+    .perfil-nombre { font-size:.85rem; font-weight:600; color:var(--texto); line-height:1.2; }
+    .perfil-link { font-size:.72rem; color:var(--gris); }
+    .content { padding:32px 36px; flex:1; }
+    .tabs { display:flex; gap:4px; margin-bottom:28px; background:#fff; padding:6px; border-radius:10px; box-shadow:0 1px 8px rgba(0,0,0,.06); width:fit-content; }
+    .tab { padding:9px 20px; border-radius:7px; border:none; cursor:pointer; font-family:'DM Sans',sans-serif; font-size:.88rem; font-weight:500; color:var(--gris); background:transparent; transition:all .2s; }
+    .tab.active { background:var(--azul); color:#fff; }
+    .panel { display:none; } .panel.active { display:block; }
+    .card { background:#fff; border-radius:12px; padding:24px; box-shadow:0 1px 8px rgba(0,0,0,.06); margin-bottom:20px; }
+    .card-title { font-weight:600; font-size:1rem; color:var(--texto); margin-bottom:18px; }
+    .badge { display:inline-block; padding:3px 10px; border-radius:20px; font-size:.75rem; font-weight:600; }
+    .badge-general { background:#e0e7ff; color:#4338ca; } .badge-tarea { background:#dcfce7; color:#16a34a; }
+    .badge-horario { background:#fef3c7; color:#b45309; } .badge-urgente { background:#fee2e2; color:#dc2626; }
+    .aviso-card { border:1px solid #f0f0f0; border-radius:10px; padding:16px 18px; margin-bottom:12px; }
+    .aviso-meta { display:flex; align-items:center; gap:10px; margin-bottom:8px; flex-wrap:wrap; }
+    .aviso-titulo { font-weight:600; font-size:.95rem; margin-bottom:6px; }
+    .aviso-body { color:var(--gris); font-size:.88rem; line-height:1.6; }
+    .aviso-fecha { font-size:.78rem; color:var(--gris); margin-left:auto; }
+    .empty { text-align:center; padding:48px; color:var(--gris); }
+    .empty-icon { font-size:2.5rem; margin-bottom:12px; }
+    .asistencia-grid { display:grid; gap:8px; }
+    .asistencia-item { display:flex; align-items:center; gap:12px; padding:12px 16px; border:1px solid #f0f0f0; border-radius:8px; font-size:.88rem; }
+    .asist-dot { width:10px; height:10px; border-radius:50%; flex-shrink:0; }
+    .presente { background:#16a34a; } .ausente { background:#dc2626; } .tarde { background:#f59e0b; }
+    .bienvenida { background:linear-gradient(135deg, var(--azul) 0%, var(--azul2) 100%); border-radius:14px; padding:28px 32px; color:#fff; margin-bottom:24px; }
+    .bienvenida h2 { font-family:'Playfair Display',serif; font-size:1.6rem; margin-bottom:6px; }
+    .bienvenida p { opacity:.8; font-size:.92rem; }
+    @media(max-width:900px) { .sidebar{display:none} .main{margin-left:0} .content{padding:20px 16px} .topbar{padding:14px 20px} .perfil-info{display:none} }
+  </style>
+</head>
+<body>
+<aside class="sidebar">
+  <div class="sidebar-logo">Campus <span>Virtual</span></div>
+  <div class="sidebar-rol">🟡 Alumno</div>
+  <nav class="sidebar-nav">
+    <div class="nav-item active" onclick="showTab('inicio')"><span class="icon">🏠</span> Inicio</div>
+    <div class="nav-item" onclick="showTab('avisos')"><span class="icon">📢</span> Avisos</div>
+    <div class="nav-item" onclick="showTab('tareas')"><span class="icon">📚</span> Tareas</div>
+    <div class="nav-item" onclick="showTab('asistencia')"><span class="icon">✅</span> Asistencia</div>
+  </nav>
+  <div class="sidebar-footer">
+    <button class="btn-logout" onclick="logout()">🚪 Cerrar sesión</button>
+  </div>
+</aside>
+<div class="main">
+  <div class="topbar">
+    <div class="topbar-title" id="pageTitle">Mi Campus</div>
+    <div class="perfil-btn" onclick="irAPerfil()">
+      <div class="avatar" id="avatarInitial"></div>
+      <div class="perfil-info">
+        <div class="perfil-nombre" id="userName">Alumno</div>
+        <div class="perfil-link">Ver perfil →</div>
+      </div>
+    </div>
+  </div>
+  <div class="content">
+    <div class="tabs">
+      <button class="tab active" onclick="showTab('inicio')">🏠 Inicio</button>
+      <button class="tab" onclick="showTab('avisos')">📢 Avisos</button>
+      <button class="tab" onclick="showTab('tareas')">📚 Tareas</button>
+      <button class="tab" onclick="showTab('asistencia')">✅ Asistencia</button>
+    </div>
+    <div class="panel active" id="panel-inicio">
+      <div class="bienvenida">
+        <h2>¡Bienvenido, <span id="welcomeName">alumno</span>! 👋</h2>
+        <p>Desde acá podés ver tus avisos, tareas y asistencia.</p>
+      </div>
+      <div class="card"><div class="card-title">📢 Últimos avisos</div><div id="ultimosAvisos"><div class="empty"><div class="empty-icon">📭</div>Sin avisos</div></div></div>
+    </div>
+    <div class="panel" id="panel-avisos">
+      <div class="card"><div class="card-title">Todos los avisos</div><div id="todosAvisos"><div class="empty"><div class="empty-icon">📭</div>Sin avisos</div></div></div>
+    </div>
+    <div class="panel" id="panel-tareas">
+      <div class="card"><div class="card-title">Tareas asignadas</div><div id="listaTareas"><div class="empty"><div class="empty-icon">📚</div>Sin tareas</div></div></div>
+    </div>
+    <div class="panel" id="panel-asistencia">
+      <div class="card"><div class="card-title">Mi asistencia</div><div id="miAsistencia"><div class="empty"><div class="empty-icon">✅</div>Sin registros</div></div></div>
+    </div>
+  </div>
+</div>
+<script src="base.js"></script>
+<script>
+  const user = getUser();
+  if (user) {
+    document.getElementById('userName').textContent = user.nombre;
+    initAvatar();
+    document.getElementById('welcomeName').textContent   = user.nombre.split(' ')[0];
+    
+  }
+
+  function irAPerfil() { window.location.href = 'perfil.html'; }
+  function cargarFotoPerfil() {
+    const u = getUser(); if (!u) return;
+    const ud = getUsuarios().find(x => x.email === u.email);
+  }
+  document.addEventListener('DOMContentLoaded', cargarFotoPerfil);
+
+  function getAvisos() { return JSON.parse(localStorage.getItem('campus_avisos') || '[]'); }
+  function getAsistencia() { return JSON.parse(localStorage.getItem('campus_asistencia') || '[]'); }
+
+  function showTab(tab) {
+    document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.getElementById('panel-' + tab).classList.add('active');
+    document.querySelectorAll('.tab').forEach(t => { if(t.textContent.toLowerCase().includes(tab.substring(0,4))) t.classList.add('active'); });
+    if (tab === 'avisos')     cargarSeccion('todosAvisos', getAvisos().filter(a => a.tipo !== 'tarea'));
+    if (tab === 'tareas')     cargarSeccion('listaTareas', getAvisos().filter(a => a.tipo === 'tarea'));
+    if (tab === 'asistencia') cargarMiAsistencia();
+  }
+
+  function renderAvisos(data) {
+    if (!data.length) return '<div class="empty"><div class="empty-icon">📭</div>No hay avisos</div>';
+    return data.map(a => `
+      <div class="aviso-card">
+        <div class="aviso-meta">
+          <span class="badge badge-${a.tipo}">${a.tipo.toUpperCase()}</span>
+          <span style="font-size:.82rem;color:var(--gris)">Por: ${a.autor || '—'}</span>
+          <span class="aviso-fecha">${formatFecha(a.fecha)}</span>
+        </div>
+        <div class="aviso-titulo">${a.titulo}</div>
+        <div class="aviso-body">${a.contenido}</div>
+      </div>`).join('');
+  }
+
+  function cargarSeccion(id, data) {
+    document.getElementById(id).innerHTML = renderAvisos(data);
+  }
+
+  function cargarInicio() {
+    const avisos = getAvisos();
+    document.getElementById('ultimosAvisos').innerHTML = renderAvisos(avisos.slice(0,3));
+  }
+
+  function cargarMiAsistencia() {
+    const mis = getAsistencia().filter(r => r.alumno?.toLowerCase() === user.nombre?.toLowerCase());
+    const el  = document.getElementById('miAsistencia');
+    if (!mis.length) { el.innerHTML = '<div class="empty"><div class="empty-icon">✅</div>Sin registros de asistencia</div>'; return; }
+    el.innerHTML = '<div class="asistencia-grid">' + mis.map(r => `
+      <div class="asistencia-item">
+        <div class="asist-dot ${r.estado}"></div>
+        <span><strong>${new Date(r.fecha).toLocaleDateString('es-AR')}</strong></span>
+        <span style="color:var(--gris)">${r.estado.charAt(0).toUpperCase() + r.estado.slice(1)}</span>
+      </div>`).join('') + '</div>';
+  }
+
+  cargarInicio();
+</script>
+</body>
+</html>

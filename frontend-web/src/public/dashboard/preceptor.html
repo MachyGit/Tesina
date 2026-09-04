@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Panel Preceptor — Campus Virtual</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root { --cyan:#0e7490; --cyan2:#0891b2; --acento:#e8a020; --claro:#f5f7fa; --texto:#1c1c2e; --gris:#6b7280; --sidebar:240px; }
+    body { font-family:'DM Sans',sans-serif; background:var(--claro); display:flex; min-height:100vh; }
+    .sidebar { width:var(--sidebar); background:var(--cyan); color:#fff; display:flex; flex-direction:column; position:fixed; top:0; left:0; bottom:0; z-index:50; }
+    .sidebar-logo { padding:24px 20px 16px; font-family:'Playfair Display',serif; font-size:1.05rem; border-bottom:1px solid rgba(255,255,255,.1); }
+    .sidebar-logo span { color:#7dd3fc; }
+    .sidebar-rol { padding:10px 20px; font-size:.72rem; letter-spacing:2px; text-transform:uppercase; opacity:.5; border-bottom:1px solid rgba(255,255,255,.08); }
+    .sidebar-nav { flex:1; padding:12px 0; }
+    .nav-item { display:flex; align-items:center; gap:10px; padding:12px 20px; color:rgba(255,255,255,.75); cursor:pointer; transition:all .2s; font-size:.9rem; border-left:3px solid transparent; }
+    .nav-item:hover, .nav-item.active { background:rgba(255,255,255,.1); color:#fff; border-left-color:#7dd3fc; }
+    .nav-item .icon { font-size:1rem; width:20px; }
+    .sidebar-footer { padding:16px 20px; border-top:1px solid rgba(255,255,255,.1); }
+    .btn-logout { display:flex; align-items:center; gap:8px; background:rgba(255,255,255,.08); border:none; color:#fff; padding:10px 14px; border-radius:8px; cursor:pointer; font-family:'DM Sans',sans-serif; font-size:.85rem; width:100%; }
+    .main { margin-left:var(--sidebar); flex:1; display:flex; flex-direction:column; }
+    .topbar { background:#fff; padding:16px 32px; display:flex; align-items:center; justify-content:space-between; box-shadow:0 1px 12px rgba(0,0,0,.06); position:sticky; top:0; z-index:40; }
+    .topbar-title { font-family:'Playfair Display',serif; font-size:1.25rem; color:var(--texto); }
+    .perfil-btn { display:flex; align-items:center; gap:10px; cursor:pointer; padding:6px 12px; border-radius:10px; transition:background .2s; border:1.5px solid transparent; }
+    .perfil-btn:hover { background:var(--claro); border-color:#e5e7eb; }
+    .avatar { width:36px; height:36px; border-radius:50%; background:var(--cyan); color:#fff; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:.88rem; overflow:hidden; border:2px solid var(--acento); flex-shrink:0; }
+    .avatar img { width:100%; height:100%; object-fit:cover; }
+    .perfil-info { display:flex; flex-direction:column; }
+    .perfil-nombre { font-size:.85rem; font-weight:600; color:var(--texto); line-height:1.2; }
+    .perfil-link { font-size:.72rem; color:var(--gris); }
+    .content { padding:28px 32px; flex:1; }
+    .tabs { display:flex; gap:4px; margin-bottom:24px; background:#fff; padding:5px; border-radius:10px; box-shadow:0 1px 8px rgba(0,0,0,.06); width:fit-content; }
+    .tab { padding:8px 18px; border-radius:7px; border:none; cursor:pointer; font-family:'DM Sans',sans-serif; font-size:.85rem; font-weight:600; color:var(--gris); background:transparent; transition:all .2s; }
+    .tab.active { background:var(--cyan); color:#fff; }
+    .panel { display:none; } .panel.active { display:block; }
+    .card { background:#fff; border-radius:12px; padding:22px; box-shadow:0 1px 8px rgba(0,0,0,.06); margin-bottom:18px; }
+    .card-title { font-weight:600; font-size:.95rem; color:var(--texto); margin-bottom:16px; }
+    .form-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+    .field { display:flex; flex-direction:column; gap:4px; }
+    .field.full { grid-column:1/-1; }
+    label { font-size:.8rem; font-weight:600; color:var(--texto); }
+    input, select { padding:10px 12px; border:1.5px solid #e5e7eb; border-radius:8px; font-family:'DM Sans',sans-serif; font-size:.9rem; color:var(--texto); background:var(--claro); outline:none; }
+    input:focus, select:focus { border-color:var(--cyan2); }
+    .btn { padding:10px 20px; border-radius:8px; border:none; font-family:'DM Sans',sans-serif; font-weight:600; font-size:.87rem; cursor:pointer; }
+    .btn-primary { background:var(--cyan); color:#fff; } .btn-primary:hover { background:var(--cyan2); }
+    .estado-row { display:flex; gap:8px; margin-bottom:14px; flex-wrap:wrap; }
+    .estado-badge { flex:1; padding:10px; border-radius:8px; border:1.5px solid #e5e7eb; cursor:pointer; font-size:.85rem; font-weight:600; color:var(--gris); background:var(--claro); text-align:center; transition:all .2s; }
+    .estado-badge.presente.active { background:#16a34a; color:#fff; border-color:#16a34a; }
+    .estado-badge.ausente.active  { background:#dc2626; color:#fff; border-color:#dc2626; }
+    .estado-badge.tarde.active    { background:#f59e0b; color:#fff; border-color:#f59e0b; }
+    table { width:100%; border-collapse:collapse; font-size:.85rem; }
+    th { text-align:left; padding:9px 12px; font-size:.72rem; letter-spacing:.5px; text-transform:uppercase; color:var(--gris); border-bottom:2px solid #f0f0f0; }
+    td { padding:11px 12px; border-bottom:1px solid #f7f7f7; color:var(--texto); }
+    .badge { display:inline-block; padding:3px 10px; border-radius:20px; font-size:.72rem; font-weight:700; }
+    .badge-presente { background:#dcfce7; color:#16a34a; } .badge-ausente { background:#fee2e2; color:#dc2626; } .badge-tarde { background:#fef3c7; color:#b45309; }
+    .aviso-item { padding:12px 0; border-bottom:1px solid #f0f0f0; }
+    .aviso-titulo { font-weight:600; font-size:.9rem; }
+    .aviso-body { color:var(--gris); font-size:.85rem; margin-top:3px; }
+    .empty { text-align:center; padding:40px; color:var(--gris); }
+    .empty-icon { font-size:2.2rem; margin-bottom:10px; }
+    @media(max-width:900px) { .sidebar{display:none} .main{margin-left:0} .form-grid{grid-template-columns:1fr} .content{padding:18px 14px} .topbar{padding:12px 18px} .perfil-info{display:none} }
+  </style>
+</head>
+<body>
+<aside class="sidebar">
+  <div class="sidebar-logo">Campus <span>Virtual</span></div>
+  <div class="sidebar-rol">🔵 Preceptor</div>
+  <nav class="sidebar-nav">
+    <div class="nav-item active" onclick="showTab('asistencia')"><span class="icon">✅</span> Asistencia</div>
+    <div class="nav-item" onclick="showTab('avisos')"><span class="icon">📢</span> Avisos</div>
+    <div class="nav-item" onclick="showTab('chat')"><span class="icon">💬</span> Mensajes</div>
+  </nav>
+  <div class="sidebar-footer">
+    <button class="btn-logout" onclick="logout()">🚪 Cerrar sesión</button>
+  </div>
+</aside>
+<div class="main">
+  <div class="topbar">
+    <div class="topbar-title">Panel Preceptor</div>
+    <div class="perfil-btn" onclick="irAPerfil()">
+      <div class="avatar" id="avatarInitial"></div>
+      <div class="perfil-info">
+        <div class="perfil-nombre" id="userName">Preceptor</div>
+        <div class="perfil-link">Ver perfil →</div>
+      </div>
+    </div>
+  </div>
+  <div class="content">
+    <div class="tabs">
+      <button class="tab active" onclick="showTab('asistencia')">✅ Asistencia</button>
+      <button class="tab" onclick="showTab('avisos')">📢 Avisos</button>
+    </div>
+
+    <div class="panel active" id="panel-asistencia">
+      <div class="card">
+        <div class="card-title">Registrar asistencia de hoy</div>
+        <div class="form-grid">
+          <div class="field full">
+            <label>Nombre del alumno</label>
+            <input type="text" id="alumnoNombre" placeholder="Nombre y apellido del alumno"/>
+          </div>
+          <div class="field full">
+            <label>Estado</label>
+            <div class="estado-row">
+              <div class="estado-badge presente active" onclick="selEstado(this,'presente')">✅ Presente</div>
+              <div class="estado-badge ausente"          onclick="selEstado(this,'ausente')">❌ Ausente</div>
+              <div class="estado-badge tarde"            onclick="selEstado(this,'tarde')">⏰ Tarde</div>
+            </div>
+          </div>
+          <div class="field full"><button class="btn btn-primary" onclick="registrarAsistencia()">✅ Registrar</button></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">Registros de hoy — <span id="fechaHoy"></span></div>
+        <div style="overflow-x:auto">
+          <table>
+            <thead><tr><th>Alumno</th><th>Hora</th><th>Estado</th><th></th></tr></thead>
+            <tbody id="tablaAsistencia"><tr><td colspan="3" style="text-align:center;padding:28px;color:#9ca3af">Sin registros hoy</td></tr></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel" id="panel-avisos">
+      <div class="card">
+        <div class="card-title">Avisos recientes</div>
+        <div id="listaAvisos"><div class="empty"><div class="empty-icon">📭</div>Sin avisos</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    <!-- PANEL CHAT -->
+    <div class="panel" id="panel-chat">
+      <div class="card" style="min-height:500px; padding:0; overflow:hidden;">
+        <div style="display:flex; height:560px;">
+          <div id="chatContactos" style="width:240px; border-right:1px solid #f0f0f0; overflow-y:auto; flex-shrink:0;">
+            <div style="padding:14px 16px; font-weight:600; font-size:.85rem; color:var(--texto); border-bottom:1px solid #f0f0f0;">
+              💬 Mensajes
+            </div>
+            <div id="listaContactos"><div class="empty" style="padding:20px;font-size:.82rem;">Cargando...</div></div>
+          </div>
+          <div style="flex:1; display:flex; flex-direction:column;">
+            <div id="chatHeader" style="padding:12px 18px; border-bottom:1px solid #f0f0f0; font-weight:600; font-size:.88rem; color:var(--texto);">
+              Seleccioná un contacto para chatear
+            </div>
+            <div id="chatMensajes" style="flex:1; overflow-y:auto; padding:16px; display:flex; flex-direction:column; gap:10px;"></div>
+            <div id="chatInput" style="padding:12px 16px; border-top:1px solid #f0f0f0; display:none; gap:8px; align-items:flex-end;">
+              <textarea id="chatTexto" placeholder="Escribí un mensaje..." rows="2"
+                style="flex:1; resize:none; padding:8px 12px; border:1.5px solid #e5e7eb; border-radius:8px; font-family:inherit; font-size:.88rem; outline:none;"
+                onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();enviarMensajeChat();}"></textarea>
+              <label style="cursor:pointer; padding:8px 10px; background:#f3f4f6; border-radius:8px; font-size:1rem;" title="Adjuntar archivo">
+                📎<input type="file" style="display:none" onchange="adjuntarArchivo(event)"/>
+              </label>
+              <button onclick="enviarMensajeChat()" class="btn btn-primary" style="height:38px;">Enviar</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+<script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+<script src="base.js"></script>
+<script>
+  const user = getUser();
+  if (user) { document.getElementById('userName').textContent = user.nombre;  initAvatar(); }
+
+  function irAPerfil() { window.location.href = 'perfil.html'; }
+  function cargarFotoPerfil() {
+    const u = getUser(); if (!u) return;
+    const ud = getUsuarios().find(x => x.email === u.email);
+  }
+  document.addEventListener('DOMContentLoaded', cargarFotoPerfil);
+
+  document.getElementById('fechaHoy').textContent = new Date().toLocaleDateString('es-AR', { weekday:'long', day:'numeric', month:'long' });
+
+  let estadoActual = 'presente';
+  function selEstado(el, estado) {
+    document.querySelectorAll('.estado-badge').forEach(b => b.classList.remove('active'));
+    el.classList.add('active'); estadoActual = estado;
+  }
+
+  function getAsistencia() { return JSON.parse(localStorage.getItem('campus_asistencia') || '[]'); }
+  function guardarAsistencia(a) { localStorage.setItem('campus_asistencia', JSON.stringify(a)); }
+
+  function registrarAsistencia() {
+    const nombre = document.getElementById('alumnoNombre').value.trim();
+    if (!nombre) return alert('Ingresá el nombre del alumno');
+    const registros = getAsistencia();
+    registros.unshift({ id: Date.now().toString(), alumno: nombre, estado: estadoActual, fecha: new Date().toISOString(), preceptor: user.nombre });
+    guardarAsistencia(registros);
+    document.getElementById('alumnoNombre').value = '';
+    cargarTablaAsistencia();
+  }
+
+  function cargarTablaAsistencia() {
+    const hoy = new Date().toDateString();
+    const hoy_registros = getAsistencia().filter(r => new Date(r.fecha).toDateString() === hoy);
+    const tbody = document.getElementById('tablaAsistencia');
+    if (!hoy_registros.length) {
+      tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;padding:28px;color:#9ca3af">Sin registros hoy</td></tr>';
+      return;
+    }
+    tbody.innerHTML = hoy_registros.map(r => `
+      <tr id="fila_${r.id}">
+        <td><strong>${r.alumno}</strong></td>
+        <td style="color:var(--gris)">${new Date(r.fecha).toLocaleTimeString('es-AR', {hour:'2-digit',minute:'2-digit'})}</td>
+        <td>
+          <select onchange="editarEstadoAsistencia('${r.id}', this.value)"
+            style="padding:4px 8px; border:1.5px solid #e5e7eb; border-radius:6px;
+                   font-family:inherit; font-size:.82rem; cursor:pointer; background:#fff;">
+            <option value="presente" ${r.estado==='presente'?'selected':''}>✅ Presente</option>
+            <option value="ausente"  ${r.estado==='ausente' ?'selected':''}>❌ Ausente</option>
+            <option value="tarde"    ${r.estado==='tarde'   ?'selected':''}>⏰ Tarde</option>
+          </select>
+        </td>
+        <td>
+          <button onclick="borrarRegistroAsistencia('${r.id}')"
+            style="background:#fee2e2; color:#dc2626; border:none; padding:4px 10px;
+                   border-radius:6px; cursor:pointer; font-size:.78rem; font-weight:600;">
+            🗑 Borrar
+          </button>
+        </td>
+      </tr>`).join('');
+  }
+
+  function editarEstadoAsistencia(id, nuevoEstado) {
+    const registros = getAsistencia();
+    const idx = registros.findIndex(r => r.id === id);
+    if (idx === -1) return;
+    registros[idx].estado = nuevoEstado;
+    guardarAsistencia(registros);
+    // Si el backend está disponible, sincronizar
+    apiFetch(`/api/asistencia/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify({ estado: nuevoEstado })
+    }).catch(() => {}); // silencioso si no hay backend
+  }
+
+  function borrarRegistroAsistencia(id) {
+    if (!confirm('¿Borrar este registro de asistencia?')) return;
+    const registros = getAsistencia().filter(r => r.id !== id);
+    guardarAsistencia(registros);
+    // Quitar la fila del DOM inmediatamente
+    const fila = document.getElementById(`fila_${id}`);
+    if (fila) fila.remove();
+    // Sincronizar con backend
+    apiFetch(`/api/asistencia/${id}`, { method: 'DELETE' }).catch(() => {});
+  }
+
+  function showTab(tab) {
+    if (tab === 'chat') { initChat(); }
+    if (tab === 'anios') { cargarAnios(); }
+    document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.getElementById('panel-' + tab).classList.add('active');
+    document.querySelectorAll('.tab').forEach(t => { if(t.textContent.toLowerCase().includes(tab === 'asistencia' ? 'asist' : 'aviso')) t.classList.add('active'); });
+    if (tab === 'avisos') cargarAvisos();
+  }
+
+  function cargarAvisos() {
+    const avisos = JSON.parse(localStorage.getItem('campus_avisos') || '[]');
+    const el = document.getElementById('listaAvisos');
+    if (!avisos.length) { el.innerHTML = '<div class="empty"><div class="empty-icon">📭</div>Sin avisos</div>'; return; }
+    el.innerHTML = avisos.map(a => `
+      <div class="aviso-item">
+        <div class="aviso-titulo">${a.titulo}</div>
+        <div class="aviso-body">${a.contenido}</div>
+        <small style="color:#9ca3af">${formatFecha(a.fecha)}</small>
+      </div>`).join('');
+  }
+
+  cargarTablaAsistencia();
+</script>
+<script src="chat.js"></script>
+</body>
+</html>

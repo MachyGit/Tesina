@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <link rel="stylesheet" href="login.CSS">
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Campus Virtual — Login</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+ 
+</head>
+<body>
+
+<div class="left">
+  <div class="left-content">
+    <div class="left-logo">Campus <span>Virtual</span></div>
+    <p class="left-sub">Accedé a tu espacio educativo: avisos, tareas, horarios y más.</p>
+    <div class="left-badges">
+      <span class="left-badge">🟣 Director</span>
+      <span class="left-badge">🔵 Secretaria</span>
+      <span class="left-badge">🔵 Preceptor</span>
+      <span class="left-badge">🟢 Profesor</span>
+      <span class="left-badge">🟡 Alumno</span>
+    </div>
+  </div>
+</div>
+
+<div class="right">
+  <div class="card">
+    <a href="index.html" class="back-link">← Volver al inicio</a>
+
+    <h1 id="pageTitle">Campus Virtual</h1>
+    <p class="subtitle" id="pageSubtitle">Ingresá o creá tu cuenta institucional</p>
+
+    <!-- Tabs -->
+    <div class="tabs">
+      <button class="tab-btn active" onclick="switchTab('login')">Iniciar sesión</button>
+      <button class="tab-btn" onclick="switchTab('registro')">Crear cuenta</button>
+    </div>
+
+    <!-- ══ FORM LOGIN ══ -->
+    <div class="form active" id="formLogin">
+      <div class="field">
+        <label>Correo electrónico</label>
+        <div class="input-wrap">
+          <span class="input-icon">✉️</span>
+          <input type="email" id="loginEmail" placeholder="correo@escuelasproa.edu.ar"/>
+        </div>
+      </div>
+      <div class="field">
+        <label>Contraseña</label>
+        <div class="input-wrap">
+          <span class="input-icon">🔒</span>
+          <input type="password" id="loginPassword" placeholder="••••••••"/>
+        </div>
+      </div>
+      <div class="msg msg-error" id="loginError"></div>
+      <div class="msg msg-info"  id="loginPendiente" style="display:none">
+        ⏳ Tu cuenta está pendiente de aprobación por el director. Te avisaremos cuando esté activada.
+      </div>
+      <button class="btn-submit" onclick="handleLogin()">Ingresar al Campus</button>
+
+      <!-- Soy administrador -->
+      <div class="admin-section">
+        <button class="admin-toggle" onclick="toggleAdmin()">
+          🔐 Soy administrador — acceso especial
+        </button>
+        <div class="admin-form" id="adminForm">
+          <div class="field">
+            <label>Email administrador</label>
+            <div class="input-wrap">
+              <span class="input-icon">✉️</span>
+              <input type="email" id="adminEmail" placeholder="admin@escuelasproa.edu.ar"/>
+            </div>
+          </div>
+          <div class="field">
+            <label>Contraseña</label>
+            <div class="input-wrap">
+              <span class="input-icon">🔒</span>
+              <input type="password" id="adminPassword" placeholder="••••••••"/>
+            </div>
+          </div>
+          <div class="msg msg-error" id="adminError"></div>
+          <button class="btn-submit" onclick="handleAdminLogin()">Ingresar como administrador</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ FORM REGISTRO ══ -->
+    <div class="form" id="formRegistro">
+      <div class="field">
+        <label>Nombre completo</label>
+        <div class="input-wrap">
+          <span class="input-icon">👤</span>
+          <input type="text" id="regNombre" placeholder="Tu nombre y apellido"/>
+        </div>
+      </div>
+      <div class="field">
+        <label>Correo electrónico institucional</label>
+        <div class="input-wrap">
+          <span class="input-icon">✉️</span>
+          <input type="email" id="regEmail" placeholder="correo@escuelasproa.edu.ar"/>
+        </div>
+      </div>
+      <div class="field">
+        <label>Contraseña</label>
+        <div class="input-wrap">
+          <span class="input-icon">🔒</span>
+          <input type="password" id="regPassword" placeholder="Mínimo 6 caracteres"/>
+        </div>
+      </div>
+      <div class="field">
+        <label>Rol</label>
+        <div class="input-wrap">
+          <span class="input-icon">🎓</span>
+          <select id="regRol">
+            <option value="alumno">🟡 Alumno</option>
+            <option value="profesor">🟢 Profesor</option>
+            <option value="preceptor">🔵 Preceptor</option>
+          </select>
+        </div>
+      </div>
+      <div class="msg msg-error"   id="regError"></div>
+      <div class="msg msg-success" id="regSuccess"></div>
+      <button class="btn-submit green" onclick="handleRegistro()">✅ Crear mi cuenta</button>
+      <div class="pendiente-badge">
+        ⏳ Tu cuenta será revisada por el director antes de poder ingresar.
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+// ═══════════════════════════════════════
+// 💾 STORAGE
+// ═══════════════════════════════════════
+const DIRECTOR_DEFAULT = {
+  nombre: 'Director', email: 'lenunez@escuelasproa.edu.ar',
+  password: 'Admin1', rol: 'director', estado: 'activo', telegram_validado: false
+};
+const SECRETARIA_DEFAULT = {
+  nombre: 'Secretaria', email: 'stmachado@escuelasproa.edu.ar',
+  password: 'Admin1', rol: 'secretaria', estado: 'activo', telegram_validado: false
+};
+
+function getUsuarios() {
+  const data = localStorage.getItem('campus_usuarios');
+  const usuarios = data ? JSON.parse(data) : [];
+  if (!usuarios.find(u => u.email === DIRECTOR_DEFAULT.email))   usuarios.unshift(DIRECTOR_DEFAULT);
+  if (!usuarios.find(u => u.email === SECRETARIA_DEFAULT.email)) usuarios.splice(1, 0, SECRETARIA_DEFAULT);
+  return usuarios;
+}
+
+function guardarUsuarios(u) {
+  localStorage.setItem('campus_usuarios', JSON.stringify(u));
+}
+
+// ═══════════════════════════════════════
+// 🔐 LOGIN NORMAL
+// ═══════════════════════════════════════
+function handleLogin() {
+  const email    = document.getElementById('loginEmail').value.trim().toLowerCase();
+  const password = document.getElementById('loginPassword').value;
+  const errEl    = document.getElementById('loginError');
+  const pendEl   = document.getElementById('loginPendiente');
+  errEl.style.display  = 'none';
+  pendEl.style.display = 'none';
+
+  const usuario = getUsuarios().find(u => u.email === email && u.password === password);
+  if (!usuario) { errEl.textContent = 'Email o contraseña incorrectos.'; errEl.style.display = 'block'; return; }
+
+  if (usuario.estado === 'pendiente') { pendEl.style.display = 'block'; return; }
+
+  // Admins no pueden usar login normal
+  if (['director','secretaria'].includes(usuario.rol)) {
+    errEl.textContent = 'Los administradores deben usar la sección "Soy administrador".';
+    errEl.style.display = 'block';
+    return;
+  }
+
+  iniciarSesion(usuario);
+}
+
+// ═══════════════════════════════════════
+// 🔐 LOGIN ADMINISTRADOR
+// ═══════════════════════════════════════
+function handleAdminLogin() {
+  const email    = document.getElementById('adminEmail').value.trim().toLowerCase();
+  const password = document.getElementById('adminPassword').value;
+  const errEl    = document.getElementById('adminError');
+  errEl.style.display = 'none';
+
+  const usuario = getUsuarios().find(u => u.email === email && u.password === password);
+  if (!usuario) { errEl.textContent = 'Credenciales incorrectas.'; errEl.style.display = 'block'; return; }
+  if (!['director','secretaria'].includes(usuario.rol)) {
+    errEl.textContent = 'Esta sección es solo para directivos.';
+    errEl.style.display = 'block';
+    return;
+  }
+
+  iniciarSesion(usuario);
+}
+
+function iniciarSesion(usuario) {
+  localStorage.setItem('campus_token', 'local_' + Date.now());
+  localStorage.setItem('campus_user',  JSON.stringify({
+    nombre:            usuario.nombre,
+    email:             usuario.email,
+    rol:               usuario.rol,
+    telegram_validado: usuario.telegram_validado || false
+  }));
+  const rutas = {
+    director:   'dashboard/director.html',
+    secretaria: 'dashboard/secretaria.html',
+    preceptor:  'dashboard/preceptor.html',
+    profesor:   'dashboard/profesor.html',
+    alumno:     'dashboard/alumno.html',
+  };
+  window.location.href = rutas[usuario.rol] || 'dashboard/alumno.html';
+}
+
+// ═══════════════════════════════════════
+// ➕ REGISTRO PÚBLICO
+// ═══════════════════════════════════════
+function handleRegistro() {
+  const nombre   = document.getElementById('regNombre').value.trim();
+  const email    = document.getElementById('regEmail').value.trim().toLowerCase();
+  const password = document.getElementById('regPassword').value;
+  const rol      = document.getElementById('regRol').value;
+  const errEl    = document.getElementById('regError');
+  const okEl     = document.getElementById('regSuccess');
+  errEl.style.display = 'none';
+  okEl.style.display  = 'none';
+
+  if (!nombre || !email || !password) {
+    errEl.textContent = 'Completá todos los campos.'; errEl.style.display = 'block'; return;
+  }
+  if (password.length < 6) {
+    errEl.textContent = 'La contraseña debe tener al menos 6 caracteres.'; errEl.style.display = 'block'; return;
+  }
+  const usuarios = getUsuarios();
+  if (usuarios.find(u => u.email === email)) {
+    errEl.textContent = 'Ese email ya está registrado.'; errEl.style.display = 'block'; return;
+  }
+
+  usuarios.push({ nombre, email, password, rol, estado: 'pendiente', telegram_validado: false });
+  guardarUsuarios(usuarios);
+
+  document.getElementById('regNombre').value   = '';
+  document.getElementById('regEmail').value    = '';
+  document.getElementById('regPassword').value = '';
+
+  okEl.textContent   = `✅ Cuenta creada. Esperá la aprobación del director para poder ingresar.`;
+  okEl.style.display = 'block';
+}
+
+// ═══════════════════════════════════════
+// UI
+// ═══════════════════════════════════════
+function switchTab(tab) {
+  document.querySelectorAll('.tab-btn').forEach((b,i) => b.classList.toggle('active', (tab==='login'&&i===0)||(tab==='registro'&&i===1)));
+  document.getElementById('formLogin').classList.toggle('active', tab === 'login');
+  document.getElementById('formRegistro').classList.toggle('active', tab === 'registro');
+  document.getElementById('pageTitle').textContent    = tab === 'login' ? 'Campus Virtual' : 'Crear cuenta';
+  document.getElementById('pageSubtitle').textContent = tab === 'login'
+    ? 'Ingresá con tu cuenta institucional'
+    : 'Registrate y esperá la aprobación del director';
+}
+
+function toggleAdmin() {
+  const f = document.getElementById('adminForm');
+  f.classList.toggle('open');
+}
+
+// Enter para login
+document.addEventListener('keydown', e => {
+  if (e.key === 'Enter') {
+    if (document.getElementById('formLogin').classList.contains('active')) handleLogin();
+  }
+});
+
+// Si ya tiene sesión activa, redirigir
+window.onload = () => {
+  const token = localStorage.getItem('campus_token');
+  const user  = localStorage.getItem('campus_user');
+  if (token && user) {
+    const u = JSON.parse(user);
+    const rutas = { director:'dashboard/director.html', secretaria:'dashboard/secretaria.html', preceptor:'dashboard/preceptor.html', profesor:'dashboard/profesor.html', alumno:'dashboard/alumno.html' };
+    window.location.href = rutas[u.rol] || 'dashboard/alumno.html';
+  }
+};
+</script>
+</body>
+</html>
