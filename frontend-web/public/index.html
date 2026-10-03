@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
+  <script src="theme.js"></script>
   <link rel="stylesheet" href="index.css">
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
@@ -26,6 +27,11 @@
     <a href="#galeria"  class="nav-link">Galería</a>
     <a href="#contacto" class="nav-link">Contacto</a>
     <a href="login.html" class="btn-campus">🎓 Campus Virtual</a>
+    <div class="theme-toggle">
+      <button data-theme-btn="light" title="Modo claro">☀️</button>
+      <button data-theme-btn="dark" title="Modo oscuro">🌙</button>
+      <button data-theme-btn="system" title="Igual que el sistema">🖥️</button>
+    </div>
   </div>
   <button class="burger" onclick="toggleMenu()">☰</button>
   <div class="mobile-menu" id="mobileMenu">
@@ -34,6 +40,11 @@
     <a href="#galeria"  class="mobile-link" onclick="closeMenu()">Galería</a>
     <a href="#contacto" class="mobile-link" onclick="closeMenu()">Contacto</a>
     <a href="login.html" class="mobile-btn">🎓 Campus Virtual</a>
+    <div class="theme-toggle" style="margin-top:12px; align-self:center;">
+      <button data-theme-btn="light" title="Modo claro">☀️</button>
+      <button data-theme-btn="dark" title="Modo oscuro">🌙</button>
+      <button data-theme-btn="system" title="Igual que el sistema">🖥️</button>
+    </div>
   </div>
 </nav>
 
@@ -83,7 +94,7 @@
     <span class="tag tag-light" data-reveal>Galería</span>
     <h2 class="section-title-light" data-reveal>Nuestra escuela en imágenes</h2>
     <div class="carrusel" data-reveal="zoom">
-      <img class="carrusel-img" id="carruselImg" src="/images/galeria/fachada.jpg" alt="Foto escuela" onerror="this.style.background='rgba(255,255,255,.12)'; this.removeAttribute('src')"/>
+      <img class="carrusel-img" id="carruselImg" src="/images/fachada.jpg" alt="Foto escuela" onerror="this.style.background='rgba(255,255,255,.12)'; this.removeAttribute('src')"/>
       <div class="carrusel-caption" id="caption">Foto 1</div>
       <div class="carrusel-nav">
         <button class="nav-btn" onclick="cambiarFoto(-1)">‹</button>
@@ -121,10 +132,14 @@
         </div>
         <div class="mapa-wrap">
           <iframe
-            src="https://www.google.com/maps?q=R%C3%ADo+Amazonas+450,+R%C3%ADo+Tercero,+C%C3%B3rdoba&output=embed"
-            width="100%" height="220" style="border:0; border-radius:10px;"
-            allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade">
-          </iframe>
+  src="https://www.google.com/maps?q=-32.1788869,-64.0992604&output=embed"
+  width="100%"
+  height="400"
+  style="border:0;"
+  allowfullscreen=""
+  loading="lazy"
+  referrerpolicy="no-referrer-when-downgrade">
+</iframe>
         </div>
       </div>
       <form class="form" id="contactForm" data-reveal="right">
@@ -227,14 +242,14 @@
     document.querySelector('.burger').textContent = '☰';
   }
   const FOTOS = [
-    { src: '/images/galeria/fachada.jpg',     caption: 'Fachada del edificio — Río Amazonas 450' },
-    { src: '/images/galeria/aula.jpg',        caption: 'Aulas' },
-    { src: '/images/galeria/informatica.jpg', caption: 'Taller de Informática' },
-    { src: '/images/galeria/infoarte.jpg',    caption: 'Taller de Info-Arte' },
-    { src: '/images/galeria/ciencias.jpg',    caption: 'Taller de Ciencias' },
-    { src: '/images/galeria/alumnos.jpg',     caption: 'Alumnos en clase' },
-    { src: '/images/galeria/eventos.jpg',     caption: 'Jornada de Profundización' },
-    { src: '/images/galeria/exterior.jpg',    caption: 'Patio y espacios comunes' },
+    { src: '/images/fachada.jpg',     caption: 'Fachada del edificio — Río Amazonas 450' },
+    { src: '/images/aula.jpg',        caption: 'Aulas' },
+    { src: '/images/informatica.jpg', caption: 'Laboratorio de Informática' },
+    { src: '/images/infoarte.jpg',    caption: 'Usina de Arte' },
+    { src: '/images/ciencias.jpg',    caption: 'Labor de Ciencias' },
+    { src: '/images/alumnos.jpg',     caption: 'Alumnos en clase' },
+    { src: '/images/eventos.jpg',     caption: 'Jornada de Profundización' },
+    { src: '/images/sum.jpg',    caption: 'Sum/Comedor' },
   ];
   let fotoActiva = 0, timer;
   function renderGaleria() {
