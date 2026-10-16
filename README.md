@@ -1,285 +1,416 @@
-<h1 align="center"> Tesina – Página Web Escolar PROA</h1>
+# 🎓 Tesina – Campus Virtual PROA Río Tercero
 
-<p align="center">
-Plataforma web escolar desarrollada como proyecto institucional.
-</p>
+Plataforma web escolar desarrollada como proyecto de tesina de 6.º año de la Escuela Experimental PROA de Río Tercero, Córdoba, Argentina.
 
-<p align="center">
-<img src="https://img.shields.io/badge/Estado-En%20desarrollo-yellow">
-<img src="https://img.shields.io/badge/Tecnologías-HTML%20CSS%20JavaScript-blue">
-<img src="https://img.shields.io/badge/Tipo-Proyecto%20Escolar-green">
-</p>
+![Estado](https://img.shields.io/badge/Estado-En%20desarrollo-yellow)
+![Backend](https://img.shields.io/badge/Backend-Node.js%20Express-green)
+![Base de datos](https://img.shields.io/badge/Base%20de%20datos-MySQL-orange)
+![Proyecto](https://img.shields.io/badge/Tipo-Tesina%20Escolar-blue)
 
-<hr>
+---
 
-<h2>📖 Descripción del Proyecto</h2>
+# 📖 Descripción del proyecto
 
-<p>
-Este proyecto consiste en el desarrollo de una <b>plataforma web institucional para una escuela PROA</b>.
-</p>
+El proyecto consiste en el desarrollo de una plataforma web institucional para la Escuela Experimental PROA de Río Tercero.
 
-<p>
-El objetivo es crear un <b>portal escolar centralizado</b> donde estudiantes y docentes puedan acceder a información académica, anuncios, horarios y recursos educativos.
-</p>
+Su objetivo es centralizar la información escolar y facilitar la comunicación entre estudiantes, docentes, preceptores, secretaría y directivos.
 
-<hr>
+La plataforma integra una página institucional, un sistema de inicio de sesión, un Campus Virtual, gestión de avisos y herramientas de asistencia mediante inteligencia artificial.
 
-<h2>🎯 Objetivos</h2>
+También incorpora un bot de Telegram desarrollado en Python.
 
-<h3>Objetivo General</h3>
+---
 
-<p>
-Desarrollar una plataforma web escolar moderna que facilite el acceso a información académica y mejore la comunicación dentro de la institución.
-</p>
+# 🎯 Objetivos
 
-<h3>Objetivos Específicos</h3>
+## Objetivo general
 
-<ul>
-<li>Centralizar la información institucional</li>
-<li>Organizar anuncios por curso</li>
-<li>Permitir acceso mediante inicio de sesión</li>
-<li>Mostrar horarios escolares</li>
-<li>Crear un campus virtual educativo</li>
-<li>Incorporar herramientas de asistencia virtual</li>
-</ul>
+Desarrollar una plataforma web escolar que permita mejorar la organización, comunicación y acceso a la información académica dentro de la institución.
 
-<hr>
+## Objetivos específicos
 
-<h2>⚙️ Funcionalidades</h2>
+Centralizar la información institucional.
+Facilitar la comunicación escolar.
+Implementar un sistema de inicio de sesión.
+Organizar los usuarios según sus roles.
+Permitir la publicación y consulta de avisos.
+Gestionar información académica.
+Incorporar un asistente virtual.
+Integrar un bot de Telegram.
+Implementar una base de datos.
+Diseñar una interfaz accesible desde computadoras y celulares.
 
-<h3> Página de inicio</h3>
+---
 
-<ul>
-<li>Noticias y novedades</li>
-<li>Información institucional</li>
-<li>Acceso rápido a secciones</li>
-<li>Acceso al campus virtual</li>
-</ul>
+# ⚙️ Funcionalidades del sistema
 
-<h3> Sistema de inicio de sesión</h3>
+## 1. Página institucional
 
-<p>
-Los usuarios podrán iniciar sesión según su rol:
-</p>
+La página principal permite acceder a información sobre la institución.
 
-<ul>
-<li>Alumno</li>
-<li>Docente</li>
-<li>Administrador</li>
-</ul>
+Incluye:
 
-<h3>Anuncios por curso</h3>
+Inicio.
+Información institucional.
+Galería de imágenes.
+Contacto.
+Acceso al Campus Virtual.
+Diseño adaptable a diferentes pantallas.
+Modo claro y oscuro.
 
-<p>
-Cada curso contará con su propio espacio de anuncios donde se publicarán avisos académicos e institucionales.
-</p>
+## 2. Sistema de inicio de sesión
 
-<ul>
-<li>Fechas de exámenes</li>
-<li>Comunicados docentes</li>
-<li>Actividades escolares</li>
-<li>Avisos importantes</li>
-</ul>
+El Campus Virtual contempla un sistema de autenticación que permite identificar a los usuarios y controlar el acceso según su rol.
 
-<h3>Campus Virtual</h3>
+### Roles del sistema
 
-<ul>
-<li>Material de estudio</li>
-<li>Documentos descargables</li>
-<li>Recursos educativos</li>
-<li>Contenido académico</li>
-</ul>
+Director.
+Secretaría.
+Preceptor.
+Profesor.
+Alumno.
 
-<h3> Horarios escolares</h3>
+Cada rol tiene permisos específicos dentro del sistema.
 
-<ul>
-<li>Horarios por curso</li>
-<li>Materias del día</li>
-<li>Profesores asignados</li>
-</ul>
+## 3. Gestión de avisos
 
-<hr>
+El sistema contempla las siguientes funcionalidades:
 
-<h2>🤖 Asistente Virtual</h2>
+Publicación de novedades.
+Consulta de avisos.
+Organización de comunicaciones.
+Gestión de avisos institucionales.
+Avisos específicos por curso.
+Restricción de acciones según los permisos del usuario.
 
-<p>
-La plataforma contará con un <b>asistente virtual integrado en la página web</b> que permitirá a los usuarios realizar consultas rápidas sobre:
-</p>
+## 4. Campus Virtual
 
-<ul>
-<li>Horarios escolares</li>
-<li>Anuncios del curso</li>
-<li>Información institucional</li>
-<li>Acceso al campus virtual</li>
-<li>Dudas frecuentes de estudiantes</li>
-</ul>
+El Campus Virtual busca centralizar las herramientas académicas.
 
-<p>
-El asistente facilitará la navegación dentro del sitio y ayudará a los usuarios a encontrar información de forma rápida e intuitiva.
-</p>
+### Funcionalidades contempladas
 
-<hr>
+Consulta de novedades.
+Información académica.
+Avisos por curso.
+Consulta de asistencia.
+Gestión de usuarios.
+Acceso a herramientas según permisos.
 
-<h2> Bot de Telegram</h2>
+Algunas funcionalidades todavía se encuentran en desarrollo.
 
-<p>
-Además de la página web, el proyecto incluirá un <b>bot de Telegram</b> que replicará algunas de las funciones principales del sitio.
-</p>
+## 5. Asistente virtual
 
-<p>
-Esto permitirá a los usuarios realizar consultas sin necesidad de ingresar manualmente a la página web.
-</p>
+El proyecto contempla la incorporación de un asistente virtual para responder preguntas relacionadas con la escuela y el Campus Virtual.
 
-<p>
-Entre sus funciones principales estarán:
-</p>
+Su objetivo es facilitar el acceso a información institucional y ayudar a los usuarios a utilizar la plataforma.
 
-<ul>
-<li>Consultar horarios escolares</li>
-<li>Ver anuncios del curso</li>
-<li>Recibir avisos importantes</li>
-<li>Acceder a enlaces del campus virtual</li>
-<li>Realizar consultas rápidas mediante comandos</li>
-</ul>
+## 6. Bot de Telegram
 
-<p>
-De esta forma, los estudiantes podrán acceder a la información de la escuela de forma más rápida y desde cualquier dispositivo.
-</p>
+El sistema incluye un bot desarrollado en Python.
 
-<hr>
+### Funcionalidades del bot
 
-<h2>Tecnologías utilizadas</h2>
+Verificación de usuarios.
+Vinculación de cuentas.
+Consulta de avisos.
+Publicación de novedades según permisos.
+Consulta de asistencia.
+Respuestas mediante Google Gemini.
 
-<ul>
-<li>HTML</li>
-<li>CSS</li>
-<li>JavaScript</li>
-<li>Git / GitHub</li>
-<li>Integración con APIs</li>
-<li>Bot de Telegram</li>
-</ul>
+La integración completa del bot continúa en desarrollo.
 
-<hr>
+---
 
-<h2> Estructura del Proyecto</h2>
+# 💻 Tecnologías utilizadas
 
-<pre>
-ProApp/
+## Frontend
+
+HTML5.
+CSS3.
+JavaScript.
+React (en componentes específicos).
+
+## Backend
+
+Node.js.
+Express.js.
+JavaScript.
+MySQL.
+JWT para autenticación.
+
+## Bot de Telegram
+
+Python.
+pyTelegramBotAPI.
+Google Gemini API.
+Requests.
+python-dotenv.
+
+## Herramientas de desarrollo
+
+Visual Studio Code.
+Git.
+GitHub.
+XAMPP.
+phpMyAdmin.
+
+---
+
+# 📂 Estructura general del proyecto
+text
+Tesina/
 │
-├──  backend/                          # Node.js + Express
-│   ├──  config/
-│   │   └── db.js                        # Conexión MySQL
-│   ├──  controllers/
-│   │   ├── authController.js            # Login / Logout
-│   │   ├── userController.js            # Crear usuarios, asignar roles
-│   │   ├── avisoController.js           # CRUD de avisos
-│   │   ├── asistenciaController.js      # Registrar asistencia
-│   │   └── logController.js             # Ver logs de sesión
-│   ├──  middleware/
-│   │   ├── authMiddleware.js            # Verificar JWT + roles
-│   │   └── sessionLogger.js            # Registrar acciones
-│   ├──  models/
-│   │   ├── User.js
-│   │   └── Aviso.js
-│   ├──  routes/
-│   │   ├── auth.js
-│   │   ├── users.js
-│   │   ├── avisos.js
-│   │   ├── asistencia.js
-│   │   └── logs.js
-│   ├──  telegram/                     # Endpoint para recibir avisos del bot
-│   ├──  logs/                         # Logs del servidor
-│   ├── server.js                        # Entrada principal
+├── backend/
+│   ├── config/
+│   │   └── db.js
+│   ├── controllers/
+│   ├── middleware/
+│   ├── models/
+│   ├── routes/
+│   ├── server.js
 │   ├── package.json
 │   └── .env.example
 │
-├──  frontend-web/                     # React + Tailwind CSS
-│   ├──  public/
-│   │   └── images/                  # Fotos de la escuela
-│   └──  src/
-│       ├──  pages/
-│       │   ├── Home.jsx                 # Página pública principal
-│       │   ├── Login.jsx                # Campus virtual - inicio sesión
-│       │   └──  Dashboard/
-│       │       ├── Dashboard.jsx        # Enruta según el rol
-│       │       ├── Director.jsx
-│       │       ├── Secretaria.jsx
-│       │       ├── Preceptor.jsx
-│       │       ├── Profesor.jsx
-│       │       └── Alumno.jsx
-│       ├── components/
-│       │   ├──  Navbar/
-│       │   │   └── Navbar.jsx
-│       │   ├──  Avisos/
-│       │   │   └── AvisoCard.jsx
-│       │   ├──  Asistencia/
-│       │   │   └── AsistenciaForm.jsx
-│       │   └──  Asistente/
-│       │       ├── AsistenteButton.jsx  # Botón flotante
-│       │       └── AsistenteChat.jsx    # Ventana del chat IA
-│       ├──  context/
-│       │   └── AuthContext.jsx          # Estado global del usuario
-│       ├──  services/
-│       │   └── api.js                   # Axios + interceptores JWT
-│       ├──  hooks/                    # Custom hooks
-│       └── App.jsx                      # Rutas principales
+├── frontend-web/
+│   ├── index.html
+│   ├── login.html
+│   ├── src/
+│   │   ├── context/
+│   │   ├── services/
+│   │   └── App.jsx
+│   └── public/
 │
-├──  frontend-mobile/                  # React Native + Expo
-│   ├──  app/
-│   │   ├── index.jsx                    # Redirige según sesión
-│   │   ├──  auth/
-│   │   │   └── login.jsx
-│   │   └──  dashboard/
-│   │       ├── director.jsx
-│   │       ├── secretaria.jsx
-│   │       ├── preceptor.jsx
-│   │       ├── profesor.jsx
-│   │       └── alumno.jsx
-│   ├──  components/
-│   │   ├── AvisoCard.jsx
-│   │   ├── HorarioTable.jsx
-│   │   └── AsistenciaItem.jsx
-│   ├──  services/
-│   │   └── api.js                       # Mismo backend, token con SecureStore
-│   ├──  hooks/
-│   └──  assets/
-│
-├──  telegram-bot/                     # Python + Telebot
-│   ├── bot.py                           # Entrada principal
-│   ├── commands.py                      # /aviso /tarea /horario /urgente /ver
-│   ├── auth.py                          # Verifica Telegram ID autorizado
+├── telegram-bot/
+│   ├── bot.py
+│   ├── commands.py
 │   ├── requirements.txt
 │   └── .env.example
 │
 ├── database/
-│  └── schema.sql                       # Tablas: users, cursos, avisos, asistencia, logs
+│   └── schema.sql
+│
+└── README.md
 
-</pre>
+**Nota:** La estructura debe comprobarse con los archivos reales del repositorio.
 
-<hr>
+---
 
-<h2> Futuras Mejoras </h2>
+# 🛠️ Requisitos para ejecutar el proyecto
 
-<ul>
-<li>Sistema de notificaciones</li>
-<li>Aplicación móvil</li>
-<li>Entrega de trabajos prácticos</li>
-<li>Panel de administración</li>
-<li>Chat entre alumnos y docentes</li>
-<li>Mejoras en el asistente virtual</li>
-</ul>
+Para ejecutar el sistema es necesario instalar:
 
-<hr>
-<h2>👥 Integrantes del equipo</h2>
+Node.js.
+npm.
+Python 3.
+MySQL.
+XAMPP o un servidor MySQL equivalente.
+Git.
 
-<ul>
-<li>Leandro Nuñez</li>
-<li>Santiago Vigna</li>
-<li>Santiago Machado</li>
-</ul>
+También se necesita conexión a Internet para utilizar las APIs externas.
 
-<h2>📌 Estado del proyecto</h2>
+---
 
-<p>
-🔴⏳ Proyecto en desarrollo como trabajo institucional escolar.
-</p>
+# 🚀 Instalación y ejecución
+
+## Paso 1. Clonar el repositorio
+
+Abrir una terminal y ejecutar:
+bash
+git clone https://github.com/MachyGit/Tesina.git
+
+Ingresar a la carpeta:
+bash
+cd Tesina
+
+## Paso 2. Instalar dependencias del backend
+bash
+cd backend
+npm install
+
+## Paso 3. Configurar variables de entorno
+
+Crear un archivo .env dentro de la carpeta backend, utilizando como referencia .env.example.
+
+### Ejemplo de configuración
+env
+PORT=5000
+
+DB_HOST=localhost
+DB_PORT=3307
+DB_USER=tu_usuario
+DB_PASSWORD=tu_contraseña
+DB_NAME=escuela_db
+
+MAIL_USER=tu_correo
+MAIL_PASS=tu_clave_de_aplicacion
+
+Los valores deben adaptarse a la configuración local.
+
+**Importante:** No publicar contraseñas, tokens ni claves reales en GitHub.
+
+## Paso 4. Configurar la base de datos
+
+1. Abrir XAMPP.
+2. Iniciar MySQL.
+3. Acceder a phpMyAdmin.
+4. Crear la base de datos escuela_db.
+5. Importar el archivo SQL del proyecto, si está disponible.
+6. Verificar las credenciales del archivo .env.
+
+El puerto debe coincidir con el configurado en MySQL.
+
+## Paso 5. Iniciar el backend
+
+Desde la carpeta backend, ejecutar:
+bash
+npm start
+
+El servidor utiliza de manera predeterminada el puerto 5000.
+text
+http://localhost:5000
+
+## Paso 6. Ejecutar el frontend
+
+Abrir la carpeta frontend-web en Visual Studio Code.
+
+Para las páginas HTML se puede utilizar Live Server.
+
+Si se utiliza la versión desarrollada con React, deben instalarse las dependencias correspondientes y ejecutar el comando definido en su package.json.
+
+## Paso 7. Configurar el bot de Telegram
+
+Ingresar a la carpeta:
+bash
+cd telegram-bot
+
+Instalar las dependencias:
+bash
+pip install -r requirements.txt
+
+Configurar las variables de entorno necesarias para Telegram y Google Gemini.
+
+El archivo de inicio del bot debe comprobarse en la versión actual del proyecto.
+
+---
+
+# 🗄️ Configuración de la base de datos
+
+El sistema utiliza MySQL para almacenar información relacionada con los usuarios y las funcionalidades escolares.
+
+## Nombre de la base de datos
+text
+escuela_db
+
+## Archivo de conexión
+text
+backend/config/db.js
+La información de conexión se obtiene de las variables de entorno.
+
+No deben publicarse credenciales reales ni datos privados de estudiantes o docentes.
+
+---
+
+# 🔒 Seguridad
+
+Durante el desarrollo se tienen en cuenta las siguientes medidas:
+
+Autenticación de usuarios.
+Diferenciación de permisos según roles.
+Protección de contraseñas y credenciales.
+Uso de variables de entorno.
+Restricción de operaciones administrativas.
+Validación de datos.
+Control de acceso a funcionalidades.
+
+Algunas medidas requieren pruebas adicionales para confirmar su funcionamiento.
+
+---
+
+# 📌 Estado actual del proyecto
+
+**Estado general: En desarrollo.**
+
+## Componentes desarrollados
+
+Página institucional.
+Diseño del inicio de sesión.
+Estructura del backend.
+Configuración inicial de MySQL.
+Organización de usuarios y roles.
+Estructura del bot de Telegram.
+Funciones iniciales relacionadas con avisos.
+Diseño adaptable a dispositivos móviles.
+
+## Componentes pendientes de completar o verificar
+
+Funcionamiento completo del inicio de sesión.
+Validación de permisos.
+Integración completa del frontend y backend.
+Pruebas de conexión con MySQL.
+Integración del bot de Telegram.
+Pruebas de las funcionalidades académicas.
+Corrección de errores.
+Verificación de la instalación desde una copia del repositorio.
+
+---
+
+# ⚠️ Limitaciones conocidas
+
+## 1. Conexión con MySQL
+
+Se presentaron errores de autenticación relacionados con las credenciales de acceso a la base de datos.
+
+## 2. Configuración del correo electrónico
+
+El formulario de contacto requiere configurar correctamente las credenciales del servicio de correo.
+
+## 3. Integración de componentes
+
+Algunas funcionalidades todavía necesitan pruebas para verificar la comunicación entre el frontend, backend y base de datos.
+
+## 4. Configuración local
+
+El proyecto requiere variables de entorno y una base de datos preparada para funcionar correctamente.
+
+---
+
+# 🔮 Futuras mejoras
+
+Sistema de notificaciones.
+Aplicación móvil.
+Entrega de trabajos prácticos.
+Mejoras en el panel de administración.
+Chat entre alumnos y docentes.
+Mejoras en el asistente virtual.
+Optimización de rendimiento.
+Mayor integración con Telegram.
+
+---
+
+# 👥 Integrantes del equipo
+
+Leandro Nuñez.
+Santiago Vigna.
+Santiago Machado.
+
+---
+
+# 🏫 Institución
+
+**Escuela Experimental PROA – Río Tercero**
+
+**Orientación:** Desarrollo de Software.
+
+**Ubicación:** Río Tercero, Córdoba, Argentina.
+
+**Proyecto:** Tesina de 6.º año – 2026.
+
+---
+
+# 📄 Conclusión
+
+El Campus Virtual PROA busca mejorar la comunicación y organización de la información escolar mediante una plataforma digital centralizada.
+
+El proyecto permite aplicar conocimientos de desarrollo web, programación, bases de datos, autenticación de usuarios e integración con servicios externos.
+
+Actualmente continúa en desarrollo, con el objetivo de lograr un sistema funcional, seguro y accesible para la comunidad educativa.
