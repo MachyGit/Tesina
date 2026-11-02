@@ -1,3 +1,4 @@
+// © 2026 Pito, Santiago Vigna y Santiago Machado — Campus Virtual PROA. Todos los derechos reservados (ver LICENSE).
 // backend/middleware/authMiddleware.js
 const jwt = require('jsonwebtoken');
 const pool = require('../config/db');
@@ -15,7 +16,7 @@ const verifyToken = async (req, res, next) => {
 
     // Verificar que el usuario siga activo en la DB
     const [rows] = await pool.query(
-      'SELECT id, nombre, rol, activo FROM users WHERE id = ?',
+      'SELECT id, nombre, email, rol, activo, anio_id, situacion FROM users WHERE id = ?',
       [decoded.id]
     );
     if (!rows.length || !rows[0].activo) {
@@ -46,8 +47,10 @@ const checkRol = (...roles) => (req, res, next) => {
 // ── Verificar token interno del bot ───────────────────────────────────────────
 // El bot manda el header: X-Bot-Secret: <BOT_SECRET del .env>
 const verifyBotSecret = (req, res, next) => {
-  const secret = req.headers['x-bot-secret'];
-  if (!secret || secret !== process.env.BOT_SECRET) {
+  const secret = String(req.headers['x-bot-secret'] || '');
+  const esperado = String(process.env.BOT_SECRET || '');
+  const a = Buffer.from(secret), b = Buffer.from(esperado);
+  if (!esperado || a.length !== b.length || !require('crypto').timingSafeEqual(a, b)) {
     return res.status(403).json({ error: 'Acceso de bot no autorizado' });
   }
   next();

@@ -1,0 +1,17 @@
+CAMPUS VIRTUAL PROA — LICENCIA DE USO
+Copyright © 2026 Pito, Santiago Vigna y Santiago Machado. Todos los derechos reservados.
+
+Este software es obra original de sus autores (tesina de Bachiller en Informática,
+Escuela ProA, Río Tercero, Córdoba, Argentina).
+
+1. Se otorga a la Escuela ProA una licencia de uso no exclusiva e intransferible para
+   operar el Campus Virtual en sus propias instalaciones con fines educativos.
+2. Queda prohibido, sin autorización escrita de los autores: copiar, distribuir,
+   vender, sublicenciar o presentar este software como propio; y quitar, ocultar o
+   modificar los avisos de autoría (pie de página, metadatos, encabezados de los
+   archivos, información de los archivos exportados).
+3. Las modificaciones deben conservar los avisos de autoría originales.
+4. El software se entrega "tal cual", sin garantías de ningún tipo.
+
+Los nombres de los autores pueden completarse con nombre y apellido completos en
+backend/config/autoria.js y en este archivo.

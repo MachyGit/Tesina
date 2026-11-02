@@ -17,6 +17,9 @@ async function initChat() {
   const user = getUser();
   if (!user || !user.token) return;
 
+  // El usuario está entrando a la sección de chat: apagar el indicador de "no leído".
+  limpiarIndicadorChatNoLeido();
+
   // Cargar contactos
   await cargarContactos();
 
@@ -24,6 +27,18 @@ async function initChat() {
   if (!chatSocket) {
     _conectarSocket(user.token);
   }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   INDICADOR DE "MENSAJE SIN LEER" EN LA PESTAÑA DE CHAT
+   (visible aunque el usuario esté mirando otra sección del panel)
+═══════════════════════════════════════════════════════════════ */
+function marcarChatNoLeido() {
+  document.querySelectorAll('.chat-tab-dot').forEach((d) => d.classList.add('show'));
+}
+
+function limpiarIndicadorChatNoLeido() {
+  document.querySelectorAll('.chat-tab-dot').forEach((d) => d.classList.remove('show'));
 }
 
 function _conectarSocket(token) {
@@ -50,6 +65,10 @@ function _conectarSocket(token) {
     ) {
       _renderMensaje(msg, false);
       _scrollToBottom();
+    } else {
+      // Llegó un mensaje de otra conversación: avisar con un punto en la
+      // pestaña de Chat aunque el usuario esté mirando otra sección.
+      marcarChatNoLeido();
     }
 
     // Actualizar badge de no leídos en el contacto
@@ -266,7 +285,7 @@ async function enviarMensajeChat() {
     }, true);
     _scrollToBottom();
   } catch {
-    alert('No se pudo enviar el mensaje. Verificá la conexión.');
+    mostrarToast('No se pudo enviar el mensaje. Verificá la conexión.', 'error');
   }
 }
 
@@ -275,7 +294,7 @@ async function enviarMensajeChat() {
 ═══════════════════════════════════════════════════════════════ */
 async function adjuntarArchivo(event) {
   if (!chatDestinatarioId) {
-    alert('Primero seleccioná un contacto');
+    mostrarToast('Primero seleccioná un contacto', 'error');
     return;
   }
 
@@ -283,7 +302,7 @@ async function adjuntarArchivo(event) {
   if (!file) return;
 
   if (file.size > 10 * 1024 * 1024) {
-    alert('El archivo supera los 10MB permitidos');
+    mostrarToast('El archivo supera los 10MB permitidos', 'error');
     return;
   }
 
@@ -317,7 +336,7 @@ async function adjuntarArchivo(event) {
       }, true);
       _scrollToBottom();
     } catch {
-      alert('Error al enviar el archivo');
+      mostrarToast('Error al enviar el archivo', 'error');
     }
   };
   reader.readAsDataURL(file);
@@ -382,10 +401,10 @@ async function crearAnio() {
       method: 'POST',
       body: JSON.stringify({ nombre, division, turno })
     });
-    if (r.error) { alert(r.error); return; }
+    if (r.error) { mostrarToast(r.error, 'error'); return; }
     await cargarAnios();
   } catch {
-    alert('Error al crear el año');
+    mostrarToast('Error al crear el año', 'error');
   }
 }
 
@@ -400,7 +419,7 @@ async function eliminarAnio(id) {
     }
     await cargarAnios();
   } catch {
-    alert('Error al eliminar el año');
+    mostrarToast('Error al eliminar el año', 'error');
   }
 }
 
@@ -463,23 +482,23 @@ async function cargarMaterias(anioId) {
 }
 
 async function crearMateria() {
-  if (!anioSeleccionadoId) { alert('Seleccioná un año primero'); return; }
+  if (!anioSeleccionadoId) { mostrarToast('Seleccioná un año primero', 'error'); return; }
 
   const nombre      = document.getElementById('materiaNombre')?.value.trim();
   const profesor_id = document.getElementById('materiaProfesor')?.value || null;
 
-  if (!nombre) { alert('Ingresá el nombre de la materia'); return; }
+  if (!nombre) { mostrarToast('Ingresá el nombre de la materia', 'error'); return; }
 
   try {
     const r = await apiFetch('/api/anios/materias', {
       method: 'POST',
       body: JSON.stringify({ nombre, anio_id: anioSeleccionadoId, profesor_id })
     });
-    if (r.error) { alert(r.error); return; }
+    if (r.error) { mostrarToast(r.error, 'error'); return; }
     document.getElementById('materiaNombre').value = '';
     await cargarMaterias(anioSeleccionadoId);
   } catch {
-    alert('Error al crear la materia');
+    mostrarToast('Error al crear la materia', 'error');
   }
 }
 
@@ -489,7 +508,7 @@ async function eliminarMateria(id) {
     await apiFetch(`/api/anios/materias/${id}`, { method: 'DELETE' });
     if (anioSeleccionadoId) await cargarMaterias(anioSeleccionadoId);
   } catch {
-    alert('Error al eliminar');
+    mostrarToast('Error al eliminar', 'error');
   }
 }
 

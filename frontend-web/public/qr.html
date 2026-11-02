@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Registro por QR — Campus Virtual</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet"/>
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:'DM Sans',sans-serif;background:#f5f7fa;display:flex;align-items:center;justify-content:center;min-height:100vh;padding:20px}
+    .card{background:#fff;border-radius:16px;padding:32px;max-width:400px;width:100%;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.08)}
+    h1{font-size:1.4rem;color:#1a3a6b;margin-bottom:10px}
+    p{color:#6b7280;font-size:.9rem;margin-bottom:20px}
+    button{background:#1a3a6b;color:#fff;border:none;padding:12px 24px;border-radius:10px;font-size:.95rem;cursor:pointer}
+    .msg{margin-top:16px;padding:12px;border-radius:10px;display:none}
+    .ok{background:#f0fdf4;color:#16a34a;border:1px solid #bbf7d0}
+    .err{background:#fef2f2;color:#dc2626;border:1px solid #fecaca}
+  </style>
+  <script>
+    window.BACKEND_URL = `${window.location.protocol}//${window.location.hostname}:5000`;
+  </script>
+</head>
+<body>
+  <div class="card">
+    <h1>🎓 Registro de asistencia</h1>
+    <p>Confirmá tu presencia escaneando este QR</p>
+    <button onclick="registrar()">Registrar mi asistencia</button>
+    <div id="msgOk" class="msg ok"></div>
+    <div id="msgErr" class="msg err"></div>
+  </div>
+  <script>
+    const BACKEND = window.BACKEND_URL;
+    function getCodigo(){
+      const p = new URLSearchParams(location.search);
+      return p.get('codigo');
+    }
+    async function registrar(){
+      const token = localStorage.getItem('campus_token');
+      const codigo = getCodigo();
+      const ok = document.getElementById('msgOk');
+      const err = document.getElementById('msgErr');
+      ok.style.display='none'; err.style.display='none';
+      if(!token){ err.textContent='Tenés que iniciar sesión para registrar asistencia.'; err.style.display='block'; setTimeout(()=>{location.href='login.html';},1500); return; }
+      if(!codigo){ err.textContent='Código QR inválido.'; err.style.display='block'; return; }
+      try {
+        const resp = await fetch(BACKEND+'/api/qr/registrar',{
+          method:'POST',
+          headers:{'Content-Type':'application/json','Authorization':'Bearer '+token},
+          body: JSON.stringify({codigo})
+        });
+        const data = await resp.json();
+        if(!resp.ok){ err.textContent=data.error||'Error'; err.style.display='block'; return; }
+        ok.textContent=data.message; ok.style.display='block';
+      }catch(e){ err.textContent='Error de conexión'; err.style.display='block'; }
+    }
+  </script>
+</body>
+</html>

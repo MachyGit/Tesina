@@ -1,0 +1,19 @@
+# Datos de la escuela que el asistente puede usar para responder.
+# Editá este archivo con información REAL. Lo que no esté acá (ni en el campus), el bot
+# dirá que no lo sabe y va a derivar a la secretaría. No escribas datos personales ni claves.
+# Las líneas que empiezan con # se ignoran.
+
+Nombre: Escuela PROA — Sede Río Tercero (Córdoba, Argentina)
+Orientación: Bachiller en Informática con orientación en Desarrollo de Software
+Contacto de secretaría / dirección: lenunez@escuelasproa.edu.ar
+Campus virtual: sirve para ver avisos, descargar archivos de clase, ver la asistencia propia y (el personal) publicar avisos y cargar asistencia.
+Asistencia: los alumnos registran su llegada escaneando el código QR que muestra el preceptor con la cámara del celular.
+Roles del campus: director, secretaría, preceptor, profesor y alumno.
+Cuentas: los alumnos se registran desde el campus y la secretaría las aprueba. Si olvidaste la contraseña, usá "¿Olvidaste tu contraseña?" en el login.
+
+# Agregá acá lo que quieras que el bot sepa, por ejemplo (descomentá y completá con datos reales):
+# Horario de atención de secretaría: ...
+# Horario de ingreso: ...
+# Calendario de exámenes / mesas: ...
+# Teléfono: ...
+# Dirección: ...

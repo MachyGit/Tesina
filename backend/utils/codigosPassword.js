@@ -1,3 +1,4 @@
+// © 2026 Pito, Santiago Vigna y Santiago Machado — Campus Virtual PROA. Todos los derechos reservados (ver LICENSE).
 // backend/utils/codigosPassword.js
 // Helpers compartidos para códigos de acceso (primer ingreso) y enlaces de
 // recuperación de contraseña. Los usan authController y userController.
@@ -14,19 +15,20 @@ const generarCodigo = () => String(crypto.randomInt(100000, 999999));
 const generarTokenLink = () => crypto.randomBytes(32).toString('hex');
 const hashToken = (token) => crypto.createHash('sha256').update(token).digest('hex');
 
+// El vencimiento se calcula en SQL (NOW() + N minutos) para no depender de que Node y la base
+// tengan la misma zona horaria.
 // Guarda un código/token pendiente para un usuario. Si ya tenía uno sin usar
 // del mismo tipo, lo pisa (evita acumular códigos viejos y que quede
 // ambigüedad sobre cuál es el vigente).
 const guardarCodigo = async (userId, tokenGuardado, tipo, minutosVida, generadoPor = null) => {
-  const expira = new Date(Date.now() + minutosVida * 60 * 1000);
   await pool.query(
     'DELETE FROM codigos_password WHERE user_id = ? AND tipo = ? AND usado = 0',
     [userId, tipo]
   );
   await pool.query(
     `INSERT INTO codigos_password (user_id, token, tipo, generado_por, expira_en)
-     VALUES (?, ?, ?, ?, ?)`,
-    [userId, tokenGuardado, tipo, generadoPor, expira]
+     VALUES (?, ?, ?, ?, DATE_ADD(NOW(), INTERVAL ? MINUTE))`,
+    [userId, tokenGuardado, tipo, generadoPor, Math.round(minutosVida)]
   );
 };
 

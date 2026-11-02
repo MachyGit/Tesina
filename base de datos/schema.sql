@@ -78,14 +78,6 @@ CREATE TABLE IF NOT EXISTS codigos_password (
 -- ────────────────────────────────────────────────────────────
 --  MATERIAS
 -- ────────────────────────────────────────────────────────────
-CREATE TABLE IF NOT EXISTS materias (
-  id          INT AUTO_INCREMENT PRIMARY KEY,
-  nombre      VARCHAR(100) NOT NULL,
-  profesor_id INT,
-  curso_id    INT,
-  FOREIGN KEY (profesor_id) REFERENCES users(id)  ON DELETE SET NULL,
-  FOREIGN KEY (curso_id)    REFERENCES cursos(id) ON DELETE SET NULL
-);
 
 -- ────────────────────────────────────────────────────────────
 --  AVISOS
@@ -132,15 +124,15 @@ CREATE TABLE IF NOT EXISTS session_logs (
 
 -- ────────────────────────────────────────────────────────────
 --  DATOS INICIALES
---  Director y secretaria por defecto (password: Admin1234!)
+--  Director y secretaria por defecto (contraseña: password — cambiala apenas ingreses)
 --  Hash generado con bcrypt rounds=10
 -- ────────────────────────────────────────────────────────────
 INSERT IGNORE INTO users (nombre, email, password, rol) VALUES
   ('Director', 'lenunez@escuelasproa.edu.ar',
-   '$2a$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', -- Admin1234!
+   '$2a$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', -- password
    'director'),
   ('Secretaria', 'stmachado@escuelasproa.edu.ar',
-   '$2a$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', -- Admin1234!
+   '$2a$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', -- password
    'secretaria');
 
 -- ────────────────────────────────────────────────────────────
@@ -149,9 +141,9 @@ INSERT IGNORE INTO users (nombre, email, password, rol) VALUES
 -- ────────────────────────────────────────────────────────────
 CREATE TABLE IF NOT EXISTS anios (
   id       INT AUTO_INCREMENT PRIMARY KEY,
-  nombre   VARCHAR(20) NOT NULL,              -- ej: "1ero", "2do", "3ero"
-  division VARCHAR(10) NOT NULL,              -- ej: "A", "B"
-  turno    ENUM('mañana','tarde','noche') NOT NULL,
+  nombre   VARCHAR(20) NOT NULL,              -- ej: "1ro", "2do", "3ro"
+  division VARCHAR(10) NOT NULL DEFAULT '',   -- ya no se usa (PROA tiene una sola división)
+  turno    VARCHAR(20) NOT NULL DEFAULT '',   -- ya no se usa (PROA tiene un solo turno)
   activo   TINYINT(1) DEFAULT 1,
   creado_en TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   UNIQUE KEY uq_anio (nombre, division, turno)
@@ -203,3 +195,9 @@ CREATE TABLE IF NOT EXISTS archivos_chat (
 -- Índices para acelerar la consulta de conversación entre dos usuarios
 CREATE INDEX IF NOT EXISTS idx_mensajes_conv
   ON mensajes(remitente_id, destinatario_id, enviado_en);
+
+-- ──────────────────────────────────────────────────────────────────────────────
+--  NOVEDADES (año del alumno, aprobación de cuentas, fecha de actividad en avisos,
+--  asistencia por QR, archivos del aula). NO hace falta correr nada a mano:
+--  backend/config/migraciones.js las crea/actualiza solo cada vez que arranca el servidor.
+-- ──────────────────────────────────────────────────────────────────────────────

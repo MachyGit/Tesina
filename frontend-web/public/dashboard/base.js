@@ -363,3 +363,135 @@ function initAvatar() {
   const user = getUser();
   if (user) renderAvatar(user);
 }
+
+// ═══════════════════════════════════════════════════
+// ⚠️ MODAL DE CONFIRMACIÓN (reemplaza confirm() nativo)
+// ═══════════════════════════════════════════════════
+(function inyectarEstilosConfirm() {
+  const css = `
+    .cc-overlay{position:fixed;inset:0;background:rgba(0,0,0,.45);display:flex;align-items:center;justify-content:center;z-index:99999;font-family:'DM Sans',sans-serif;animation:ccFadeIn .15s ease;}
+    .cc-box{background:var(--bg-card,#fff);color:var(--texto,#1c1c2e);border-radius:14px;padding:26px;max-width:380px;width:90%;box-shadow:0 20px 60px rgba(0,0,0,.25);}
+    .cc-box h3{font-size:1.05rem;margin:0 0 10px;font-family:'Playfair Display',serif;}
+    .cc-box p{font-size:.88rem;color:var(--gris,#6b7280);line-height:1.55;margin:0 0 22px;}
+    .cc-btns{display:flex;gap:10px;justify-content:flex-end;}
+    .cc-btns button{padding:10px 18px;border-radius:8px;border:none;font-family:inherit;font-weight:600;font-size:.85rem;cursor:pointer;transition:opacity .15s;}
+    .cc-btns button:hover{opacity:.85;}
+    .cc-btn-cancelar{background:var(--borde-suave,#f0f0f0);color:var(--gris,#6b7280);}
+    .cc-btn-confirmar{background:var(--rojo,#dc2626);color:#fff;}
+    .cc-btn-confirmar.cc-suave{background:var(--azul,#1a3a6b);}
+    @keyframes ccFadeIn{from{opacity:0}to{opacity:1}}
+    .chat-tab-dot{display:none;width:8px;height:8px;background:var(--rojo,#dc2626);border-radius:50%;margin-left:6px;vertical-align:middle;}
+    .chat-tab-dot.show{display:inline-block;}
+    .cc-toast-container{position:fixed;top:18px;right:18px;z-index:100000;display:flex;flex-direction:column;gap:10px;max-width:320px;}
+    .cc-toast{background:var(--bg-card,#fff);color:var(--texto,#1c1c2e);border-left:4px solid var(--azul,#1a3a6b);border-radius:8px;padding:13px 16px;font-size:.85rem;line-height:1.4;box-shadow:0 8px 24px rgba(0,0,0,.18);opacity:0;transform:translateX(24px);transition:opacity .2s ease,transform .2s ease;}
+    .cc-toast.show{opacity:1;transform:translateX(0);}
+    .cc-toast.cc-toast-success{border-left-color:var(--verde,#16a34a);}
+    .cc-toast.cc-toast-error{border-left-color:var(--rojo,#dc2626);}
+  `;
+  const style = document.createElement('style');
+  style.textContent = css;
+  document.head.appendChild(style);
+})();
+
+// Reemplazo de confirm() nativo, con estilo propio y coherente con el modo
+// claro/oscuro. Devuelve una Promise<boolean>: usarlo con await.
+// Uso: if (!(await confirmarAccion({ mensaje:'¿Eliminar esto?' }))) return;
+function confirmarAccion(opts = {}) {
+  return new Promise((resolve) => {
+    const overlay = document.createElement('div');
+    overlay.className = 'cc-overlay';
+    overlay.innerHTML = `
+      <div class="cc-box">
+        <h3>${opts.titulo || '¿Estás seguro?'}</h3>
+        <p>${opts.mensaje || 'Esta acción no se puede deshacer.'}</p>
+        <div class="cc-btns">
+          <button class="cc-btn-cancelar">Cancelar</button>
+          <button class="cc-btn-confirmar ${opts.peligroso === false ? 'cc-suave' : ''}">${opts.textoConfirmar || 'Confirmar'}</button>
+        </div>
+      </div>`;
+    document.body.appendChild(overlay);
+    const cerrar = (resultado) => { overlay.remove(); resolve(resultado); };
+    overlay.querySelector('.cc-btn-cancelar').onclick = () => cerrar(false);
+    overlay.querySelector('.cc-btn-confirmar').onclick = () => cerrar(true);
+    overlay.addEventListener('click', (e) => { if (e.target === overlay) cerrar(false); });
+    document.addEventListener('keydown', function escHandler(e) {
+      if (e.key === 'Escape') { cerrar(false); document.removeEventListener('keydown', escHandler); }
+    });
+  });
+}
+
+// ═══════════════════════════════════════════════════
+// 🔔 TOAST (reemplaza alert() nativo: no bloquea la pantalla)
+// ═══════════════════════════════════════════════════
+// tipo: 'info' (default) | 'success' | 'error'
+function mostrarToast(mensaje, tipo = 'info') {
+  let cont = document.getElementById('ccToastContainer');
+  if (!cont) {
+    cont = document.createElement('div');
+    cont.id = 'ccToastContainer';
+    cont.className = 'cc-toast-container';
+    document.body.appendChild(cont);
+  }
+
+  const toast = document.createElement('div');
+  toast.className = 'cc-toast' + (tipo === 'success' ? ' cc-toast-success' : tipo === 'error' ? ' cc-toast-error' : '');
+  toast.textContent = mensaje;
+  cont.appendChild(toast);
+
+  requestAnimationFrame(() => toast.classList.add('show'));
+  setTimeout(() => {
+    toast.classList.remove('show');
+    setTimeout(() => toast.remove(), 250);
+  }, 3800);
+}
+
+// ═══════════════════════════════════════════════════
+// 👤 ACTIVAR / DESACTIVAR USUARIO (director y secretaria)
+// ═══════════════════════════════════════════════════
+// Protege al sistema de quedarse sin ningún director activo, igual que la
+// regla ya aplicada en el backend real (userController.asignarRol/toggleActivo).
+function esUltimoDirectorActivo(email) {
+  const usuarios = getUsuarios();
+  const objetivo = usuarios.find(u => u.email === email);
+  if (!objetivo || objetivo.rol !== 'director') return false;
+  const otrosDirectoresActivos = usuarios.filter(
+    u => u.rol === 'director' && u.estado !== 'inactivo' && u.email !== email
+  );
+  return otrosDirectoresActivos.length === 0;
+}
+
+async function toggleActivoUsuario(email, nombre) {
+  const usuarios = getUsuarios();
+  const u = usuarios.find(x => x.email === email);
+  if (!u) return;
+
+  const vaADesactivar = u.estado !== 'inactivo';
+
+  if (vaADesactivar && esUltimoDirectorActivo(email)) {
+    await confirmarAccion({
+      titulo: 'No se puede desactivar',
+      mensaje: `${nombre} es el único director activo del sistema. Asigná el rol de director a otra persona antes de desactivar esta cuenta.`,
+      textoConfirmar: 'Entendido',
+      peligroso: false
+    });
+    return;
+  }
+
+  const ok = await confirmarAccion({
+    titulo: vaADesactivar ? 'Desactivar usuario' : 'Reactivar usuario',
+    mensaje: vaADesactivar
+      ? `${nombre} no va a poder iniciar sesión hasta que lo reactives. ¿Confirmás?`
+      : `${nombre} va a poder volver a iniciar sesión normalmente. ¿Confirmás?`,
+    textoConfirmar: vaADesactivar ? 'Desactivar' : 'Reactivar',
+    peligroso: vaADesactivar
+  });
+  if (!ok) return;
+
+  actualizarUsuario(email, { estado: vaADesactivar ? 'inactivo' : 'activo' });
+  if (typeof addLog === 'function') {
+    addLog((vaADesactivar ? 'Desactivó' : 'Reactivó') + ' usuario: ' + email);
+  }
+  if (typeof cargarUsuarios === 'function') cargarUsuarios();
+  const buscar = document.getElementById('buscarUsuario');
+  if (buscar && buscar.value && typeof filtrarUsuarios === 'function') filtrarUsuarios();
+}

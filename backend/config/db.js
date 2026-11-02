@@ -1,13 +1,14 @@
+// © 2026 Pito, Santiago Vigna y Santiago Machado — Campus Virtual PROA. Todos los derechos reservados (ver LICENSE).
 // backend/config/db.js
 const mysql = require('mysql2/promise');
-require('dotenv').config();
+require('dotenv').config({ path: require('path').join(__dirname, '../../.env') }); // siempre el .env de la raíz, sin importar desde dónde se ejecute
 
 const pool = mysql.createPool({
-  host: 'localhost',
-  port: 3307,
-  user: 'root',
-  password: 'root',
-  database: 'escuela_db',
+  host:     process.env.DB_HOST || 'localhost',
+  port:     Number(process.env.DB_PORT) || 3306,
+  user:     process.env.DB_USER || 'root',
+  password: process.env.DB_PASSWORD ?? 'root',
+  database: process.env.DB_NAME || 'escuela_db',
   charset:         'utf8mb4',
   waitForConnections: true,
   connectionLimit:    10,

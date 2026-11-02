@@ -1,0 +1,9 @@
+{
+  "hash": "d734da886096ee68b0ee77b7d5b7e5c88304f418ca013c13d117cc5abea91738",
+  "archivos": [
+    "server.js",
+    "backend/middleware/autoria.js",
+    "backend/config/autoria.js"
+  ],
+  "generado": "2026-11-02T03:41:25.596Z"
+}

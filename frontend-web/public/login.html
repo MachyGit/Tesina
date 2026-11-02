@@ -1,24 +1,28 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
+  <script src="theme.js"></script>
   <link rel="stylesheet" href="login.CSS">
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Campus Virtual — Login</title>
+  <title>Campus Virtual — Ingresar</title>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
- 
+  <style>
+    .form { display:none; } .form.active { display:block; }
+    .link { background:none; border:none; color:var(--azul2,#2256a8); font:inherit; font-size:.85rem; font-weight:600; cursor:pointer; padding:0; text-decoration:underline; }
+    .row-links { display:flex; justify-content:space-between; flex-wrap:wrap; gap:8px; margin:6px 0 14px; }
+    select { width:100%; }
+  </style>
 </head>
 <body>
 
 <div class="left">
   <div class="left-content">
     <div class="left-logo">Campus <span>Virtual</span></div>
-    <p class="left-sub">Accedé a tu espacio educativo: avisos, tareas, horarios y más.</p>
+    <p class="left-sub">Accedé a tu espacio educativo: avisos, archivos, asistencia y más.</p>
     <div class="left-badges">
-      <span class="left-badge">🟣 Director</span>
-      <span class="left-badge">🔵 Secretaria</span>
-      <span class="left-badge">🔵 Preceptor</span>
-      <span class="left-badge">🟢 Profesor</span>
+      <span class="left-badge">🟣 Director</span><span class="left-badge">🔵 Secretaría</span>
+      <span class="left-badge">🔵 Preceptor</span><span class="left-badge">🟢 Profesor</span>
       <span class="left-badge">🟡 Alumno</span>
     </div>
   </div>
@@ -26,269 +30,194 @@
 
 <div class="right">
   <div class="card">
-    <a href="index.html" class="back-link">← Volver al inicio</a>
-
-    <h1 id="pageTitle">Campus Virtual</h1>
-    <p class="subtitle" id="pageSubtitle">Ingresá o creá tu cuenta institucional</p>
-
-    <!-- Tabs -->
-    <div class="tabs">
-      <button class="tab-btn active" onclick="switchTab('login')">Iniciar sesión</button>
-      <button class="tab-btn" onclick="switchTab('registro')">Crear cuenta</button>
-    </div>
-
-    <!-- ══ FORM LOGIN ══ -->
-    <div class="form active" id="formLogin">
-      <div class="field">
-        <label>Correo electrónico</label>
-        <div class="input-wrap">
-          <span class="input-icon">✉️</span>
-          <input type="email" id="loginEmail" placeholder="correo@escuelasproa.edu.ar"/>
-        </div>
-      </div>
-      <div class="field">
-        <label>Contraseña</label>
-        <div class="input-wrap">
-          <span class="input-icon">🔒</span>
-          <input type="password" id="loginPassword" placeholder="••••••••"/>
-        </div>
-      </div>
-      <div class="msg msg-error" id="loginError"></div>
-      <div class="msg msg-info"  id="loginPendiente" style="display:none">
-        ⏳ Tu cuenta está pendiente de aprobación por el director. Te avisaremos cuando esté activada.
-      </div>
-      <button class="btn-submit" onclick="handleLogin()">Ingresar al Campus</button>
-
-      <!-- Soy administrador -->
-      <div class="admin-section">
-        <button class="admin-toggle" onclick="toggleAdmin()">
-          🔐 Soy administrador — acceso especial
-        </button>
-        <div class="admin-form" id="adminForm">
-          <div class="field">
-            <label>Email administrador</label>
-            <div class="input-wrap">
-              <span class="input-icon">✉️</span>
-              <input type="email" id="adminEmail" placeholder="admin@escuelasproa.edu.ar"/>
-            </div>
-          </div>
-          <div class="field">
-            <label>Contraseña</label>
-            <div class="input-wrap">
-              <span class="input-icon">🔒</span>
-              <input type="password" id="adminPassword" placeholder="••••••••"/>
-            </div>
-          </div>
-          <div class="msg msg-error" id="adminError"></div>
-          <button class="btn-submit" onclick="handleAdminLogin()">Ingresar como administrador</button>
-        </div>
+    <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:8px;">
+      <a href="index.html" class="back-link" style="margin-bottom:0;">← Volver al inicio</a>
+      <div class="theme-toggle">
+        <button data-theme-btn="light" title="Modo claro">☀️</button>
+        <button data-theme-btn="dark" title="Modo oscuro">🌙</button>
+        <button data-theme-btn="system" title="Igual que el sistema">🖥️</button>
       </div>
     </div>
 
-    <!-- ══ FORM REGISTRO ══ -->
-    <div class="form" id="formRegistro">
-      <div class="field">
-        <label>Nombre completo</label>
-        <div class="input-wrap">
-          <span class="input-icon">👤</span>
-          <input type="text" id="regNombre" placeholder="Tu nombre y apellido"/>
-        </div>
-      </div>
-      <div class="field">
-        <label>Correo electrónico institucional</label>
-        <div class="input-wrap">
-          <span class="input-icon">✉️</span>
-          <input type="email" id="regEmail" placeholder="correo@escuelasproa.edu.ar"/>
-        </div>
-      </div>
-      <div class="field">
-        <label>Contraseña</label>
-        <div class="input-wrap">
-          <span class="input-icon">🔒</span>
-          <input type="password" id="regPassword" placeholder="Mínimo 6 caracteres"/>
-        </div>
-      </div>
-      <div class="field">
-        <label>Rol</label>
-        <div class="input-wrap">
-          <span class="input-icon">🎓</span>
-          <select id="regRol">
-            <option value="alumno">🟡 Alumno</option>
-            <option value="profesor">🟢 Profesor</option>
-            <option value="preceptor">🔵 Preceptor</option>
-          </select>
-        </div>
-      </div>
-      <div class="msg msg-error"   id="regError"></div>
-      <div class="msg msg-success" id="regSuccess"></div>
-      <button class="btn-submit green" onclick="handleRegistro()">✅ Crear mi cuenta</button>
-      <div class="pendiente-badge">
-        ⏳ Tu cuenta será revisada por el director antes de poder ingresar.
-      </div>
+    <h1>Campus Virtual</h1>
+    <p class="subtitle" id="subtitulo">Ingresá o creá tu cuenta</p>
+
+    <div class="tabs" id="tabsPrincipales">
+      <button class="tab-btn active" data-vista="login">Iniciar sesión</button>
+      <button class="tab-btn" data-vista="registro">Crear cuenta</button>
     </div>
 
+    <div class="msg msg-error" id="error"></div>
+    <div class="msg msg-success" id="exito"></div>
+    <div class="msg msg-info" id="info"></div>
+
+    <!-- INICIAR SESIÓN -->
+    <div class="form active" id="v-login">
+      <div class="field"><label>Correo electrónico</label>
+        <div class="input-wrap"><span class="input-icon">✉️</span><input type="email" id="lEmail" placeholder="correo@ejemplo.com" autocomplete="username"/></div></div>
+      <div class="field"><label>Contraseña</label>
+        <div class="input-wrap"><span class="input-icon">🔒</span><input type="password" id="lPass" placeholder="••••••••" autocomplete="current-password"/></div></div>
+      <div class="row-links">
+        <button class="link" data-vista="recuperar">¿Olvidaste tu contraseña?</button>
+        <button class="link" data-vista="codigo">Primer ingreso (tengo un código)</button>
+      </div>
+      <button class="btn-submit" id="bLogin">Ingresar</button>
+    </div>
+
+    <!-- CREAR CUENTA (alumnos) -->
+    <div class="form" id="v-registro">
+      <div class="field"><label>Nombre completo</label>
+        <div class="input-wrap"><span class="input-icon">👤</span><input type="text" id="rNombre" placeholder="Tu nombre y apellido" autocomplete="name"/></div></div>
+      <div class="field"><label>Correo electrónico</label>
+        <div class="input-wrap"><span class="input-icon">✉️</span><input type="email" id="rEmail" placeholder="correo@ejemplo.com" autocomplete="email"/></div></div>
+      <div class="field"><label>Mi año</label>
+        <div class="input-wrap"><span class="input-icon">🏫</span><select id="rAnio"><option value="">Cargando años…</option></select></div></div>
+      <div class="field"><label>Contraseña</label>
+        <div class="input-wrap"><span class="input-icon">🔒</span><input type="password" id="rPass" placeholder="Mínimo 8 caracteres" autocomplete="new-password"/></div></div>
+      <button class="btn-submit green" id="bRegistro">✅ Crear mi cuenta</button>
+      <div class="pendiente-badge">⏳ Tu cuenta la revisa la secretaría antes de que puedas ingresar. El personal (profesores, preceptores) lo da de alta la dirección.</div>
+    </div>
+
+    <!-- RECUPERAR CONTRASEÑA -->
+    <div class="form" id="v-recuperar">
+      <p class="subtitle" style="margin-bottom:14px">Escribí tu correo y te mandamos un enlace para elegir una contraseña nueva (vale 1 hora).</p>
+      <div class="field"><label>Correo electrónico</label>
+        <div class="input-wrap"><span class="input-icon">✉️</span><input type="email" id="cEmail" placeholder="correo@ejemplo.com"/></div></div>
+      <button class="btn-submit" id="bRecuperar">📧 Enviarme el enlace</button>
+      <div class="row-links" style="margin-top:14px"><button class="link" data-vista="login">← Volver</button></div>
+    </div>
+
+    <!-- PRIMER INGRESO CON CÓDIGO -->
+    <div class="form" id="v-codigo">
+      <p class="subtitle" style="margin-bottom:14px">Usá el código de 6 dígitos que te llegó por mail (o que te dio la secretaría) para activar tu cuenta.</p>
+      <div class="field"><label>Correo electrónico</label>
+        <div class="input-wrap"><span class="input-icon">✉️</span><input type="email" id="kEmail" placeholder="correo@ejemplo.com"/></div></div>
+      <div class="field"><label>Código</label>
+        <div class="input-wrap"><span class="input-icon">🔑</span><input type="text" id="kCodigo" inputmode="numeric" maxlength="6" placeholder="123456"/></div></div>
+      <button class="btn-submit" id="bCodigo">Continuar</button>
+      <div class="row-links" style="margin-top:14px"><button class="link" data-vista="login">← Volver</button></div>
+    </div>
+
+    <!-- ELEGIR CONTRASEÑA (después del código) -->
+    <div class="form" id="v-clave">
+      <p class="subtitle" style="margin-bottom:14px">¡Bienvenido/a! Elegí tu contraseña para terminar.</p>
+      <div class="field"><label>Nueva contraseña</label>
+        <div class="input-wrap"><span class="input-icon">🔒</span><input type="password" id="nPass" placeholder="Mínimo 8 caracteres" autocomplete="new-password"/></div></div>
+      <div class="field"><label>Repetila</label>
+        <div class="input-wrap"><span class="input-icon">🔒</span><input type="password" id="nPass2" placeholder="Repetí la contraseña" autocomplete="new-password"/></div></div>
+      <button class="btn-submit green" id="bClave">Guardar y entrar</button>
+    </div>
   </div>
 </div>
 
 <script>
-// ═══════════════════════════════════════
-// 💾 STORAGE
-// ═══════════════════════════════════════
-const DIRECTOR_DEFAULT = {
-  nombre: 'Director', email: 'lenunez@escuelasproa.edu.ar',
-  password: 'Admin1', rol: 'director', estado: 'activo', telegram_validado: false
-};
-const SECRETARIA_DEFAULT = {
-  nombre: 'Secretaria', email: 'stmachado@escuelasproa.edu.ar',
-  password: 'Admin1', rol: 'secretaria', estado: 'activo', telegram_validado: false
-};
+const BACK = window.BACKEND_URL || (location.port === '3000' ? `${location.protocol}//${location.hostname}:5000` : location.origin);
+const $ = (id) => document.getElementById(id);
+const VISTAS = ['login', 'registro', 'recuperar', 'codigo', 'clave'];
+let sesionTemporal = null; // { token, user } mientras elige su contraseña
 
-function getUsuarios() {
-  const data = localStorage.getItem('campus_usuarios');
-  const usuarios = data ? JSON.parse(data) : [];
-  if (!usuarios.find(u => u.email === DIRECTOR_DEFAULT.email))   usuarios.unshift(DIRECTOR_DEFAULT);
-  if (!usuarios.find(u => u.email === SECRETARIA_DEFAULT.email)) usuarios.splice(1, 0, SECRETARIA_DEFAULT);
-  return usuarios;
+function vista(v) {
+  VISTAS.forEach((x) => $('v-' + x).classList.toggle('active', x === v));
+  document.querySelectorAll('#tabsPrincipales .tab-btn').forEach((b) => b.classList.toggle('active', b.dataset.vista === v));
+  $('tabsPrincipales').style.display = (v === 'login' || v === 'registro') ? '' : 'none';
+  $('subtitulo').textContent = { login: 'Ingresá a tu cuenta', registro: 'Creá tu cuenta de alumno', recuperar: 'Recuperar contraseña', codigo: 'Primer ingreso', clave: 'Elegí tu contraseña' }[v];
+  mensaje();
+  if (v === 'registro') cargarAnios();
+}
+function mensaje(tipo, txt) {
+  ['error', 'exito', 'info'].forEach((k) => { $(k).style.display = 'none'; });
+  if (tipo) { $(tipo).textContent = txt; $(tipo).style.display = 'block'; }
+}
+async function post(ruta, body, token) {
+  try {
+    const r = await fetch(BACK + ruta, { method: ruta.includes('password') ? 'PUT' : 'POST', headers: { 'Content-Type': 'application/json', ...(token ? { Authorization: 'Bearer ' + token } : {}) }, body: JSON.stringify(body) });
+    let d = {}; try { d = await r.json(); } catch {}
+    return { ok: r.ok, status: r.status, d };
+  } catch { return { ok: false, status: 0, d: { error: 'No se pudo conectar con el servidor. Verificá que el backend esté iniciado.' } }; }
+}
+function conBoton(id, fn) {
+  const b = $(id); const t = b.textContent;
+  b.addEventListener('click', async () => { if (b.disabled) return; b.disabled = true; b.textContent = 'Un momento…'; try { await fn(); } finally { b.disabled = false; b.textContent = t; } });
+}
+function entrar(token, user) {
+  localStorage.setItem('campus_token', token);
+  localStorage.setItem('campus_user', JSON.stringify({ id: user.id, nombre: user.nombre, email: user.email, rol: user.rol, foto: user.foto || null, anio_id: user.anio_id || null, anio: user.anio || null, situacion: user.situacion || 'regular' }));
+  // Si venía de escanear el QR de asistencia, lo llevamos directo a su panel (ahí se registra la llegada)
+  location.href = `dashboard/${user.rol}.html`;
 }
 
-function guardarUsuarios(u) {
-  localStorage.setItem('campus_usuarios', JSON.stringify(u));
+async function cargarAnios() {
+  const sel = $('rAnio');
+  if (sel.dataset.listo) return;
+  try {
+    const r = await fetch(BACK + '/api/auth/anios'); const a = await r.json();
+    sel.innerHTML = '<option value="">Elegí tu año…</option>' + a.map((x) => `<option value="${x.id}">${x.nombre.replace(/[<>&]/g, '')}</option>`).join('');
+    sel.dataset.listo = '1';
+    if (!a.length) sel.innerHTML = '<option value="">Todavía no hay años cargados</option>';
+  } catch { sel.innerHTML = '<option value="">No se pudieron cargar los años</option>'; }
 }
 
-// ═══════════════════════════════════════
-// 🔐 LOGIN NORMAL
-// ═══════════════════════════════════════
-function handleLogin() {
-  const email    = document.getElementById('loginEmail').value.trim().toLowerCase();
-  const password = document.getElementById('loginPassword').value;
-  const errEl    = document.getElementById('loginError');
-  const pendEl   = document.getElementById('loginPendiente');
-  errEl.style.display  = 'none';
-  pendEl.style.display = 'none';
-
-  const usuario = getUsuarios().find(u => u.email === email && u.password === password);
-  if (!usuario) { errEl.textContent = 'Email o contraseña incorrectos.'; errEl.style.display = 'block'; return; }
-
-  if (usuario.estado === 'pendiente') { pendEl.style.display = 'block'; return; }
-
-  // Admins no pueden usar login normal
-  if (['director','secretaria'].includes(usuario.rol)) {
-    errEl.textContent = 'Los administradores deben usar la sección "Soy administrador".';
-    errEl.style.display = 'block';
-    return;
+conBoton('bLogin', async () => {
+  const email = $('lEmail').value.trim().toLowerCase(), password = $('lPass').value;
+  if (!email || !password) return mensaje('error', 'Completá el correo y la contraseña.');
+  const { ok, d } = await post('/api/auth/login', { email, password });
+  if (!ok) {
+    if (d.debeUsarCodigo) { $('kEmail').value = email; vista('codigo'); return mensaje('info', d.error); }
+    return mensaje(d.pendiente ? 'info' : 'error', d.error || 'Correo o contraseña incorrectos.');
   }
-
-  iniciarSesion(usuario);
-}
-
-// ═══════════════════════════════════════
-// 🔐 LOGIN ADMINISTRADOR
-// ═══════════════════════════════════════
-function handleAdminLogin() {
-  const email    = document.getElementById('adminEmail').value.trim().toLowerCase();
-  const password = document.getElementById('adminPassword').value;
-  const errEl    = document.getElementById('adminError');
-  errEl.style.display = 'none';
-
-  const usuario = getUsuarios().find(u => u.email === email && u.password === password);
-  if (!usuario) { errEl.textContent = 'Credenciales incorrectas.'; errEl.style.display = 'block'; return; }
-  if (!['director','secretaria'].includes(usuario.rol)) {
-    errEl.textContent = 'Esta sección es solo para directivos.';
-    errEl.style.display = 'block';
-    return;
-  }
-
-  iniciarSesion(usuario);
-}
-
-function iniciarSesion(usuario) {
-  localStorage.setItem('campus_token', 'local_' + Date.now());
-  localStorage.setItem('campus_user',  JSON.stringify({
-    nombre:            usuario.nombre,
-    email:             usuario.email,
-    rol:               usuario.rol,
-    telegram_validado: usuario.telegram_validado || false
-  }));
-  const rutas = {
-    director:   'dashboard/director.html',
-    secretaria: 'dashboard/secretaria.html',
-    preceptor:  'dashboard/preceptor.html',
-    profesor:   'dashboard/profesor.html',
-    alumno:     'dashboard/alumno.html',
-  };
-  window.location.href = rutas[usuario.rol] || 'dashboard/alumno.html';
-}
-
-// ═══════════════════════════════════════
-// ➕ REGISTRO PÚBLICO
-// ═══════════════════════════════════════
-function handleRegistro() {
-  const nombre   = document.getElementById('regNombre').value.trim();
-  const email    = document.getElementById('regEmail').value.trim().toLowerCase();
-  const password = document.getElementById('regPassword').value;
-  const rol      = document.getElementById('regRol').value;
-  const errEl    = document.getElementById('regError');
-  const okEl     = document.getElementById('regSuccess');
-  errEl.style.display = 'none';
-  okEl.style.display  = 'none';
-
-  if (!nombre || !email || !password) {
-    errEl.textContent = 'Completá todos los campos.'; errEl.style.display = 'block'; return;
-  }
-  if (password.length < 6) {
-    errEl.textContent = 'La contraseña debe tener al menos 6 caracteres.'; errEl.style.display = 'block'; return;
-  }
-  const usuarios = getUsuarios();
-  if (usuarios.find(u => u.email === email)) {
-    errEl.textContent = 'Ese email ya está registrado.'; errEl.style.display = 'block'; return;
-  }
-
-  usuarios.push({ nombre, email, password, rol, estado: 'pendiente', telegram_validado: false });
-  guardarUsuarios(usuarios);
-
-  document.getElementById('regNombre').value   = '';
-  document.getElementById('regEmail').value    = '';
-  document.getElementById('regPassword').value = '';
-
-  okEl.textContent   = `✅ Cuenta creada. Esperá la aprobación del director para poder ingresar.`;
-  okEl.style.display = 'block';
-}
-
-// ═══════════════════════════════════════
-// UI
-// ═══════════════════════════════════════
-function switchTab(tab) {
-  document.querySelectorAll('.tab-btn').forEach((b,i) => b.classList.toggle('active', (tab==='login'&&i===0)||(tab==='registro'&&i===1)));
-  document.getElementById('formLogin').classList.toggle('active', tab === 'login');
-  document.getElementById('formRegistro').classList.toggle('active', tab === 'registro');
-  document.getElementById('pageTitle').textContent    = tab === 'login' ? 'Campus Virtual' : 'Crear cuenta';
-  document.getElementById('pageSubtitle').textContent = tab === 'login'
-    ? 'Ingresá con tu cuenta institucional'
-    : 'Registrate y esperá la aprobación del director';
-}
-
-function toggleAdmin() {
-  const f = document.getElementById('adminForm');
-  f.classList.toggle('open');
-}
-
-// Enter para login
-document.addEventListener('keydown', e => {
-  if (e.key === 'Enter') {
-    if (document.getElementById('formLogin').classList.contains('active')) handleLogin();
-  }
+  entrar(d.token, d.user);
 });
 
-// Si ya tiene sesión activa, redirigir
-window.onload = () => {
-  const token = localStorage.getItem('campus_token');
-  const user  = localStorage.getItem('campus_user');
-  if (token && user) {
-    const u = JSON.parse(user);
-    const rutas = { director:'dashboard/director.html', secretaria:'dashboard/secretaria.html', preceptor:'dashboard/preceptor.html', profesor:'dashboard/profesor.html', alumno:'dashboard/alumno.html' };
-    window.location.href = rutas[u.rol] || 'dashboard/alumno.html';
-  }
-};
+conBoton('bRegistro', async () => {
+  const nombre = $('rNombre').value.trim(), email = $('rEmail').value.trim(), password = $('rPass').value, anio_id = $('rAnio').value;
+  if (!nombre || !email || !password) return mensaje('error', 'Completá todos los campos.');
+  if (!anio_id) return mensaje('error', 'Elegí tu año.');
+  if (password.length < 8) return mensaje('error', 'La contraseña debe tener al menos 8 caracteres.');
+  const { ok, d } = await post('/api/auth/registro', { nombre, email, password, anio_id });
+  if (!ok) return mensaje('error', d.error || 'No se pudo crear la cuenta.');
+  ['rNombre', 'rEmail', 'rPass'].forEach((i) => ($(i).value = ''));
+  mensaje('exito', d.message);
+});
+
+conBoton('bRecuperar', async () => {
+  const email = $('cEmail').value.trim();
+  if (!email) return mensaje('error', 'Escribí tu correo.');
+  const { d } = await post('/api/auth/recuperar', { email });
+  mensaje('exito', d.message || 'Si el correo está registrado, te enviamos el enlace.');
+});
+
+conBoton('bCodigo', async () => {
+  const email = $('kEmail').value.trim(), codigo = $('kCodigo').value.trim();
+  if (!email || !codigo) return mensaje('error', 'Completá el correo y el código.');
+  const { ok, d } = await post('/api/auth/login-codigo', { email, codigo });
+  if (!ok) return mensaje('error', d.error || 'Código incorrecto o vencido.');
+  sesionTemporal = { token: d.token, user: d.user };
+  vista('clave');
+});
+
+conBoton('bClave', async () => {
+  const p1 = $('nPass').value, p2 = $('nPass2').value;
+  if (p1.length < 8) return mensaje('error', 'La contraseña debe tener al menos 8 caracteres.');
+  if (p1 !== p2) return mensaje('error', 'Las contraseñas no coinciden.');
+  const { ok, d } = await post('/api/users/password', { passwordNueva: p1 }, sesionTemporal.token);
+  if (!ok) return mensaje('error', d.error || 'No se pudo guardar la contraseña.');
+  // Con la contraseña ya definida, iniciamos una sesión normal
+  const l = await post('/api/auth/login', { email: sesionTemporal.user.email, password: p1 });
+  if (l.ok) return entrar(l.d.token, l.d.user);
+  vista('login'); mensaje('exito', 'Contraseña guardada. Ya podés iniciar sesión.');
+});
+
+document.addEventListener('click', (e) => { const b = e.target.closest('[data-vista]'); if (b) vista(b.dataset.vista); });
+document.addEventListener('keydown', (e) => {
+  if (e.key !== 'Enter') return;
+  const activa = document.querySelector('.form.active .btn-submit'); if (activa) activa.click();
+});
+
+// Ya hay sesión: ir directo al panel
+try {
+  const u = JSON.parse(localStorage.getItem('campus_user') || 'null');
+  if (u && localStorage.getItem('campus_token')) location.replace(`dashboard/${u.rol}.html`);
+} catch {}
 </script>
 </body>
 </html>

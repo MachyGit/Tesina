@@ -1,8 +1,10 @@
+// © 2026 Pito, Santiago Vigna y Santiago Machado — Campus Virtual PROA. Todos los derechos reservados (ver LICENSE).
 // backend/controladores/authController.js
 const pool    = require('../config/db');
 const bcrypt  = require('bcryptjs');
 const jwt     = require('jsonwebtoken');
 const { logAction } = require('../middleware/sessionLogger');
+const { etiquetaAnio, anioExiste, aIdONulo } = require('../utils/anios');
 const transporter = require('../config/mailer');
 const {
   generarCodigo,
@@ -26,7 +28,7 @@ exports.login = async (req, res) => {
 
   try {
     const [rows] = await pool.query(
-      'SELECT * FROM users WHERE email = ? AND activo = 1',
+      'SELECT * FROM users WHERE email = ?',
       [email.toLowerCase().trim()]
     );
 
@@ -35,6 +37,17 @@ exports.login = async (req, res) => {
     }
 
     const user = rows[0];
+
+    if (!user.activo) {
+      // Solo se aclara que está pendiente si la contraseña es correcta (no se filtra nada a terceros).
+      if (user.pendiente && !user.debe_cambiar_password && await bcrypt.compare(password, user.password)) {
+        return res.status(403).json({
+          error: 'Tu cuenta todavía está pendiente de aprobación. Cuando la secretaría la apruebe vas a poder ingresar.',
+          pendiente: true,
+        });
+      }
+      return res.status(401).json({ error: 'Credenciales incorrectas' });
+    }
 
     // Cuenta recién creada o reseteada: todavía no tiene una contraseña
     // propia, tiene que entrar con el código que le mandamos por mail.
@@ -59,6 +72,12 @@ exports.login = async (req, res) => {
       { expiresIn: '8h' }
     );
 
+    let anio = null;
+    if (user.anio_id) {
+      const [a] = await pool.query(`SELECT ${etiquetaAnio('an')} AS anio FROM anios an WHERE an.id = ?`, [user.anio_id]);
+      anio = a[0]?.anio || null;
+    }
+
     res.json({
       token,
       user: {
@@ -68,6 +87,9 @@ exports.login = async (req, res) => {
         rol:    user.rol,
         foto:   user.foto || null,
         curso_id: user.curso_id || null,
+        anio_id: user.anio_id || null,
+        situacion: user.situacion || 'regular',
+        anio,
       }
     });
 
@@ -164,11 +186,11 @@ exports.solicitarRecuperacion = async (req, res) => {
     const tokenCrudo = generarTokenLink();
     await guardarCodigo(user.id, hashToken(tokenCrudo), 'recuperacion', 60);
 
-    const base = process.env.FRONTEND_URL || 'http://localhost:5500/frontend-web/public';
+    const base = (process.env.FRONTEND_URL || 'http://localhost:3000').replace(/\/+$/, '');
     const enlace = `${base}/reset-password.html?token=${tokenCrudo}`;
 
     await transporter.sendMail({
-      from: `"Campus PROA" <${process.env.MAIL_USER}>`,
+      from: transporter.remitente,
       to: user.email,
       subject: 'Restablecer tu contraseña — Campus Virtual PROA',
       text:
@@ -222,6 +244,64 @@ exports.resetearPassword = async (req, res) => {
     res.json({ message: 'Contraseña actualizada. Ya podés iniciar sesión.' });
   } catch (err) {
     console.error('Error al restablecer contraseña:', err);
+    res.status(500).json({ error: 'Error interno del servidor' });
+  }
+};
+
+// ── REGISTRO PÚBLICO (autoservicio) ─────────────────────────────────────────────
+// Un alumno se anota solo: elige su año y su contraseña. La cuenta queda
+// PENDIENTE (inactiva) hasta que director/secretaría la aprueba.
+// Por seguridad solo se puede pedir el rol "alumno": el personal lo crea un admin.
+exports.registro = async (req, res) => {
+  const { nombre, email, password } = req.body;
+  const anioId = aIdONulo(req.body.anio_id);
+
+  if (!nombre || !email || !password) {
+    return res.status(400).json({ error: 'Completá nombre, email y contraseña' });
+  }
+  if (String(nombre).trim().length < 3) {
+    return res.status(400).json({ error: 'Escribí tu nombre completo' });
+  }
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(email).trim())) {
+    return res.status(400).json({ error: 'El email no es válido' });
+  }
+  if (String(password).length < 8) {
+    return res.status(400).json({ error: 'La contraseña debe tener al menos 8 caracteres' });
+  }
+  if (anioId === null || Number.isNaN(anioId)) {
+    return res.status(400).json({ error: 'Elegí tu año' });
+  }
+
+  try {
+    if (!(await anioExiste(anioId))) return res.status(404).json({ error: 'Año no encontrado' });
+
+    const emailNorm = String(email).toLowerCase().trim();
+    const [existe] = await pool.query('SELECT id FROM users WHERE email = ?', [emailNorm]);
+    if (existe.length) return res.status(409).json({ error: 'Ese email ya está registrado' });
+
+    const hash = await bcrypt.hash(String(password), 10);
+    const [r] = await pool.query(
+      `INSERT INTO users (nombre, email, password, rol, anio_id, activo, pendiente, debe_cambiar_password)
+       VALUES (?, ?, ?, 'alumno', ?, 0, 1, 0)`,
+      [String(nombre).trim(), emailNorm, hash, anioId]
+    );
+    await logAction(r.insertId, 'REGISTRO_PENDIENTE', req.ip, req.headers['user-agent']);
+
+    res.status(201).json({
+      message: 'Solicitud enviada. Cuando la secretaría apruebe tu cuenta vas a poder ingresar.',
+    });
+  } catch (err) {
+    console.error('Error en registro:', err);
+    res.status(500).json({ error: 'Error interno del servidor' });
+  }
+};
+
+// ── AÑOS DISPONIBLES PARA EL REGISTRO (público, solo id y nombre) ───────────────
+exports.aniosPublicos = async (_req, res) => {
+  try {
+    const [rows] = await pool.query(`SELECT an.id, ${etiquetaAnio('an')} AS nombre FROM anios an WHERE an.tipo = 'escolar' ORDER BY an.orden, an.id`);
+    res.json(rows);
+  } catch (err) {
     res.status(500).json({ error: 'Error interno del servidor' });
   }
 };

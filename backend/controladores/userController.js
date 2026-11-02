@@ -1,3 +1,4 @@
+// © 2026 Pito, Santiago Vigna y Santiago Machado — Campus Virtual PROA. Todos los derechos reservados (ver LICENSE).
 // backend/controladores/userController.js
 const pool   = require('../config/db');
 const bcrypt = require('bcryptjs');
@@ -8,10 +9,15 @@ const {
   generarCodigo,
   guardarCodigo,
 } = require('../utils/codigosPassword');
+const { etiquetaAnio, anioExiste, aIdONulo } = require('../utils/anios');
 
 const ROLES_VALIDOS  = ['director','secretaria','preceptor','profesor','alumno'];
 const ROL_PROTEGIDO  = 'director'; // el sistema siempre necesita al menos un usuario activo con este rol
 const MAX_FOTO_BYTES = 2 * 1024 * 1024 * 1.37; // ~2MB en base64
+// Solo imágenes reales en base64 (nada de SVG ni otros tipos con contenido activo).
+const FOTO_REGEX = /^data:image\/(jpeg|png|webp);base64,[A-Za-z0-9+/]+=*$/;
+const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const LIMITE_FOTO_LISTADO = 150000; // en el listado solo se devuelven fotos chicas (las nuevas se comprimen a ~20 KB)
 
 // Devuelve true si `userId` es el único usuario activo con el rol `rol`
 // (es decir, si sacárselo/desactivarlo lo dejaría en cero).
@@ -28,7 +34,7 @@ const esUltimoConRol = async (rol, userId) => {
 // alguien que sí tiene acceso a su mail.
 const enviarCodigoAcceso = async (destinatario, nombre, codigo) => {
   await transporter.sendMail({
-    from: `"Campus PROA" <${process.env.MAIL_USER}>`,
+    from: transporter.remitente,
     to: destinatario,
     subject: 'Tu código de acceso — Campus Virtual PROA',
     text:
@@ -52,6 +58,10 @@ const enviarCodigoAcceso = async (destinatario, nombre, codigo) => {
 // que nadie conoce y queda marcada con debe_cambiar_password = 1. Se manda un
 // código de 6 dígitos al mail; con ese código el usuario entra una vez y
 // define su propia clave (ver authController.loginConCodigo).
+//
+// Si el mail no se puede enviar (o el servidor está en modo prueba) el usuario
+// se crea igual y el código vuelve en la respuesta, para que quien lo creó
+// se lo entregue en persona.
 exports.crearUsuario = async (req, res) => {
   const { nombre, email, rol, curso_id } = req.body;
 
@@ -61,9 +71,23 @@ exports.crearUsuario = async (req, res) => {
   if (!ROLES_VALIDOS.includes(rol)) {
     return res.status(400).json({ error: 'Rol inválido' });
   }
+  if (!EMAIL_REGEX.test(String(email).trim())) {
+    return res.status(400).json({ error: 'El email no es válido' });
+  }
+
+  const anioId = aIdONulo(req.body.anio_id);
+  if (Number.isNaN(anioId)) return res.status(400).json({ error: 'Año inválido' });
+  if (anioId !== null && rol !== 'alumno') {
+    return res.status(400).json({ error: 'Solo los alumnos pertenecen a un año' });
+  }
 
   try {
-    const [existe] = await pool.query('SELECT id FROM users WHERE email = ?', [email.toLowerCase()]);
+    if (anioId !== null && !(await anioExiste(anioId))) {
+      return res.status(404).json({ error: 'Año no encontrado' });
+    }
+
+    const emailNorm = String(email).toLowerCase().trim();
+    const [existe] = await pool.query('SELECT id FROM users WHERE email = ?', [emailNorm]);
     if (existe.length) {
       return res.status(409).json({ error: 'El email ya está registrado' });
     }
@@ -74,17 +98,31 @@ exports.crearUsuario = async (req, res) => {
     const hash = await bcrypt.hash(passwordProvisoria, 10);
 
     const [result] = await pool.query(
-      'INSERT INTO users (nombre, email, password, rol, curso_id, creado_por, debe_cambiar_password) VALUES (?, ?, ?, ?, ?, ?, 1)',
-      [nombre.trim(), email.toLowerCase().trim(), hash, rol, curso_id || null, req.user.id]
+      `INSERT INTO users (nombre, email, password, rol, curso_id, anio_id, creado_por, debe_cambiar_password)
+       VALUES (?, ?, ?, ?, ?, ?, ?, 1)`,
+      [String(nombre).trim(), emailNorm, hash, rol, curso_id || null, anioId, req.user.id]
     );
 
     const codigo = generarCodigo();
     await guardarCodigo(result.insertId, codigo, 'primer_login', 60, req.user.id);
-    await enviarCodigoAcceso(email.toLowerCase().trim(), nombre.trim(), codigo);
+    await logAction(req.user.id, `USUARIO_CREADO(id:${result.insertId})`, req.ip, req.headers['user-agent']);
 
+    let emailEnviado = true;
+    try {
+      await enviarCodigoAcceso(emailNorm, String(nombre).trim(), codigo);
+    } catch (errMail) {
+      emailEnviado = false;
+      console.error('No se pudo enviar el código de acceso por mail:', errMail.message);
+    }
+
+    const entregarCodigo = !emailEnviado || transporter.modoPrueba;
     res.status(201).json({
-      message: 'Usuario creado. Se envió un código de acceso a su email para completar el registro.',
-      id: result.insertId
+      message: emailEnviado && !transporter.modoPrueba
+        ? 'Usuario creado. Se envió un código de acceso a su email para completar el registro.'
+        : 'Usuario creado. El mail no se envió: entregale el código en persona.',
+      id: result.insertId,
+      emailEnviado: emailEnviado && !transporter.modoPrueba,
+      ...(entregarCodigo ? { codigo } : {}),
     });
   } catch (err) {
     console.error('Error al crear usuario:', err);
@@ -93,18 +131,46 @@ exports.crearUsuario = async (req, res) => {
 };
 
 // ── LISTAR USUARIOS ────────────────────────────────────────────────────────────
+// Filtros opcionales: ?rol=alumno  ?anio_id=3  ?pendiente=1  ?activo=0|1
 exports.listarUsuarios = async (req, res) => {
   try {
+    const where = [];
+    const params = [];
+
+    if (req.query.rol && ROLES_VALIDOS.includes(req.query.rol)) {
+      where.push('u.rol = ?'); params.push(req.query.rol);
+    }
+    const anioFiltro = aIdONulo(req.query.anio_id);
+    if (!Number.isNaN(anioFiltro) && anioFiltro !== null) {
+      where.push('u.anio_id = ?'); params.push(anioFiltro);
+    }
+    // Por defecto solo personas "regulares" (egresados y ex alumnos tienen su propio apartado).
+    const sit = req.query.situacion || 'regular';
+    if (sit === 'no_regular') where.push("u.situacion <> 'regular'");
+    else if (['regular', 'egresado', 'ex_alumno'].includes(sit)) { where.push('u.situacion = ?'); params.push(sit); }
+    if (req.query.pendiente === '1') where.push('u.pendiente = 1');
+    if (req.query.pendiente === '0') where.push('u.pendiente = 0');
+    if (req.query.activo === '1' || req.query.activo === '0') {
+      where.push('u.activo = ?'); params.push(Number(req.query.activo));
+    }
+
     const [rows] = await pool.query(`
-      SELECT u.id, u.nombre, u.email, u.rol, u.activo,
-             u.fecha_creacion, u.telegram_id,
+      SELECT u.id, u.nombre, u.email, u.rol, u.activo, u.pendiente,
+             u.fecha_creacion, u.telegram_id, u.situacion, u.egresado_en,
+             u.anio_id, u.situacion, ${etiquetaAnio('an')} AS anio,
+             (u.foto IS NOT NULL) AS tiene_foto,
+             IF(LENGTH(u.foto) <= ${LIMITE_FOTO_LISTADO}, u.foto, NULL) AS foto,
              c.nombre AS curso, c.division
       FROM users u
-      LEFT JOIN cursos c ON u.curso_id = c.id
-      ORDER BY u.rol, u.nombre
-    `);
-    res.json(rows);
+      LEFT JOIN cursos c  ON u.curso_id = c.id
+      LEFT JOIN anios  an ON u.anio_id  = an.id
+      ${where.length ? 'WHERE ' + where.join(' AND ') : ''}
+      ORDER BY u.pendiente DESC, u.rol, u.nombre
+    `, params);
+
+    res.json(rows.map(r => ({ ...r, tiene_foto: !!r.tiene_foto })));
   } catch (err) {
+    console.error('Error al listar usuarios:', err);
     res.status(500).json({ error: 'Error interno del servidor' });
   }
 };
@@ -115,38 +181,65 @@ exports.obtenerPerfil = async (req, res) => {
     const [rows] = await pool.query(`
       SELECT u.id, u.nombre, u.email, u.rol, u.foto,
              u.telegram_id, u.fecha_creacion,
-             c.nombre AS curso, c.division, c.turno
+             u.anio_id, ${etiquetaAnio('an')} AS anio,
+             c.nombre AS curso, c.division
       FROM users u
-      LEFT JOIN cursos c ON u.curso_id = c.id
+      LEFT JOIN cursos c  ON u.curso_id = c.id
+      LEFT JOIN anios  an ON u.anio_id  = an.id
       WHERE u.id = ?
     `, [req.user.id]);
 
     if (!rows.length) return res.status(404).json({ error: 'Usuario no encontrado' });
-
-    // No devolver la foto completa en el listado para no saturar
-    const user = rows[0];
-    res.json(user);
+    res.json(rows[0]);
   } catch (err) {
     res.status(500).json({ error: 'Error interno del servidor' });
   }
 };
 
-// ── SUBIR / ACTUALIZAR FOTO ────────────────────────────────────────────────────
+// ── SUBIR / ACTUALIZAR FOTO (cualquier usuario, la propia) ─────────────────────
 exports.subirFoto = async (req, res) => {
   const { foto } = req.body;
 
   if (!foto) return res.status(400).json({ error: 'No se recibió ninguna imagen' });
-  if (!foto.startsWith('data:image/')) {
-    return res.status(400).json({ error: 'Formato de imagen inválido. Usá JPG o PNG.' });
-  }
-  if (foto.length > MAX_FOTO_BYTES) {
+  if (typeof foto !== 'string' || foto.length > MAX_FOTO_BYTES) {
     return res.status(400).json({ error: 'La imagen supera los 2MB permitidos' });
+  }
+  if (!FOTO_REGEX.test(foto)) {
+    return res.status(400).json({ error: 'Formato de imagen inválido. Usá JPG, PNG o WEBP.' });
   }
 
   try {
     await pool.query('UPDATE users SET foto = ? WHERE id = ?', [foto, req.user.id]);
     res.json({ message: 'Foto actualizada', foto });
   } catch (err) {
+    res.status(500).json({ error: 'Error interno del servidor' });
+  }
+};
+
+// ── QUITAR LA PROPIA FOTO ──────────────────────────────────────────────────────
+exports.quitarFotoPropia = async (req, res) => {
+  try {
+    await pool.query('UPDATE users SET foto = NULL WHERE id = ?', [req.user.id]);
+    res.json({ message: 'Foto eliminada' });
+  } catch (err) {
+    res.status(500).json({ error: 'Error interno del servidor' });
+  }
+};
+
+// ── QUITAR LA FOTO DE OTRO USUARIO (moderación: director / secretaria) ─────────
+// Para fotos indebidas. Queda registrado en el log de actividad.
+exports.quitarFotoUsuario = async (req, res) => {
+  const { userId } = req.params;
+  try {
+    const [rows] = await pool.query('SELECT id, nombre, foto IS NOT NULL AS tiene FROM users WHERE id = ?', [userId]);
+    if (!rows.length) return res.status(404).json({ error: 'Usuario no encontrado' });
+    if (!rows[0].tiene) return res.status(404).json({ error: 'Ese usuario no tiene foto de perfil' });
+
+    await pool.query('UPDATE users SET foto = NULL WHERE id = ?', [userId]);
+    await logAction(req.user.id, `FOTO_QUITADA(objetivo:${userId})`, req.ip, req.headers['user-agent']);
+    res.json({ message: `Se quitó la foto de perfil de ${rows[0].nombre}` });
+  } catch (err) {
+    console.error('Error al quitar foto:', err);
     res.status(500).json({ error: 'Error interno del servidor' });
   }
 };
@@ -175,7 +268,11 @@ exports.asignarRol = async (req, res) => {
       }
     }
 
-    const [r] = await pool.query('UPDATE users SET rol = ? WHERE id = ?', [nuevoRol, userId]);
+    const [r] = await pool.query(
+      "UPDATE users SET rol = ?, anio_id = IF(? = 'alumno', anio_id, NULL) WHERE id = ?",
+      [nuevoRol, nuevoRol, userId]
+    );
+    await logAction(req.user.id, `ROL_CAMBIADO(u:${userId},${nuevoRol})`, req.ip, req.headers['user-agent']);
     if (!r.affectedRows) return res.status(404).json({ error: 'Usuario no encontrado' });
     res.json({ message: 'Rol actualizado' });
   } catch (err) {
@@ -204,7 +301,7 @@ exports.toggleActivo = async (req, res) => {
       }
     }
 
-    await pool.query('UPDATE users SET activo = ? WHERE id = ?', [nuevoEstado, userId]);
+    await pool.query('UPDATE users SET activo = ?, pendiente = 0 WHERE id = ?', [nuevoEstado, userId]);
     res.json({ message: nuevoEstado ? 'Usuario activado' : 'Usuario desactivado' });
   } catch (err) {
     res.status(500).json({ error: 'Error interno del servidor' });
@@ -246,7 +343,7 @@ exports.editarNombre = async (req, res) => {
   }
 
   // Un usuario puede cambiar su propio nombre; admins pueden cambiar cualquiera
-  const esAdmin = ['director', 'secretaria', 'profesor'].includes(req.user.rol);
+  const esAdmin = ['director', 'secretaria'].includes(req.user.rol);
   const esPropioUsuario = req.user.id === parseInt(userId);
 
   if (!esAdmin && !esPropioUsuario) {
@@ -340,6 +437,115 @@ exports.resetearPasswordAdmin = async (req, res) => {
     });
   } catch (err) {
     console.error('Error al resetear contraseña:', err);
+    res.status(500).json({ error: 'Error interno del servidor' });
+  }
+};
+
+// ── ASIGNAR / CAMBIAR EL AÑO DE UN ALUMNO (director / secretaria) ──────────────
+// Un alumno pertenece a UN solo año: solo ve avisos, archivos y materias de ese año.
+// Para pasarlo de año (ej. de 1ro a 2do) se cambia acá. anio_id null = sin año.
+exports.asignarAnio = async (req, res) => {
+  const { userId } = req.params;
+  const anioId = aIdONulo(req.body.anio_id);
+  if (Number.isNaN(anioId)) return res.status(400).json({ error: 'Año inválido' });
+
+  try {
+    const [rows] = await pool.query('SELECT rol FROM users WHERE id = ?', [userId]);
+    if (!rows.length) return res.status(404).json({ error: 'Usuario no encontrado' });
+    if (rows[0].rol !== 'alumno') {
+      return res.status(400).json({ error: 'Solo los alumnos pertenecen a un año' });
+    }
+    if (anioId !== null && !(await anioExiste(anioId))) {
+      return res.status(404).json({ error: 'Año no encontrado' });
+    }
+
+    // Elegir un año escolar reincorpora a la persona como alumno regular; elegir una promoción la deja como egresada.
+    let situacion = null;
+    if (anioId !== null) {
+      const [[a]] = await pool.query('SELECT tipo FROM anios WHERE id = ?', [anioId]);
+      situacion = a.tipo === 'promocion' ? 'egresado' : 'regular';
+    }
+    await pool.query(
+      situacion ? 'UPDATE users SET anio_id = ?, situacion = ?, egresado_en = IF(? = \'regular\', NULL, COALESCE(egresado_en, CURDATE())) WHERE id = ?' : 'UPDATE users SET anio_id = ? WHERE id = ?',
+      situacion ? [anioId, situacion, situacion, userId] : [anioId, userId]);
+    await logAction(req.user.id, `ANIO_ASIGNADO(u:${userId},a:${anioId})`, req.ip, req.headers['user-agent']);
+    res.json({ message: anioId === null ? 'Alumno sin año asignado' : 'Año asignado' });
+  } catch (err) {
+    console.error('Error al asignar año:', err);
+    res.status(500).json({ error: 'Error interno del servidor' });
+  }
+};
+
+// ── APROBAR UNA CUENTA PENDIENTE (director / secretaria) ───────────────────────
+// Opcionalmente se corrige el rol y/o se asigna el año en el mismo paso.
+exports.aprobarUsuario = async (req, res) => {
+  const { userId } = req.params;
+  const { rol } = req.body;
+  const anioId = aIdONulo(req.body.anio_id);
+  if (Number.isNaN(anioId)) return res.status(400).json({ error: 'Año inválido' });
+  if (rol && !ROLES_VALIDOS.includes(rol)) return res.status(400).json({ error: 'Rol inválido' });
+
+  try {
+    const [rows] = await pool.query('SELECT nombre, email, rol, pendiente FROM users WHERE id = ?', [userId]);
+    if (!rows.length) return res.status(404).json({ error: 'Usuario no encontrado' });
+    if (!rows[0].pendiente) return res.status(400).json({ error: 'Esa cuenta no está pendiente de aprobación' });
+
+    const rolFinal = rol || rows[0].rol;
+    if (anioId !== null) {
+      if (rolFinal !== 'alumno') return res.status(400).json({ error: 'Solo los alumnos pertenecen a un año' });
+      if (!(await anioExiste(anioId))) return res.status(404).json({ error: 'Año no encontrado' });
+    }
+
+    await pool.query(
+      'UPDATE users SET activo = 1, pendiente = 0, rol = ?, anio_id = ? WHERE id = ?',
+      [rolFinal, rolFinal === 'alumno' ? anioId : null, userId]
+    );
+    await logAction(req.user.id, `USUARIO_APROBADO(id:${userId})`, req.ip, req.headers['user-agent']);
+
+    // Aviso por mail (si falla, la aprobación igual queda hecha)
+    transporter.sendMail({
+      from: transporter.remitente,
+      to: rows[0].email,
+      subject: 'Tu cuenta fue aprobada — Campus Virtual PROA',
+      text: `Hola ${rows[0].nombre},\n\nTu cuenta del Campus Virtual PROA fue aprobada. Ya podés iniciar sesión con tu email y la contraseña que elegiste.`,
+    }).catch(e => console.error('No se pudo avisar la aprobación por mail:', e.message));
+
+    res.json({ message: 'Cuenta aprobada' });
+  } catch (err) {
+    console.error('Error al aprobar usuario:', err);
+    res.status(500).json({ error: 'Error interno del servidor' });
+  }
+};
+
+// ── RECHAZAR UNA CUENTA PENDIENTE (borra la solicitud) ─────────────────────────
+exports.rechazarUsuario = async (req, res) => {
+  const { userId } = req.params;
+  try {
+    const [r] = await pool.query('DELETE FROM users WHERE id = ? AND pendiente = 1', [userId]);
+    if (!r.affectedRows) return res.status(404).json({ error: 'No hay una solicitud pendiente con ese id' });
+    await logAction(req.user.id, `USUARIO_RECHAZADO(id:${userId})`, req.ip, req.headers['user-agent']);
+    res.json({ message: 'Solicitud rechazada' });
+  } catch (err) {
+    console.error('Error al rechazar usuario:', err);
+    res.status(500).json({ error: 'Error interno del servidor' });
+  }
+};
+
+// ── "SE FUE DEL COLEGIO": conserva la cuenta como ex alumno (director / secretaria) ──
+// No se borra nada: la persona sigue pudiendo ingresar (con acceso reducido) y
+// se la puede reincorporar a un año cuando quiera volver.
+exports.marcarExAlumno = async (req, res) => {
+  const { userId } = req.params;
+  try {
+    const [rows] = await pool.query('SELECT rol, situacion FROM users WHERE id = ?', [userId]);
+    if (!rows.length) return res.status(404).json({ error: 'Usuario no encontrado' });
+    if (rows[0].rol !== 'alumno') return res.status(400).json({ error: 'Solo los alumnos pueden pasar a ex alumno' });
+    if (rows[0].situacion !== 'regular') return res.status(400).json({ error: 'Esa persona ya no es alumno regular' });
+    await pool.query("UPDATE users SET situacion = 'ex_alumno', anio_id = NULL, egresado_en = CURDATE() WHERE id = ?", [userId]);
+    await logAction(req.user.id, `EX_ALUMNO(u:${userId})`, req.ip, req.headers['user-agent']);
+    res.json({ message: 'Pasó a ex alumno. Conserva su cuenta.' });
+  } catch (err) {
+    console.error('Error al marcar ex alumno:', err);
     res.status(500).json({ error: 'Error interno del servidor' });
   }
 };
